@@ -33,22 +33,9 @@ SCRUM Máster)
 
 # Sección 2. Determinación de necesidades
 
-Seleccione mínimo dos técnicas para la Elicitación de Requisitos,
-planee las sesiones con sus compañeros de trabajo y completen por
-cada sesión la siguiente información:
-- Número de la sesión y fecha en que se realizó.
-- Técnica seleccionada para la sesión y su descripción.
-- Evidencias de la reunión (p.ej, capturas de pantalla)
-- Conflictos presentados en la reunión.
-- Tema tratado en la sesión.
-- Participantes de la sesión.
-
-
 |Número| Fecha | Técnica seleccionada | Evidencias de la reunión | Conflictos presentados | Tema tratado | Participantes|
 |--|--|--|--|--|--| -- |
-| 1 | 29/07/2024 | Entrevista: Se realizó una reunión con el usuario para recibir nuevamente explicaciones de las necesidades y el estado actual de la información que poseen, para plantear posibles soluciones que fuesen acordes al tiempo, capacidad de respuesta del equipo y a planteado desde el cliente. | <a href="https://eafit-my.sharepoint.com/:v:/r/personal/mramirezr4_eafit_edu_co/Documents/Grabaciones/Grabaci%C3%B3n%20de%20la%20reuni%C3%B3n%20de%20Reuni%C3%B3n%20inicial%20proyecto%20GRID-20240729_143323.mp4?csf=1&web=1&e=svBXeU&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D"> Grabación</a> | No se presentaron conflictos | Alcance del proyecto, necesidades del cliente. Estado de la información, fuente de datos. Solicitud de archivo con información de ejemplo. | - Equipo de trabajo <br> - Felipe Mendoza |
-| 2 | 05/08/2024 | Análisis de documentos: Se realizó un análisis y se recibieron explicaciones de la estructuración de la información recibida en un archivo .csv que representaba la forma en la que se ha realizado la recolección de información desde el lado del cliente | ![image.png](/.attachments/image-5fea6217-208e-47f5-8dbc-1923b212181b.png) | Momentos de confusión con respecto a la representación de los datos brindados | Archivo de ejemplo con información relevante al consumo de energía de una cooperativa. Estructura de los datos. Dudas con respecto al archivo. | - Equipo de trabajo <br> - Felipe Mendoza <br> - Juan Gonzalez |
-| 3 | 12/08/2024 | Prototipos: Se presentaron ante el cliente prototipos de diagramas para la representación del flujo y arquitectura de la solución propuesta y diseñada por parte del equipo de trabajo, con el fin de obtener feedback acerca del cubrimiento de las necesidades y la generación de valor para el cliente | ![image.png](/.attachments/image-15d13ffc-bbc2-4933-8135-a89d18503958.png) | No se presentaron conflictos | Prototipos de arquitectura y flujo del sistema | - Equipo de trabajo <br> - Felipe Mendoza |
+| 1 | 04/02/2025 | Entrevista: Se realizó una reunión con el usuario para recibir nuevamente explicaciones de las necesidades y el estado actual de la información que poseen y el desarrollo que ya tienen, para plantear posibles soluciones que fuesen acordes al tiempo, capacidad de respuesta del equipo. | <a href="https://eafit-my.sharepoint.com/personal/fmendozag_eafit_edu_co/_layouts/15/stream.aspx?id=%2Fpersonal%2Ffmendozag%5Feafit%5Fedu%5Fco%2FDocuments%2FGrabaciones%2FReuni%C3%B3n%20inicial%20%2D%20PI2%2D20250204%5F141217%2DMeeting%20Recording%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E7bbedae5%2D5024%2D4f48%2D9e4e%2De91e901b0eb3 "> Grabación</a> | No se presentaron conflictos | Alcance del proyecto, necesidades del cliente. Estado de la aplicación, fuente de datos y nuevo desarrollo. Solicitud de acceso al repositorio de Azure. | - Equipo de trabajo <br> - Felipe Mendoza |
 
 
 
@@ -137,74 +124,5 @@ El prototipo de Solar Gauge es un paso inicial hacia la creación de una herrami
 
 ## 6.Diagrama de componentes del sistema
 
-<hr>
-
-# Plantilla sugerida
-## Equipo de trabajo 
-Indicar los diferentes roles presentes en el proyecto y sus nombres
-propios asociados, es decir, el equipo del proyecto, incluir también
-los skills con los que cuenta cada integrante del equipo
-## Alcance
-Indicar en términos de las historias de usuario (backlog) cuáles
-serán probadas, cuáles no, en qué entornos, qué tipo de pruebas se
-llevarán a cabo. Muy importante dejar claro qué cosas se prueban, y
-qué cosas no.
-## Estrategia
-En este item se incluye: todas las actividades que se desarrollarán
-como parte de las pruebas del software. Se debe hacer mención de
-todas aquellas tareas asociadas al ciclo de vida de pruebas con sus
-respectivos detalles (planeación, diseño, ejecución, reporte de
-resultados). Cada actividad del ciclo tiene unas tareas más
-detalladas.
-## Recursos y costos
-Se deben valorar y costear todos los recursos (software, hardware,
-personas, otros) que se requieran para llevar a cabo las actividades
-mencionadas en la estrategia. Incluir costos de los ingenieros, por
-ejemplo: ¿un tester cuánto cobra por hora? ¿un analista cuánto
-puede costar en el marco de este proyecto?
-## Tipos de pruebas y técnicas
-
-Para garantizar la calidad y el rendimiento del servicio web, se implementarán las siguientes pruebas bajo diferentes técnicas:
-
-### 1. **Pruebas Unitarias**
-   - **Descripción**: Verificar la funcionalidad de los componentes individuales, como funciones o métodos dentro de cada microservicio.
-   - **Técnica utilizada**: Caja blanca.
-
-### 2. **Pruebas de Integración**
-   - **Descripción**: Evaluar la interacción entre los diferentes microservicios y componentes, asegurando que funcionen correctamente cuando se integran.
-   - **Técnica utilizada**: Caja gris.
-
-### 3. **Pruebas Funcionales**
-   - **Descripción**: Asegurarse de que el sistema cumple con los requisitos funcionales especificados, desde la perspectiva del usuario.
-   - **Técnica utilizada**: Caja negra.
-
-### 4. **Pruebas de Carga (Load Testing)**
-   - **Descripción**: Probar el rendimiento del sistema bajo una carga prevista, asegurando que maneje múltiples solicitudes concurrentes.
-   - **Técnica utilizada**: Caja negra.
 
 
-### 5. **Pruebas de Seguridad**
-   - **Descripción**: Identificar y mitigar posibles vulnerabilidades de seguridad en el sistema.
-   - **Técnica utilizada**: Caja negra.
-
-### 6. **Pruebas de Usabilidad**
-   - **Descripción**: Evaluar la experiencia del usuario final y la facilidad de uso del sistema.
-   - **Técnica utilizada**: Caja negra.
-
-
-
-<hr>
-
-# Repositorio
-Repositorio público creado en GitHub o cualquier herramienta
-de gestión de código (a veces la herramienta sirve para la gestión
-de todo el proyecto y para la gestión del código).
-
-## Reglas y estilo de Programación
-
-
-
-<hr>
-
-
-## Evidencias de ceremonias realizadas
