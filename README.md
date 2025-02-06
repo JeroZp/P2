@@ -67,43 +67,43 @@ SCRUM Máster)
 # Sección 5. Prototipos iniciales
 El prototipo de Solar Gauge es una primera representación del sistema diseñado para monitorear y gestionar el consumo y la generación de energía en tiempo real. Este prototipo está orientado a usuarios que buscan una solución eficiente para controlar sus fuentes de energía, especialmente aquellas relacionadas con la energía solar.
 
-##Link del prototipo:
+## Link del prototipo:
  https://www.figma.com/proto/Ns6qu8NcjQ5fmG3xxRNLHK/Solar-Gauge?node-id=0-1&t=tehSf40yXPx8hkcm-1
 
-##Objetivos del prototipo:
+## Objetivos del prototipo:
 - **Visualización de Datos:** Proporcionar una vista clara y accesible de los datos de energía generada y consumida.
 - **Monitoreo en Tiempo Real:** Permitir a los usuarios ver cómo varía su consumo y generación a lo largo del día.
 - **Proyección de Costos:** Ofrecer herramientas para estimar los costos futuros en base al uso de la energía y las tendencias del mercado.
 
-##**Componentes Principales del Prototipo:**
-###**1. Pantalla de Inicio:**
+## **Componentes Principales del Prototipo:**
+### **1. Pantalla de Inicio:**
 - **Elementos Clave:** Nombre del proyecto, opciones de inicio de sesión y registro
 - **Funcionalidad:** Es la puerta de entrada al sistema, donde los usuarios pueden iniciar sesión o registrarse para acceder a sus datos de energía.
-###**2. Panel Principal:**
+### **2. Panel Principal:**
 - **Elementos Clave:** Gráficos de energía los cuales muestran la cantidad de energía generada y consumida en un periodo específico, indicadores clave de rendimiento donde se incluyen el consumo y la generación total, y el balance energético, y por último el resumen diario.
 - **Funcionalidad:** Centraliza la información más relevante, permitiendo a los usuarios una comprensión rápida de su situación energética.
-###**3. Sección de Detalles de Energía:**
+### **3. Sección de Detalles de Energía:**
 - **Elementos Clave:** Tablas y gráficos detallados sobre el consumo y la producción de energía.
 - **Funcionalidad:** Ofrece un análisis más profundo para los usuarios que necesitan entender los picos de consumo o producción.
-###**4. Herramientas de Proyección:**
+### **4. Herramientas de Proyección:**
 - **Elementos CLave:** Calculadora de costos que permite a los usuarios estimar sus gastos futuros en energía en base a su consumo actual.
 - **Funcionalidad:** Ayuda a los usuarios a planificar su uso de energía y a tomar decisiones informadas sobre su consumo.
 
-##**Interactividad del Usuario:**
+## **Interactividad del Usuario:**
 - **Navegación Simple:** Menús y botones bien organizados para facilitar el acceso a las diferentes secciones.
 - **Interacción con los Gráficos:** Los usuarios pueden hacer clic en las diferentes partes de los gráficos para obtener más detalles o cambiar la visualización.
 - **Actualización en Tiempo Real:** Los datos se actualizan automáticamente para reflejar los cambios en el consumo y la generación de energía.
 
-##**Tecnologías y Herramientas Utilizadas:**
+## **Tecnologías y Herramientas Utilizadas:**
 - **Figma:** Herramienta principal para el diseño y prototipado del interaz principal el cual con el tiempo le iremos agregando más detalles.
 - **HTML/CSS/Javascript - React Framework:** Tecnologías web para la implementación visual final.
 
-##**Consideraciones Futuras:**
+## **Consideraciones Futuras:**
 - **Desarrollo de Funcionalidades:** Inclusión de más herramientas de análisis avanzado y personalización (Rest API, DB, Backend languages).
 - **Implementación de Funcionalidades Avanzadas:** Añadir herramientas para el análisis de datos más sofisticados y opciones de personalización.
 - **Optimización del Rendimiento:** Mejora la velocidad y la eficiencia del sistema basado en los comentarios de los usuarios.
 
-##**Conclusión:**
+## **Conclusión:**
 El prototipo de Solar Gauge es un paso inicial hacia la creación de una herramienta poderosa para la gestión de la energía. A medida que se desarrolle y se perfeccione, se espera que se convierta en un recurso esencial para usuario que deseen maximizar la eficiencia de sus sistemas de energía.
 
 <hr>
