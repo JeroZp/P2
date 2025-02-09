@@ -32,6 +32,21 @@ de sus reservas energéticas o adquirir las de otros bajo un precio acordado por
 
 ## 1.5 Glosario de términos 
 
+**Energía:** Se da en presencia de partículas con carga eléctrica. La partícula más habitual es el electrón, el cual genera un potencial eléctrico a su alrededor y cuando otros electrones transitan por este potencial, obtienen energía eléctrica. La corriente eléctrica que conocemos es el resultado de una gran cantidad de electrones desplazándose a través de una diferencia de potencial.  
+
+**Reserva energética:** Es la resta de la energía usada de la generación posible del sistema en un periodo determinado. Se expresa en valor porcentual.  
+
+**Marketplace:** Es una plataforma que funciona como un centro comercial online ya que sirve como puente entre vendedores y clientes para que estos últimos puedan adquirir un servicio o un producto. 
+
+**Venta:** Bien o servicio brindado a un público interesado en este bajo unas condiciones y precio específico. 
+
+**Compra:** Adquisición de un bien o servicio deseado por un precio específico que es estipulado por el vendedor o en algunos casos por ambas partes.  
+
+**Gestionar:** Hacerse cargo de la administración de algo en específico y velar por el bienestar de esto. 
+
+**Recursos:** Son los diversos métodos o recursos que se emplean para alcanzar un objetivo o satisfacer una necesidad. 
+
+**Optimizar:** Se trata de mejorar algún proceso con la finalidad de lograr su máximo rendimiento, eficiencia o el resultado esperado. Esto incluye el análisis y ajuste de diversos elementos con la finalidad de conseguir un equilibrio entre las partes implicadas y alcanzar una condición más ventajosa. 
 
 <hr>
 
