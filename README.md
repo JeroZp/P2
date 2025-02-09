@@ -21,7 +21,10 @@ SCRUM Máster)
 
 ## 1.3 Público objetivo y contexto
 
-
+Este es un sistema energético que tiene como público objetivo a las empresas y
+personas en general con el fin de que estas puedan hacer monitoreo en tiempo
+real de su consumo de energía y a partir de esta información puedan optimizar 
+sus gastos en dicho recurso.
 
 ## 1.4 Descripción del proceso de interacción
 
