@@ -1,7 +1,7 @@
 # Sección 1. Generalidades del proyecto
 ## 1.1 Descripción del problema y su solución software
 
-
+En nuestro caso contamos con un proyecto previamente iniciado el cual tiene como razón de ser una mejor gestión para los recursos energéticos que poseen las empresas o comunidades, hasta el momento se tiene una página web donde al ser alimentada con una base de datos se puede visualizar dicho recurso, pero el cliente también manifestó varios propósitos que tiene en mente para este sistema; como solución a dos de las grandes prioridades del cliente nosotros ofrecemos el desarrollo de una aplicación móvil para sistema operativo móvil Android (ya que el cliente manifestó esta preferencia) y la creación de un Marketplace donde los consumidores de este proyecto puedan ofertar sus reservas energéticas y comprar este recurso si así lo desean.  
 
 ## 1.2 Personas y roles del proyecto
 
