@@ -97,6 +97,61 @@ https://www.epm.com.co/clientesyusuarios/energia/tipos-de-energia/energia-solar/
 
 ### **Historias de Usuario - Requisitos Funcionales**
 
+#### 1. Inicio de sesión y registro
+- **a.** Como usuario final, deseo poder iniciar sesión en mi aplicación móvil para gestionar mis consumos y producción energética de manera personalizada.
+- **b.** Como usuario final, deseo poder registrarme en el sistema desde mi aplicación móvil para comenzar a monitorear mis datos energéticos.
+
+#### 2. Consumos energéticos
+- **a.** Como usuario final, quiero observar mis consumos energéticos desglosados por días y horas para identificar patrones y ahorrar energía.
+- **b.** Como usuario final, quiero tener gráficos interactivos que muestren mi consumo energético mensual, para entender mejor mis gastos y optimizarlos.
+
+#### 3. Producción energética
+- **a.** Como usuario final, deseo poder monitorear la producción energética diaria y semanal para asegurarme de que estoy generando suficiente energía.
+- **b.** Como usuario final, quiero visualizar tendencias en mi producción energética para anticipar posibles fluctuaciones y planificar mi consumo.
+
+#### 4. Analítica y predicción
+- **a.** Como usuario final, quiero acceder a la analítica de mis consumos energéticos, incluyendo predicciones para los próximos días, para tomar decisiones informadas.
+- **b.** Como usuario final, quiero analizar la eficiencia de mi producción energética con recomendaciones basadas en mis datos históricos para mejorar mi rendimiento.
+- **c.** Como usuario final, quiero obtener análisis que comparen mi consumo real con las predicciones de consumo y generación, para identificar tendencias y tomar decisiones informadas.
+
+#### 5. Especificación de consumo
+- **a.** Como usuario final, quiero establecer y modificar límites de consumo máximo de energía, para evitar penalizaciones y optimizar mi uso energético.
+
+#### 6. Gestión de ofertas de venta de energía excedente
+- **a.** Como usuario final, quiero crear y gestionar ofertas para vender mi energía excedente, con el fin de aprovechar al máximo la energía que genero y no consumo.
+
+#### 7. Visualización de ofertas del mercado
+- **a.** Como usuario final, quiero explorar y evaluar ofertas de energía disponibles en el mercado, para comprar energía adicional cuando la necesite al mejor precio.
+
+#### 8. Transacciones con contratos inteligentes
+- **a.** Como usuario final, quiero comprar y vender energía a través de contratos inteligentes, para garantizar que las transacciones sean seguras, rápidas y confiables.
+
+#### 9. Notificaciones relevantes
+- **a.** Como usuario final, quiero recibir alertas en tiempo real cuando mi generación de energía sea baja, mi consumo sea alto y haya transacciones relacionadas con mi energía, para tomar acciones oportunas y evitar problemas energéticos.
+
+#### 10. Gestión de perfil
+- **a.** Como usuario registrado, quiero iniciar sesión y gestionar mi perfil, para personalizar mis datos y ajustar configuraciones según mis necesidades.
+
+### **Historias de Usuario - No Funcionales**
+
+#### 11. Seguridad de datos
+- **a.** Como usuario final, quiero que todos mis datos sean almacenados y transmitidos de manera encriptada, para proteger mi información personal y financiera contra accesos no autorizados.
+
+#### 12. Disponibilidad y escalabilidad
+- **a.** Como administrador del sistema, quiero que la aplicación sea completamente escalable y siempre disponible, para garantizar un servicio confiable, incluso con un gran número de usuarios.
+
+#### 13. Rendimiento en consultas
+- **a.** Como usuario del sistema, quiero que las consultas de datos y análisis sean rápidas y eficientes, para acceder a la información en tiempo real sin demoras.
+
+#### 14. Manejo de errores
+- **a.** Como usuario del sistema, quiero que los errores sean manejados correctamente con mensajes claros y específicos, para saber cómo resolverlos o reportarlos.
+
+#### 15. Tolerancia a fallos
+- **a.** Como usuario del sistema, quiero que la plataforma funcione adecuadamente incluso si un microservicio falla, para evitar interrupciones en el servicio.
+
+#### 16. Documentación para desarrolladores
+- **a.** Como desarrollador o nuevo miembro del equipo, quiero acceder a documentación clara y completa del sistema y la API, para comprender rápidamente su funcionamiento y comenzar a trabajar sin dificultades.
+
 
 
 
