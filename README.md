@@ -59,7 +59,30 @@ de sus reservas energéticas o adquirir las de otros bajo un precio acordado por
 
 
 ## 2.2 Exploración de antecedentes y aplicaciones similares
+**ENEL X**
+Lo que diferencia a Enel X de nuestro sistema es que se especializa solo en la parte de monitoreo de energía en tiempo real y está ubicado en Argentina.
 
+https://www.enelx.com/ar/es/empresas/plataformas-de-gestion/Monitoreo-en-tiempo-real
+
+![Imagen 1](https://github.com/user-attachments/assets/ac35d1d2-a93c-4366-b443-b28a7034dbd0)
+![3](https://github.com/user-attachments/assets/232ae6e0-b8d4-4149-81cb-bef6b8791c51)
+![2](https://github.com/user-attachments/assets/eb0556ff-6a90-4c0d-a337-73de8e530e96)
+
+**TuOnda**
+El factor diferencial de tuOnda con respecto anuestro proyecto es que este se especializa en la venta de energía pero a grandes empresas como lo son EPM, Cens, Energía de Pereira y ElectroHuila, entre otras.
+
+https://tuonda.com.co/
+
+![5](https://github.com/user-attachments/assets/59bb3bea-5dbf-4b79-9a57-125925268a57)
+![4](https://github.com/user-attachments/assets/4c952347-7a7d-4f1a-bcb3-b4d87f296832)
+
+**EPM**
+EPM tiene un apartado dentro de su empresa de venta de energía a las personas del común, sin embargo este se diferencia de nuestro sistema porque el de EPM funciona con energía solar y es como un canje de cierta parte de energía eléctrica con energía solar y a cambio de ciertos beneficios.
+
+https://www.epm.com.co/clientesyusuarios/energia/tipos-de-energia/energia-solar/venta-de-energia-solar.html#
+
+![6](https://github.com/user-attachments/assets/b16859fc-c92a-4710-ab5e-4c241f3845c2)
+![7](https://github.com/user-attachments/assets/01e55c60-10c7-4d9b-8210-f903b7daa2fd)
 
 <hr>
 
