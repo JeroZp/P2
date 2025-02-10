@@ -236,13 +236,15 @@ El alcance funcional de la aplicación incluirá:
 ## 2. Descripción de los componentes
 
 **Estilos Arquitectónicos Usados**
-| Tipo aplicación | EnergyMarket  | Power2Peer |
-|--|--|--|
-| Funcionalidad | Actua como un Marketplace de energia |Comercialización de energía asegurada por blockchain  |
-| UX | Sencilla enfocada en facilidad de uso | Sencilla y poco intuitiva |
-| Tecnologías | No información | JavaScript, Solidity, React Native, Truffle y Blockchain de SDN |
-| Modelos de negocio | Marketplace de energía basado en oferta y demanda |Transacciones directas entre productores y consumidores|
-| Seguridad | No información|Seguridad en blockchaikn, con registros inmutables y encriptación avanzada|
+| **Tipo aplicación:** | Web site/ APP  | 
+| **Estilo arquitectónico:** | Arquitectura Basada en Microservicios
+
+**Justificación:** Permite escalar cada servicio de manera independiente, facilitando la integración con terceros.  
+
+**Implicaciones:** Mayor complejidad en la gestión de despliegues y comunicación entre servicios, pero mayor flexibilidad.   |
+| **Lenguaje de programación:** | JavaScript / TypeScript |
+| **Aspectos técnicos:** | Node.js, MySql, TailwindCSS, FastAPI |
+| **Frameworks** | React Native, Expo Librarie, Node.js |
 
 ## 3. Dimensión del sistema
 
