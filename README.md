@@ -101,7 +101,9 @@ Adicional a estos queremos mencionar 2 alternativas que encontramos con IA bajo 
 
 ## 3.1 Story mapping
 
+https://miro.com/welcomeonboard/NFpWemgxSmsvMUI4ak9XUjJoNWE0WlVFditncGkvWC9jV0VKSzl2dnNiVmp3THpwS1ROZFFBUHFDNjRIaWxZMTcwV3hSREpJdE9QT040T3ZvWFJ3Um00TTNLakUwd0VFRkE2T0NBWk5CUXpEamVJc1Z2RlFzK1hmTlJ2SDRCMXFnbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=355807133262
 
+![History Mapping 2](https://github.com/user-attachments/assets/8b5c8548-5235-48fd-b3f8-d41518121cd6)
 
 ## 3.2 Backlog del producto
 
