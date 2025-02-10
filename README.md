@@ -84,6 +84,17 @@ https://www.epm.com.co/clientesyusuarios/energia/tipos-de-energia/energia-solar/
 ![6](https://github.com/user-attachments/assets/b16859fc-c92a-4710-ab5e-4c241f3845c2)
 ![7](https://github.com/user-attachments/assets/01e55c60-10c7-4d9b-8210-f903b7daa2fd)
 
+Adicional a estos queremos mencionar 2 alternativas que encontramos con IA bajo la estructura vista en la clase #3
+
+| Criterios | EnergyMarket  | Power2Peer |
+|--|--|--|
+| Funcionalidad | Actua como un Marketplace de energia |Comercialización de energía asegurada por blockchain  |
+| UX | Sencilla enfocada en facilidad de uso | Sencilla y poco intuitiva |
+| Tecnologías | No información | JavaScript, Solidity, React Native, Truffle y Blockchain de SDN |
+| Modelos de negocio | Marketplace de energía basado en oferta y demanda |Transacciones directas entre productores y consumidores|
+| Seguridad | No información|Seguridad en blockchaikn, con registros inmutables y encriptación avanzada|
+| Rendimiento | Limitada por la infraestructura | Alta eficiencia en transacciones peer to peer  |
+
 <hr>
 
 # Sección 3. User story mapping y backlog del producto
