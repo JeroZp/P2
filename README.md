@@ -237,11 +237,8 @@ El alcance funcional de la aplicación incluirá:
 
 **Estilos Arquitectónicos Usados**
 | **Tipo aplicación:** | Web site/ APP  | 
-| **Estilo arquitectónico:** | Arquitectura Basada en Microservicios
-
-**Justificación:** Permite escalar cada servicio de manera independiente, facilitando la integración con terceros.  
-
-**Implicaciones:** Mayor complejidad en la gestión de despliegues y comunicación entre servicios, pero mayor flexibilidad.   |
+|--|--|--|
+| **Estilo arquitectónico:** | Arquitectura Basada en Microservicios **Justificación:** Permite escalar cada servicio de manera independiente, facilitando la integración con terceros. **Implicaciones:** Mayor complejidad en la gestión de despliegues y comunicación entre servicios, pero mayor flexibilidad.   |
 | **Lenguaje de programación:** | JavaScript / TypeScript |
 | **Aspectos técnicos:** | Node.js, MySql, TailwindCSS, FastAPI |
 | **Frameworks** | React Native, Expo Librarie, Node.js |
