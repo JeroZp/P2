@@ -236,12 +236,12 @@ El alcance funcional de la aplicación incluirá:
 ## 2. Descripción de los componentes
 
 **Estilos Arquitectónicos Usados**
-| **Tipo aplicación:** | Web site/ APP  | 
+| Tipo aplicación: | Web site/ APP  | 
 |--|--|--|
-| **Estilo arquitectónico:** | Arquitectura Basada en Microservicios **Justificación:** Permite escalar cada servicio de manera independiente, facilitando la integración con terceros. **Implicaciones:** Mayor complejidad en la gestión de despliegues y comunicación entre servicios, pero mayor flexibilidad.   |
-| **Lenguaje de programación:** | JavaScript / TypeScript |
-| **Aspectos técnicos:** | Node.js, MySql, TailwindCSS, FastAPI |
-| **Frameworks** | React Native, Expo Librarie, Node.js |
+| Estilo arquitectónico:| Arquitectura Basada en Microservicios Justificación: Permite escalar cada servicio de manera independiente, facilitando la integración con terceros. Implicaciones: Mayor complejidad en la gestión de despliegues y comunicación entre servicios, pero mayor flexibilidad.   |
+| Lenguaje de programación:| JavaScript / TypeScript |
+| Aspectos técnicos: | Node.js, MySql, TailwindCSS, FastAPI |
+| Frameworks | React Native, Expo Librarie, Node.js |
 
 ## 3. Dimensión del sistema
 
