@@ -221,6 +221,17 @@ El prototipo de Solar Gauge es un paso inicial hacia la creación de una herrami
 # Base de Arquitectura:
 ## 1. Alcance 
 
+El proyecto consiste en el desarrollo e integración de una aplicación móvil que replicará y ampliará las funcionalidades de la web app existente. La aplicación tendrá como objetivo principal ofrecer a los usuarios una experiencia intuitiva y accesible para gestionar y monitorear sus datos energéticos. 
+
+El alcance funcional de la aplicación incluirá: 
+
+**1. Visualización de consumos y producción:** Los usuarios podrán acceder a datos en tiempo real y históricos sobre un consumo energético y producción (por ejemplo, si cuentan con paneles solares u otras fuentes de energía renovable). Se incluirán gráficos interactivos, tendencias y comparativas para facilitar el análisis. 
+
+**2. Modelos Predictivos:** la aplicación integrará algoritmos de machine learning para ofrecer predicciones personalizadas sobre el consumo futuro, la producción energética y la optimización de recursos. Estos modelos se basarían en datos históricos y factores externos como condiciones climáticas o patrones de uso. 
+
+**3. Mercado Energético:** El Modulo de Mercado Energético permite a los usuarios participar activamente en la compra y venta de energía, ofreciendo herramientas para crear y gestionar ofertas con precios y cantidades personalizadas. Los usuarios accederán a información en tiempo real sobre precios y tarifas dinámicas, junto con recomendaciones inteligentes para ajustar sus ofertas o consumo según las condiciones del mercado. Esto permitirá maximizar ingresos, reducir costes y tomar decisiones informadas para optimizar su participación en el mercado energético. 
+
+**4. Energía Almacenada:** La aplicación incluirá un módulo para monitorear y gestionar la energía almacenada (por ejemplo, en baterías). Los usuarios podrán visualizar el porcentaje de la carga, la capacidad de almacenamiento y la energía disponible. 
 
 ## 2. Descripción de los componentes
 
