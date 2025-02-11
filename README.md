@@ -25,11 +25,9 @@ SCRUM Máster)
 
 ## 1.3 Público objetivo y contexto
 
-Solar Gauge es un sistema energético que tiene como público objetivo a las empresas 
-y comunidad en general con el fin de que estas puedan hacer monitoreo en tiempo real
-de su consumo de energía para que a partir de esta información puedan optimizar sus 
-gastos en dicho recurso y con el objetivo de que en un futuro puedan vender la sobra 
-de sus reservas energéticas o adquirir las de otros bajo un precio acordado por ambas partes. 
+Nuestra plataforma es sistema energético dirigido a empresas y comunidades, permitiéndoles monitorear en tiempo real su consumo de energía. A través de esta funcionalidad, los usuarios pueden optimizar el uso de sus recursos, reduciendo costos y mejorando la eficiencia energética.
+
+Además, el sistema está diseñado para evolucionar hacia un Marketplace de energía, donde las empresas y comunidades podrán comercializar sus excedentes energéticos o adquirir energía de otros usuarios a precios previamente acordados. Esta plataforma fomenta un modelo de intercambio eficiente y accesible, promoviendo la sostenibilidad y la optimización de los recursos energéticos.
 
 ## 1.4 Descripción del proceso de interacción
 
@@ -66,27 +64,45 @@ de sus reservas energéticas o adquirir las de otros bajo un precio acordado por
 **ENEL X**
 Lo que diferencia a Enel X de nuestro sistema es que se especializa solo en la parte de monitoreo de energía en tiempo real y está ubicado en Argentina.
 
-https://www.enelx.com/ar/es/empresas/plataformas-de-gestion/Monitoreo-en-tiempo-real
+**Link:** https://www.enelx.com/ar/es/empresas/plataformas-de-gestion/Monitoreo-en-tiempo-real
 
-![Imagen 1](https://github.com/user-attachments/assets/ac35d1d2-a93c-4366-b443-b28a7034dbd0)
-![3](https://github.com/user-attachments/assets/232ae6e0-b8d4-4149-81cb-bef6b8791c51)
-![2](https://github.com/user-attachments/assets/eb0556ff-6a90-4c0d-a337-73de8e530e96)
+### Capturas de Pantalla
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ac35d1d2-a93c-4366-b443-b28a7034dbd0" width="300">
+  <img src="https://github.com/user-attachments/assets/eb0556ff-6a90-4c0d-a337-73de8e530e96" width="300">
+  <img src="https://github.com/user-attachments/assets/232ae6e0-b8d4-4149-81cb-bef6b8791c51" width="300">
+</p>
+
+<hr>
 
 **TuOnda**
 El factor diferencial de tuOnda con respecto anuestro proyecto es que este se especializa en la venta de energía pero a grandes empresas como lo son EPM, Cens, Energía de Pereira y ElectroHuila, entre otras.
 
-https://tuonda.com.co/
+**Link:** https://tuonda.com.co/
 
-![5](https://github.com/user-attachments/assets/59bb3bea-5dbf-4b79-9a57-125925268a57)
-![4](https://github.com/user-attachments/assets/4c952347-7a7d-4f1a-bcb3-b4d87f296832)
+#### Capturas de Pantalla
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/59bb3bea-5dbf-4b79-9a57-125925268a57" width="300">
+  <img src="https://github.com/user-attachments/assets/4c952347-7a7d-4f1a-bcb3-b4d87f296832" width="300">
+</p>
+
+<hr>
 
 **EPM**
 EPM tiene un apartado dentro de su empresa de venta de energía a las personas del común, sin embargo este se diferencia de nuestro sistema porque el de EPM funciona con energía solar y es como un canje de cierta parte de energía eléctrica con energía solar y a cambio de ciertos beneficios.
 
-https://www.epm.com.co/clientesyusuarios/energia/tipos-de-energia/energia-solar/venta-de-energia-solar.html#
+**Link:** https://www.epm.com.co/clientesyusuarios/energia/tipos-de-energia/energia-solar/venta-de-energia-solar.html#
 
-![6](https://github.com/user-attachments/assets/b16859fc-c92a-4710-ab5e-4c241f3845c2)
-![7](https://github.com/user-attachments/assets/01e55c60-10c7-4d9b-8210-f903b7daa2fd)
+#### Capturas de Pantalla
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b16859fc-c92a-4710-ab5e-4c241f3845c2" width="300">
+  <img src="https://github.com/user-attachments/assets/01e55c60-10c7-4d9b-8210-f903b7daa2fd" width="300">
+</p>
+
+<hr>
 
 Adicional a estos queremos mencionar 2 alternativas que encontramos con IA bajo la estructura vista en la clase #3
 
@@ -182,7 +198,7 @@ https://miro.com/welcomeonboard/NFpWemgxSmsvMUI4ak9XUjJoNWE0WlVFditncGkvWC9jV0VK
 El prototipo de Solar Gauge es una primera representación del sistema diseñado para monitorear y gestionar el consumo y la generación de energía en tiempo real. Este prototipo está orientado a usuarios que buscan una solución eficiente para controlar sus fuentes de energía, especialmente aquellas relacionadas con la energía solar.
 
 ## Link del prototipo:
- https://www.figma.com/proto/Ns6qu8NcjQ5fmG3xxRNLHK/Solar-Gauge?node-id=0-1&t=tehSf40yXPx8hkcm-1
+ https://www.figma.com/proto/9MBZlRFlehHSyywOP2puTZ/p2?node-id=1-2&t=Il9sJRRfpSAO4kkF-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2&show-proto-sidebar=1
 
 ## Objetivos del prototipo:
 - **Visualización de Datos:** Proporcionar una vista clara y accesible de los datos de energía generada y consumida.
