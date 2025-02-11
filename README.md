@@ -1,7 +1,11 @@
 # Sección 1. Generalidades del proyecto
 ## 1.1 Descripción del problema y su solución software
 
-En nuestro caso contamos con un proyecto previamente iniciado el cual tiene como razón de ser una mejor gestión para los recursos energéticos que poseen las empresas o comunidades, hasta el momento se tiene una página web donde al ser alimentada con una base de datos se puede visualizar dicho recurso, pero el cliente también manifestó varios propósitos que tiene en mente para este sistema; como solución a dos de las grandes prioridades del cliente nosotros ofrecemos el desarrollo de una aplicación móvil para sistema operativo móvil Android (ya que el cliente manifestó esta preferencia) y la creación de un Marketplace donde los consumidores de este proyecto puedan ofertar sus reservas energéticas y comprar este recurso si así lo desean.  
+En el contexto actual, la gestión eficiente de los recursos energéticos representa un desafío clave para empresas y comunidades, especialmente aquellas que buscan optimizar su consumo, maximizar el aprovechamiento de sus excedentes y participar en mercados energéticos dinámicos. Actualmente, nuestro equipo trabaja en un proyecto previamente iniciado que tiene como objetivo mejorar la administración de estos recursos mediante una plataforma digital. Hasta el momento, se ha desarrollado una página web que, alimentada por una base de datos, permite la visualización y monitoreo de la energía disponible.
+
+No obstante, en respuesta a las necesidades expresadas por el cliente, se identificaron dos áreas prioritarias de mejora: la accesibilidad a la plataforma y la integración de un mecanismo eficiente de comercialización energética. Para abordar estos requerimientos, proponemos el desarrollo de una aplicación móvil compatible con el sistema operativo Android, en línea con las preferencias del cliente, y la implementación de un Marketplace de energía. Este Marketplace permitirá a los usuarios ofertar sus excedentes energéticos y adquirir recursos según sus necesidades, facilitando así la optimización de su consumo y promoviendo un ecosistema de intercambio energético eficiente y accesible.
+
+Con esta solución, buscamos no solo mejorar la experiencia del usuario y la accesibilidad del sistema, sino también fomentar una gestión más dinámica y sostenible de los recursos energéticos, alineada con las tendencias de digitalización y transición energética.
 
 ## 1.2 Personas y roles del proyecto
 
