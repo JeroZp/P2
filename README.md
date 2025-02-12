@@ -194,44 +194,38 @@ https://miro.com/welcomeonboard/NFpWemgxSmsvMUI4ak9XUjJoNWE0WlVFditncGkvWC9jV0VK
 
 <hr>
 
-# Sección 5. Prototipos iniciales
+# Sección 5: Prototipos/ mockups 
 El prototipo de Solar Gauge es una primera representación del sistema diseñado para monitorear y gestionar el consumo y la generación de energía en tiempo real. Este prototipo está orientado a usuarios que buscan una solución eficiente para controlar sus fuentes de energía, especialmente aquellas relacionadas con la energía solar.
 
 ## Link del prototipo:
  https://www.figma.com/proto/9MBZlRFlehHSyywOP2puTZ/p2?node-id=1-2&t=Il9sJRRfpSAO4kkF-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2&show-proto-sidebar=1
 
-## Objetivos del prototipo:
-- **Visualización de Datos:** Proporcionar una vista clara y accesible de los datos de energía generada y consumida.
-- **Monitoreo en Tiempo Real:** Permitir a los usuarios ver cómo varía su consumo y generación a lo largo del día.
-- **Proyección de Costos:** Ofrecer herramientas para estimar los costos futuros en base al uso de la energía y las tendencias del mercado.
+<hr>
 
-## **Componentes Principales del Prototipo:**
-### **1. Pantalla de Inicio:**
-- **Elementos Clave:** Nombre del proyecto, opciones de inicio de sesión y registro
-- **Funcionalidad:** Es la puerta de entrada al sistema, donde los usuarios pueden iniciar sesión o registrarse para acceder a sus datos de energía.
-### **2. Panel Principal:**
-- **Elementos Clave:** Gráficos de energía los cuales muestran la cantidad de energía generada y consumida en un periodo específico, indicadores clave de rendimiento donde se incluyen el consumo y la generación total, y el balance energético, y por último el resumen diario.
-- **Funcionalidad:** Centraliza la información más relevante, permitiendo a los usuarios una comprensión rápida de su situación energética.
-### **3. Sección de Detalles de Energía:**
-- **Elementos Clave:** Tablas y gráficos detallados sobre el consumo y la producción de energía.
-- **Funcionalidad:** Ofrece un análisis más profundo para los usuarios que necesitan entender los picos de consumo o producción.
-### **4. Herramientas de Proyección:**
-- **Elementos CLave:** Calculadora de costos que permite a los usuarios estimar sus gastos futuros en energía en base a su consumo actual.
-- **Funcionalidad:** Ayuda a los usuarios a planificar su uso de energía y a tomar decisiones informadas sobre su consumo.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ce20e203-f14e-4646-b8ed-160ee45f570f" width="300">
+  <img src="https://github.com/user-attachments/assets/df11cf77-673e-4c3d-b851-4a8ecd32f7ee" width="300">
+  <img src="https://github.com/user-attachments/assets/ae79c632-b133-422e-b2ed-4221787b3fb2" width="300">
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5cccafee-2c8d-483d-bc3a-b16a3a80c68c" width="300">
+  <img src="https://github.com/user-attachments/assets/59cf16a8-b5f1-4762-9bb5-ecd018f3e5ec" width="300">
+  <img src="https://github.com/user-attachments/assets/abb8a590-10e7-4fba-934d-64d07e35d998" width="300">
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/fd214044-45a7-4e52-86f0-bd6d41e90933" width="300">
+  <img src="https://github.com/user-attachments/assets/245a6736-fea0-4d92-a46f-65c3e4d7a993" width="300">
+  <img src="https://github.com/user-attachments/assets/4a061932-2151-4b50-9368-f17472c240d3" width="300">
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/080fbaf1-b2b0-407f-aba2-649955150d4b" width="300">
+  <img src="https://github.com/user-attachments/assets/cc2dd98c-18e6-4c25-b387-fcce71ef44a2" width="300">
+  <img src="https://github.com/user-attachments/assets/db1d54d1-c66d-46f1-94d7-0bfc3643fee9" width="300">
+</p>
 
-## **Interactividad del Usuario:**
-- **Navegación Simple:** Menús y botones bien organizados para facilitar el acceso a las diferentes secciones.
-- **Interacción con los Gráficos:** Los usuarios pueden hacer clic en las diferentes partes de los gráficos para obtener más detalles o cambiar la visualización.
-- **Actualización en Tiempo Real:** Los datos se actualizan automáticamente para reflejar los cambios en el consumo y la generación de energía.
 
-## **Tecnologías y Herramientas Utilizadas:**
-- **Figma:** Herramienta principal para el diseño y prototipado del interaz principal el cual con el tiempo le iremos agregando más detalles.
-- **HTML/CSS/Javascript - React Framework:** Tecnologías web para la implementación visual final.
 
-## **Consideraciones Futuras:**
-- **Desarrollo de Funcionalidades:** Inclusión de más herramientas de análisis avanzado y personalización (Rest API, DB, Backend languages).
-- **Implementación de Funcionalidades Avanzadas:** Añadir herramientas para el análisis de datos más sofisticados y opciones de personalización.
-- **Optimización del Rendimiento:** Mejora la velocidad y la eficiencia del sistema basado en los comentarios de los usuarios.
+<hr>
 
 ## **Conclusión:**
 El prototipo de Solar Gauge es un paso inicial hacia la creación de una herramienta poderosa para la gestión de la energía. A medida que se desarrolle y se perfeccione, se espera que se convierta en un recurso esencial para usuario que deseen maximizar la eficiencia de sus sistemas de energía.
