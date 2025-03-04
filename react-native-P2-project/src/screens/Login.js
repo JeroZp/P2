@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import loginStyles from '../../assets/styles/loginStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Bubble from '../components/Bubble';
 
 export default function Login() {
   const navigation = useNavigation();
@@ -26,6 +27,14 @@ export default function Login() {
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={[loginStyles.container, { paddingBottom: insets.bottom }]}>
+
+        {/* Bolitas decorativas */}
+
+        <Bubble size={330} color="#6FCF97" position={{ top: -240, left: -90 }} />
+        <Bubble size={330} color="#1E8449" position={{ top: -265, left: 70 }} />
+
+        <Bubble size={270} color="#6FCF97" position={{ bottom: -90, right: -170 }} />
+        <Bubble size={330} color="#1E8449" position={{ bottom: -250, right: -50 }} />
 
           {/* Fondo decorativo */}
           <View style={loginStyles.topBackground} />
