@@ -1,21 +1,24 @@
-import { StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar, Dimensions  } from 'react-native';
+
+const screenHeight = Dimensions.get('window').height;
 
 const loginStyles = StyleSheet.create({
   safeArea: {
-    flex: 1,
-    backgroundColor: '#F5F5F5',
-    paddingTop: StatusBar.currentHeight, // Evita que el contenido se superponga con la barra de estado
-  },
+      flex: 1,
+      backgroundColor: '#F5F5F5',
+      paddingTop: StatusBar.currentHeight,
+    },
 
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-  },
+    height: screenHeight,
+    },
 
   logo: {
-    fontSize: 32,
+    fontSize: 28,
     fontFamily: 'Xirod',
     color: '#006600',
     marginBottom: 15,
@@ -32,7 +35,7 @@ const loginStyles = StyleSheet.create({
   separator: {
     height: 1.5, // Grosor de la línea
     backgroundColor: '#ddd', // Color de la línea
-    width: '90%', // Que no llegue a los bordes completamente
+    width: '105%', // Que no llegue a los bordes completamente
     alignSelf: 'center',
   },
 
@@ -45,7 +48,7 @@ const loginStyles = StyleSheet.create({
   inputContainer: {
     backgroundColor: 'white',
     width: '90%',
-    paddingVertical: 8,
+    paddingVertical: 2,
     paddingHorizontal: 15,
     borderTopRightRadius: 80,
     borderBottomRightRadius: 80,
@@ -74,7 +77,7 @@ const loginStyles = StyleSheet.create({
 
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'MontserratAlternates-SemiBold',
     textAlignVertical: 'center',
     includeFontPadding: false,
@@ -87,13 +90,13 @@ const loginStyles = StyleSheet.create({
   loginButton: {
     backgroundColor: '#3498DB',
     borderRadius: 50,
-    width: 75,
-    height: 75,
+    width: 90,
+    height: 90,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    right: -30,
-    top: '55%',
+    right: -40,
+    top: '40%',
     transform: [{ translateY: -27.5 }],
     shadowColor: '#000',
     shadowOpacity: 0.5,
@@ -124,14 +127,14 @@ const loginStyles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 4,
 
-    marginTop: 80,
+    marginTop: 60,
     alignSelf: 'flex-start',
-    width: '35%',
-    marginLeft: -40,
+    width: '37%',
+    marginLeft: -30,
   },
 
   registerText: {
-    fontSize: 16,
+    fontSize: 20,
     fontFamily: 'MontserratAlternates-Bold',
     color: '#1F4E78',
     textAlign: 'center',

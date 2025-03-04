@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   SafeAreaView,
   StatusBar,
   Keyboard,
@@ -13,32 +12,33 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import loginStyles from '../../assets/styles/loginStyles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Login() {
   const navigation = useNavigation();
   const [usuario, setUsuario] = useState('');
   const [contraseña, setContraseña] = useState('');
+  const insets = useSafeAreaInsets(); // Margen seguro dinámico
 
   return (
-    <SafeAreaView style={loginStyles.safeArea}>
+    <SafeAreaView style={[loginStyles.safeArea, { paddingBottom: insets.bottom, flex: 1 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
-      {/* Cierra el teclado al tocar fuera */}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={loginStyles.container}>
+        <View style={[loginStyles.container, { paddingBottom: insets.bottom }]}>
 
           {/* Fondo decorativo */}
           <View style={loginStyles.topBackground} />
           <View style={loginStyles.bottomBackground} />
 
-          {/* Logo  */}
+          {/* Logo */}
           <Text style={loginStyles.logo}>ENERGÍA COMUNIDAD</Text>
           <Text style={loginStyles.title}>Iniciar sesión</Text>
 
           {/* Contenedor de los inputs */}
           <View style={loginStyles.inputWrapper}>
             <View style={loginStyles.inputContainer}>
-            
+
               {/* Usuario */}
               <View style={[loginStyles.inputField, loginStyles.inputWithBorder]}>
                 <FontAwesome5 name="user" size={18} color="#666" style={loginStyles.inputIcon} />
@@ -92,5 +92,3 @@ export default function Login() {
     </SafeAreaView>
   );
 }
-
-
