@@ -2,7 +2,7 @@ import { StyleSheet, StatusBar, Dimensions  } from 'react-native';
 
 const screenHeight = Dimensions.get('window').height;
 
-const loginStyles = StyleSheet.create({
+const registerStyles = StyleSheet.create({
   safeArea: {
       flex: 1,
       backgroundColor: '#F5F5F5',
@@ -20,7 +20,7 @@ const loginStyles = StyleSheet.create({
   logo: {
     fontSize: 28,
     fontFamily: 'Xirod',
-    color: '#006600',
+    color: '#000066',
     marginBottom: 15,
     textAlign: 'center',
   },
@@ -34,8 +34,8 @@ const loginStyles = StyleSheet.create({
 
   separator: {
     height: 1.5, // Grosor de la línea
-    backgroundColor: '#ddd', // Color de la línea
-    width: '105%', // Que no llegue a los bordes completamente
+    backgroundColor: '#ddd',
+    width: '105%',
     alignSelf: 'center',
   },
 
@@ -50,8 +50,8 @@ const loginStyles = StyleSheet.create({
     width: '90%',
     paddingVertical: 2,
     paddingHorizontal: 15,
-    borderTopRightRadius: 80,
-    borderBottomRightRadius: 80,
+    borderTopRightRadius: 60,
+    borderBottomRightRadius: 60,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
     shadowColor: '#000',
@@ -96,7 +96,7 @@ const loginStyles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     right: -40,
-    top: '40%',
+    top: '46%',
     transform: [{ translateY: -27.5 }],
     shadowColor: '#000',
     shadowOpacity: 0.5,
@@ -117,28 +117,29 @@ const loginStyles = StyleSheet.create({
     backgroundColor: '#ffffff',
     paddingVertical: 15,
     paddingHorizontal: 20,
-    borderTopRightRadius: 80,
-    borderBottomRightRadius: 80,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 80,
+    borderBottomLeftRadius: 80,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 4,
 
-    marginTop: 60,
+    marginTop: -80,
+    marginBottom: 30,
     alignSelf: 'flex-start',
-    width: '37%',
-    marginLeft: -208,
+    width: '50%',
+    marginLeft: 240,
   },
 
   registerText: {
     fontSize: 20,
     fontFamily: 'MontserratAlternates-Bold',
-    color: '#1F4E78',
+    color: '#1E8449',
     textAlign: 'center',
   },
 });
 
-export default loginStyles;
+export default registerStyles;
