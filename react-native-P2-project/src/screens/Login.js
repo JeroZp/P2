@@ -1,3 +1,4 @@
+import { Alert } from 'react-native'; // alertas -> backend
 import { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -58,11 +59,13 @@ export default function Login() {
   // Manejar el inicio de sesión -> backend
   const handleLogin = async () => {
     try {
-      const { token } = await loginUser(email, password); // Llamar al servicio de autenticación -> backend
-      await storeToken(token); // Guardar el token en AsyncStorage -> backend
-      navigation.navigate('Home'); // Navegar a la pantalla principal -> backend
+      const { token } = await loginUser(email, password); // Llamar al servicio de autenticación
+      await storeToken(token); // Guardar el token en AsyncStorage
+      console.log('Login exitoso. Token:', token); // Imprimir en consola
+      // falta saltar a la otra vista -> backend
     } catch (error) {
-      Alert.alert('Error', 'No se pudo iniciar sesión');
+      console.error('Error en el login:', error); // Imprimir el error en consola
+      Alert.alert('Error', 'No se pudo iniciar sesión. Verifica tus credenciales.');
     }
   };
 
@@ -103,11 +106,11 @@ export default function Login() {
                 <FontAwesome5 name="user" size={18} color="#666" style={loginStyles.inputIcon} />
                 <TextInput
                   style={loginStyles.input}
-                  placeholder="Usuario"
+                  placeholder="Correo electrónico" // cambio usario por correo -> backend
                   value={email}
                   onChangeText={setEmail}
                   placeholderTextColor="#666"
-                  keyboardType="default"
+                  keyboardType="email-address" // teclado para email -> backend
                   returnKeyType="next"
                   onSubmitEditing={() => Keyboard.dismiss()}
                 />
