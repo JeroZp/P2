@@ -15,42 +15,56 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import loginStyles from '../../assets/styles/loginStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Bubble from '../components/Bubble';
+import { loginUser } from '../services/authService'; // Importar el servicio de autenticación -> backend
+import { storeToken } from '../utils/storage'; // Importar la utilidad para almacenar el token -> backend
+
 
 export default function Login() {
   const navigation = useNavigation();
-  const [usuario, setUsuario] = useState('');
-  const [contraseña, setContraseña] = useState('');
+  const [email, setEmail] = useState(''); // Cambiar de "usuario" a "email" -> backend
+  const [password, setPassword] = useState(''); // Cambiar de "contraseña" a "password" -> backend
   const [isKeyboardVisible, setKeyboardVisible] = useState(false); // Estado del teclado
   const insets = useSafeAreaInsets(); // Margen seguro dinámico
 
   // Animación de opacidad
-    const fadeAnim = useRef(new Animated.Value(1)).current; // Inicia visible
+  const fadeAnim = useRef(new Animated.Value(1)).current; // Inicia visible
 
-    // Escuchar eventos del teclado con animación
-    useEffect(() => {
-      const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-        setKeyboardVisible(true);
-        Animated.timing(fadeAnim, {
-          toValue: 0, // Se desvanece
-          duration: 300,
-          useNativeDriver: true,
-        }).start();
-      });
+  // Escuchar eventos del teclado con animación
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+      Animated.timing(fadeAnim, {
+        toValue: 0, // Se desvanece
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    });
 
-      const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-        setKeyboardVisible(false);
-        Animated.timing(fadeAnim, {
-          toValue: 1, // Reaparece
-          duration: 300,
-          useNativeDriver: true,
-        }).start();
-      });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+      Animated.timing(fadeAnim, {
+        toValue: 1, // Reaparece
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    });
 
-      return () => {
-        keyboardDidShowListener.remove();
-        keyboardDidHideListener.remove();
-      };
-    }, []);
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  // Manejar el inicio de sesión -> backend
+  const handleLogin = async () => {
+    try {
+      const { token } = await loginUser(email, password); // Llamar al servicio de autenticación -> backend
+      await storeToken(token); // Guardar el token en AsyncStorage -> backend
+      navigation.navigate('Home'); // Navegar a la pantalla principal -> backend
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo iniciar sesión');
+    }
+  };
 
   return (
     <SafeAreaView style={[loginStyles.safeArea, { paddingBottom: insets.bottom, flex: 1 }]}>
@@ -65,8 +79,8 @@ export default function Login() {
           {/* Bolitas decorativas */}
           <Animated.View style={{ opacity: fadeAnim }}>
 
-              <Bubble size={270} color="#6FCF97" position={{ top: 440, left: 110 }} />
-              <Bubble size={330} color="#1E8449" position={{ top: 550, left: -60 }} />
+            <Bubble size={270} color="#6FCF97" position={{ top: 440, left: 110 }} />
+            <Bubble size={330} color="#1E8449" position={{ top: 550, left: -60 }} />
           </Animated.View>
 
           {/* Fondo decorativo */}
@@ -75,7 +89,7 @@ export default function Login() {
 
           {/* Logo (Desaparece con el teclado) */}
           <Animated.View style={{ opacity: fadeAnim }}>
-              <Text style={loginStyles.logo}>ENERGÍA COMUNIDAD</Text>
+            <Text style={loginStyles.logo}>ENERGÍA COMUNIDAD</Text>
 
           </Animated.View>
 
@@ -90,8 +104,8 @@ export default function Login() {
                 <TextInput
                   style={loginStyles.input}
                   placeholder="Usuario"
-                  value={usuario}
-                  onChangeText={setUsuario}
+                  value={email}
+                  onChangeText={setEmail}
                   placeholderTextColor="#666"
                   keyboardType="default"
                   returnKeyType="next"
@@ -108,8 +122,8 @@ export default function Login() {
                   style={loginStyles.input}
                   placeholder="Contraseña"
                   secureTextEntry
-                  value={contraseña}
-                  onChangeText={setContraseña}
+                  value={password}
+                  onChangeText={setPassword}
                   placeholderTextColor="#666"
                   returnKeyType="done"
                   onSubmitEditing={() => Keyboard.dismiss()}
@@ -117,7 +131,7 @@ export default function Login() {
               </View>
 
               {/* Botón de inicio */}
-              <TouchableOpacity style={loginStyles.loginButton}>
+              <TouchableOpacity style={loginStyles.loginButton} onPress={handleLogin}/* que hacer en caso de presionar -> backend */>
                 <FontAwesome5 name="arrow-right" size={20} color="white" />
               </TouchableOpacity>
             </View>

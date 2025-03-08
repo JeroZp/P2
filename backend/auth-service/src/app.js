@@ -1,6 +1,6 @@
 const express = require('express');
-const authRoutes = require('./src/routes/authRoutes'); // Cambia según el microservicio
-const { pool } = require('./src/config/db');
+const authRoutes = require('./routes/authRoutes'); // Cambia según el microservicio
+const { pool } = require('./config/db');
 
 const app = express();
 app.use(express.json());
