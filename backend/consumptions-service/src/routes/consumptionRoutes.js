@@ -1,13 +1,13 @@
 const express = require('express');
-const { addConsumption, getConsumptions } = require('../controllers/consumptionController');
-const authenticateToken = require('../middlewares/authMiddleware');
+const consumptionController = require('../controllers/consumptionController');
+const authMiddleware = require('../middlewares/authMiddleware'); // Importar el middleware
 
 const router = express.Router();
 
-// Ruta para registrar un nuevo consumo (protegida por JWT)
-router.post('/', authenticateToken, addConsumption);
+// Ruta protegida: Solo usuarios autenticados pueden crear un consumo
+router.post('/', authMiddleware, consumptionController.createConsumption);
 
-// Ruta para obtener todos los consumos de un usuario (protegida por JWT)
-router.get('/', authenticateToken, getConsumptions);
+// Ruta protegida: Solo usuarios autenticados pueden obtener sus consumos
+router.get('/:userId', authMiddleware, consumptionController.getConsumptionsByUser);
 
 module.exports = router;

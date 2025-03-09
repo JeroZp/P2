@@ -1,6 +1,6 @@
 const express = require('express');
-const authRoutes = require('./src/routes/authRoutes'); // Cambia según el microservicio
-const { pool } = require('./src/config/db');
+const authRoutes = require('./routes/authRoutes'); // Cambia según el microservicio
+const { pool } = require('./config/db');
 
 const app = express();
 app.use(express.json());
@@ -10,6 +10,6 @@ app.use('/auth', authRoutes); // Cambia según el microservicio
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servicio corriendo en http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => { // Escuchar en todas las interfaces
+    console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
 });
