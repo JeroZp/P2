@@ -1,0 +1,10 @@
+#Back-End
+
+backend/auth-service/.env
+backend/auth-service/node_modules
+backend/consumptions-service/.env
+backend/consumptions-service/node_modules
+backend/productions-service/.env
+backend/productions-service/node_modules
+react-native-P2-project/Android
+.idea
