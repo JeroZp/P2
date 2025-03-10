@@ -82,6 +82,10 @@ export default function Registro() {
 
           {/* Logo con animación */}
           <Animated.View style={{ opacity: fadeAnim }}>
+                       <Text style={registerStyles.logo}>ENERGÍA COMUNIDAD</Text>
+                    </Animated.View>
+
+          <Animated.View style={{ opacity: fadeAnim }}>
             <Text style={registerStyles.title}>Registro</Text>
           </Animated.View>
 
@@ -126,7 +130,7 @@ export default function Registro() {
                 <FontAwesome5 name="envelope" size={18} color="#666" style={registerStyles.inputIcon} />
                 <TextInput
                   style={registerStyles.input}
-                  placeholder="Correo electrónico"
+                  placeholder="Correo"
                   value={correo}
                   onChangeText={setCorreo}
                   placeholderTextColor="#666"
@@ -166,15 +170,20 @@ export default function Registro() {
                 />
               </View>
 
-              {/* Botón de Registro (Flecha en círculo) */}
+              {/* Botón de Registro  */}
               <TouchableOpacity style={registerStyles.loginButton}>
                 <FontAwesome5 name="arrow-right" size={20} color="white" />
               </TouchableOpacity>
 
+
             </View>
           </View>
 
+
+
         </View>
+
+
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );

@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import { NavigationContainer } from '@react-navigation/native';
+
 import { Text, View, ActivityIndicator } from 'react-native';
 import * as Font from 'expo-font';
 import AppNavigator from './src/navigation/AppNavigator';
+import CP from './src/screens/C&P'
+
+const Stack = createStackNavigator();
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+
 
   useEffect(() => {
     async function loadFonts() {
@@ -67,5 +75,7 @@ export default function App() {
     );
   }
 
-  return <AppNavigator />;
+ return (
+     <AppNavigator />
+   );;
 }
