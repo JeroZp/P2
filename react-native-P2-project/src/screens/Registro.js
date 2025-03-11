@@ -15,6 +15,9 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import registerStyles from '../../assets/styles/registerStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Bubble from '../components/Bubble';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Para guardar el token -> backend
+import { signupUser } from '../services/authService'; // Servicio para el registro -> backend
+
 
 export default function Registro() {
   const navigation = useNavigation();
@@ -27,7 +30,7 @@ export default function Registro() {
   const [contraseña, setContraseña] = useState('');
   const [cedula, setCedula] = useState('');
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false); // Estado para controlar la carga -> backend
   // Animación de opacidad
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
@@ -57,6 +60,43 @@ export default function Registro() {
     };
   }, [fadeAnim]);
 
+  // Función para manejar el registro -> backend
+  const handleSignup = async () => {
+    if (!name || !lastname || !correo || !contraseña || !cedula) {
+      Alert.alert('Error', 'Todos los campos son obligatorios');
+      return;
+    }
+
+    if (contraseña.length < 6) {
+      Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(correo)) {
+      Alert.alert('Error', 'El formato del correo electrónico no es válido');
+      return;
+    }
+
+    setIsLoading(true); // Activar el estado de carga
+
+    try {
+      // Enviar los datos al backend
+      const response = await signupUser(name, lastname, correo, contraseña, 'Residencial', cedula);
+
+      // Guardar el token en AsyncStorage
+      await AsyncStorage.setItem('userToken', response.token);
+
+      // Redirigir a la pantalla principal
+      //navigation.navigate('Home'); -> pasar a producciones
+    } catch (error) {
+      console.error('Error en el registro:', error);
+      Alert.alert('Error', 'No se pudo registrar el usuario');
+    } finally {
+      setIsLoading(false); // Desactivar el estado de carga
+    }
+  };
+
   return (
     <SafeAreaView style={[registerStyles.safeArea, { paddingBottom: insets.bottom, flex: 1 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
@@ -82,8 +122,8 @@ export default function Registro() {
 
           {/* Logo con animación */}
           <Animated.View style={{ opacity: fadeAnim }}>
-                       <Text style={registerStyles.logo}>ENERGÍA COMUNIDAD</Text>
-                    </Animated.View>
+            <Text style={registerStyles.logo}>ENERGÍA COMUNIDAD</Text>
+          </Animated.View>
 
           <Animated.View style={{ opacity: fadeAnim }}>
             <Text style={registerStyles.title}>Registro</Text>
@@ -171,7 +211,9 @@ export default function Registro() {
               </View>
 
               {/* Botón de Registro  */}
-              <TouchableOpacity style={registerStyles.loginButton}>
+              <TouchableOpacity style={[registerStyles.loginButton, isLoading && { opacity: 0.5 }]}
+                onPress={handleSignup}
+                disabled={isLoading}>
                 <FontAwesome5 name="arrow-right" size={20} color="white" />
               </TouchableOpacity>
 
