@@ -106,7 +106,7 @@ export default function Login() {
                 <FontAwesome5 name="user" size={18} color="#666" style={loginStyles.inputIcon} />
                 <TextInput
                   style={loginStyles.input}
-                  placeholder="Correo electrónico" // cambio usario por correo -> backend
+                  placeholder="Correo" // cambio usario por correo -> backend
                   value={email}
                   onChangeText={setEmail}
                   placeholderTextColor="#666"

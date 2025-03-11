@@ -47,8 +47,8 @@ const loginStyles = StyleSheet.create({
 
   inputContainer: {
     backgroundColor: 'white',
-    width: '90%',
-    paddingVertical: 2,
+    width: '85%',
+    paddingVertical: 10,
     paddingHorizontal: 15,
     borderTopRightRadius: 80,
     borderBottomRightRadius: 80,
@@ -64,7 +64,7 @@ const loginStyles = StyleSheet.create({
   inputField: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 20,
     minHeight: 50,
     width: '100%',
     paddingLeft: 20,
@@ -83,8 +83,8 @@ const loginStyles = StyleSheet.create({
     includeFontPadding: false,
     height: '100%',
     lineHeight: 60,
-    paddingTop: 0,
-    paddingBottom: 0,
+    paddingTop: 2,
+    paddingBottom: 2,
   },
 
   loginButton: {
@@ -96,7 +96,7 @@ const loginStyles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     right: -40,
-    top: '40%',
+    top: '45%',
     transform: [{ translateY: -27.5 }],
     shadowColor: '#000',
     shadowOpacity: 0.5,
