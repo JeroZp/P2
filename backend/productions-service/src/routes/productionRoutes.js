@@ -1,13 +1,13 @@
 const express = require('express');
 const productionController = require('../controllers/productionController');
-const authMiddleware = require('../middlewares/authMiddleware'); // Importar el middleware
+const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
 // Ruta protegida: Solo usuarios autenticados pueden crear una producción
-router.post('/', authMiddleware, productionController.createProduction);
+router.post('/', authMiddleware, productionController.addProduction);
 
 // Ruta protegida: Solo usuarios autenticados pueden obtener sus producciones
-router.get('/:userId', authMiddleware, productionController.getProductionsByUser);
+router.get('/', authMiddleware, productionController.getProductions);
 
 module.exports = router;
