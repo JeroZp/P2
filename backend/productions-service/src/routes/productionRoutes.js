@@ -1,13 +1,13 @@
 const express = require('express');
-const { addProduction, getProductions } = require('../controllers/productionController');
-const authenticateToken = require('../middlewares/authMiddleware');
+const productionController = require('../controllers/productionController');
+const authMiddleware = require('../middlewares/authMiddleware'); // Importar el middleware
 
 const router = express.Router();
 
-// Ruta para registrar una nueva producción (protegida por JWT)
-router.post('/', authenticateToken, addProduction);
+// Ruta protegida: Solo usuarios autenticados pueden crear una producción
+router.post('/', authMiddleware, productionController.createProduction);
 
-// Ruta para obtener todas las producciones de un usuario (protegida por JWT)
-router.get('/', authenticateToken, getProductions);
+// Ruta protegida: Solo usuarios autenticados pueden obtener sus producciones
+router.get('/:userId', authMiddleware, productionController.getProductionsByUser);
 
 module.exports = router;

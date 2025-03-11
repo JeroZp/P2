@@ -1,5 +1,15 @@
 const db = require('../config/db');
 
+const findUserByEmail = async (email) => {
+  const query = 'SELECT id, email, userType, passwordHash FROM users WHERE email = $1';
+  try {
+    return await db.oneOrNone(query, [email]);
+  } catch (error) {
+    console.error('Error en findUserByEmail:', error);
+    throw new Error('Error al buscar el usuario en la base de datos');
+  }
+};
+
 const createUser = async (names, surnames, email, passwordHash, userType, cedulaOrNit) => {
   const query = `
     INSERT INTO users (names, surnames, email, passwordHash, userType, cedulaOrNit)
@@ -10,9 +20,4 @@ const createUser = async (names, surnames, email, passwordHash, userType, cedula
   return db.one(query, values);
 };
 
-const findUserByEmail = async (email) => {
-  const query = 'SELECT * FROM users WHERE email = $1';
-  return db.oneOrNone(query, [email]);
-};
-
-module.exports = { createUser, findUserByEmail };
+module.exports = { findUserByEmail, createUser };
