@@ -4,16 +4,15 @@ import { getToken } from '../utils/storage';
 // Obtener consumos del usuario
 export const getConsumptions = async () => {
     try {
-        const token = await getToken(); // Obtener el token
-        console.log('Token obtenido:', token);
+        const token = await getToken(); // Obtener el token desde AsyncStorage
         const response = await fetch(API_URLS.consumptions, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`, // Enviar el token
+                'Authorization': `Bearer ${token}`, // Formato correcto
             },
         });
-
+        console.log(token);
         if (!response.ok) {
             throw new Error('Error al obtener los consumos');
         }
