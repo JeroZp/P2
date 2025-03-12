@@ -86,9 +86,8 @@ export default function Registro() {
 
       // Guardar el token en AsyncStorage
       await AsyncStorage.setItem('userToken', response.token);
-
-      // Redirigir a la pantalla principal
-      //navigation.navigate('Home'); -> pasar a producciones
+      // Redirigir a la vista de consumos -> backend
+      navigation.navigate('C&P');
     } catch (error) {
       console.error('Error en el registro:', error);
       Alert.alert('Error', 'No se pudo registrar el usuario');

@@ -1,28 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, ScrollView, StatusBar, StyleSheet } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Bubble from "../components/Bubble";
 import NavBar from "../components/NavBar";
+import { getConsumptions, getProductions } from "../services/consumptionProductionService";
+
 
 export default function CP() {
   const [mode, setMode] = useState("Consumo");
-
-  const data = {
+  const [data, setData] = useState({
     Consumo: {
       totalActual: "0.00 Wh",
-      totalAnterior: "108.00 Wh",
-      promedioDiario: "474.61 Wh",
-      promedioMensual: "5537.07 Wh",
-      promedioHora: "19.07 Wh",
+      totalAnterior: "0.00 Wh",
+      promedioDiario: "0.00 Wh",
+      promedioMensual: "0.00 Wh",
+      promedioHora: "0.00 Wh",
     },
     Producción: {
-      totalActual: "150.00 Wh",
-      totalAnterior: "98.50 Wh",
-      promedioDiario: "510.32 Wh",
-      promedioMensual: "6123.45 Wh",
-      promedioHora: "21.34 Wh",
+      totalActual: "0.00 Wh",
+      totalAnterior: "0.00 Wh",
+      promedioDiario: "0.00 Wh",
+      promedioMensual: "0.00 Wh",
+      promedioHora: "0.00 Wh",
     },
-  };
+  });
 
   const titles = {
     totalActual: `${mode} total del mes actual`,
@@ -32,24 +33,63 @@ export default function CP() {
     promedioHora: `${mode} promedio por hora`,
   };
 
-const dispositivos = {
-  Consumo: [
-    { nombre: "Horno microondas", porcentaje: "12%" },
-    { nombre: "Computadora", porcentaje: "11%" },
-    { nombre: "Calefactor eléctrico", porcentaje: "11%" },
-    { nombre: "Televisor", porcentaje: "12%" },
-    { nombre: "Lavadora", porcentaje: "14%" },
-    { nombre: "Secadora", porcentaje: "16%" },
-  ],
-  Producción: [
-    { nombre: "Panel Solar 1", porcentaje: "25%" },
-    { nombre: "Panel Solar 2", porcentaje: "20%" },
-    { nombre: "Panel Solar 3", porcentaje: "18%" },
-    { nombre: "Panel Solar 4", porcentaje: "15%" },
-    { nombre: "Panel Solar 5", porcentaje: "12%" },
-    { nombre: "Panel Solar 6", porcentaje: "10%" },
-  ],
-};
+  const dispositivos = {
+    Consumo: [
+      { nombre: "Horno microondas", porcentaje: "12%" },
+      { nombre: "Computadora", porcentaje: "11%" },
+      { nombre: "Calefactor eléctrico", porcentaje: "11%" },
+      { nombre: "Televisor", porcentaje: "12%" },
+      { nombre: "Lavadora", porcentaje: "14%" },
+      { nombre: "Secadora", porcentaje: "16%" },
+    ],
+    Producción: [
+      { nombre: "Panel Solar 1", porcentaje: "25%" },
+      { nombre: "Panel Solar 2", porcentaje: "20%" },
+      { nombre: "Panel Solar 3", porcentaje: "18%" },
+      { nombre: "Panel Solar 4", porcentaje: "15%" },
+      { nombre: "Panel Solar 5", porcentaje: "12%" },
+      { nombre: "Panel Solar 6", porcentaje: "10%" },
+    ],
+  };
+
+  // Obtener datos del backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (mode === "Consumo") {
+          const consumptions = await getConsumptions();
+          setData(prevData => ({
+            ...prevData,
+            Consumo: {
+              totalActual: consumptions.totalActual,
+              totalAnterior: consumptions.totalAnterior,
+              promedioDiario: consumptions.promedioDiario,
+              promedioMensual: consumptions.promedioMensual,
+              promedioHora: consumptions.promedioHora,
+            },
+          }));
+        } else {
+          const productions = await getProductions();
+          setData(prevData => ({
+            ...prevData,
+            Producción: {
+              totalActual: productions.totalActual,
+              totalAnterior: productions.totalAnterior,
+              promedioDiario: productions.promedioDiario,
+              promedioMensual: productions.promedioMensual,
+              promedioHora: productions.promedioHora,
+            },
+          }));
+        }
+      } catch (error) {
+        console.error('Error al obtener los datos:', error);
+        alert('Error al cargar los datos. Por favor, inténtalo de nuevo.');
+      }
+    };
+
+    fetchData();
+  }, [mode]);
+
 
   return (
     <View style={styles.container}>
@@ -85,7 +125,7 @@ const dispositivos = {
         </TouchableOpacity>
       </View>
 
-        <View style={styles.separator} />
+      <View style={styles.separator} />
 
       {/* Contenido desplazable */}
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -98,22 +138,22 @@ const dispositivos = {
 
         {/* Contenedor general de dispositivos con fondo */}
         <View style={styles.devicesWrapper}>
-        {/* Título con modo en negrilla */}
-            <Text style={styles.footerText}>
-              <Text style={styles.boldText}>{mode}</Text> total por dispositivo:
-            </Text>
+          {/* Título con modo en negrilla */}
+          <Text style={styles.footerText}>
+            <Text style={styles.boldText}>{mode}</Text> total por dispositivo:
+          </Text>
 
-            {/* Lista de dispositivos con su porcentaje */}
-            {dispositivos[mode].map((item, index) => (
-              <View key={index} style={styles.deviceContainer}>
-                <Text style={styles.deviceText}>{item.nombre}: <Text style={styles.boldText}>{item.porcentaje}</Text></Text>
-              </View>
-            ))}
-         </View>
+          {/* Lista de dispositivos con su porcentaje */}
+          {dispositivos[mode].map((item, index) => (
+            <View key={index} style={styles.deviceContainer}>
+              <Text style={styles.deviceText}>{item.nombre}: <Text style={styles.boldText}>{item.porcentaje}</Text></Text>
+            </View>
+          ))}
+        </View>
       </ScrollView>
 
       {/* Barra de navegación fija */}
-      <NavBar style={{backgroundColor: "#1E8449"}}/>
+      <NavBar style={{ backgroundColor: "#1E8449" }} />
     </View>
   );
 }
@@ -132,37 +172,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: -1,
   },
-   toggleContainer: {
-      flexDirection: "row",
-      justifyContent: "center",
-      marginTop: 85,
-      marginBottom: 10,
-    },
-    toggleButton: {
-      backgroundColor: "#D0ECD8",
-      paddingVertical: 8,
-      paddingHorizontal: 25,
-      borderRadius: 30,
-      marginHorizontal: 10,
-      alignItems: "center",
-      shadowColor: "transparent", // Sin sombra por defecto
-    },
-    toggleButtonActive: {
-      backgroundColor: "#1E8449",
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 3 },
-      shadowOpacity: 0.4,
-      shadowRadius: 7,
-      elevation: 6, // Efecto de sombra en Android
-    },
-    toggleText: {
-      color: "#1E8449",
-      fontFamily: "MontserratAlternates-SemiBold",
-      fontSize: 14,
-    },
-    toggleTextActive: {
-      color: "white",
-    },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 85,
+    marginBottom: 10,
+  },
+  toggleButton: {
+    backgroundColor: "#D0ECD8",
+    paddingVertical: 8,
+    paddingHorizontal: 25,
+    borderRadius: 30,
+    marginHorizontal: 10,
+    alignItems: "center",
+    shadowColor: "transparent", // Sin sombra por defecto
+  },
+  toggleButtonActive: {
+    backgroundColor: "#1E8449",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.4,
+    shadowRadius: 7,
+    elevation: 6, // Efecto de sombra en Android
+  },
+  toggleText: {
+    color: "#1E8449",
+    fontFamily: "MontserratAlternates-SemiBold",
+    fontSize: 14,
+  },
+  toggleTextActive: {
+    color: "white",
+  },
 
   scrollContent: {
     paddingHorizontal: 20,
@@ -231,9 +271,9 @@ const styles = StyleSheet.create({
   },
 
   separator: {
-      height: 1, // Grosor de la línea
-      backgroundColor: '#ddd',
-      width: '50%',
-      alignSelf: 'center',
-    },
+    height: 1, // Grosor de la línea
+    backgroundColor: '#ddd',
+    width: '50%',
+    alignSelf: 'center',
+  },
 });
