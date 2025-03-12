@@ -4,7 +4,7 @@ const { generateToken } = require('../utils/jwtUtils');
 
 const signup = async (req, res) => {
     const { names, surnames, email, password, userType, cedulaOrNit } = req.body;
-
+    console.log("sign Up");
     try {
         // Validación de campos obligatorios
         if (!names || !surnames || !email || !password || !userType || !cedulaOrNit) {
@@ -54,7 +54,7 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-
+    console.log("login");
     try {
         const user = await findUserByEmail(email);
         if (!user) {

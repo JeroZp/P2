@@ -62,7 +62,8 @@ export default function Login() {
       const { token } = await loginUser(email, password); // Llamar al servicio de autenticación
       await storeToken(token); // Guardar el token en AsyncStorage
       console.log('Login exitoso. Token:', token); // Imprimir en consola
-      // falta saltar a la otra vista -> backend
+      // Redirigir a la vista de consumos -> backend
+      navigation.navigate('C&P');
     } catch (error) {
       console.error('Error en el login:', error); // Imprimir el error en consola
       Alert.alert('Error', 'No se pudo iniciar sesión. Verifica tus credenciales.');
