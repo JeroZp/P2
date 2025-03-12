@@ -2,6 +2,7 @@ const { createConsumption, getConsumptionsByUser, getPreviousMonthConsumptions }
 
 // Registrar un nuevo consumo
 const addConsumption = async (req, res) => {
+    console.log("add consumption");
     const { consumptionValue, consumptionDate } = req.body;
     const userId = req.user.userId; // Extraído del JWT
 
@@ -16,7 +17,7 @@ const addConsumption = async (req, res) => {
 // Obtener todos los consumos de un usuario y calcular los valores necesarios
 const getConsumptions = async (req, res) => {
     const userId = req.user.userId; // Extraído del JWT
-
+    console.log("ger consumption");
     try {
         const consumptions = await getConsumptionsByUser(userId);
 

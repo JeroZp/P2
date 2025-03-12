@@ -5,7 +5,6 @@ import Bubble from "../components/Bubble";
 import NavBar from "../components/NavBar";
 import { getConsumptions, getProductions } from "../services/consumptionProductionService";
 
-
 export default function CP() {
   const [mode, setMode] = useState("Consumo");
   const [data, setData] = useState({
@@ -90,7 +89,6 @@ export default function CP() {
     fetchData();
   }, [mode]);
 
-
   return (
     <View style={styles.container}>
       {/* Barra de estado transparente */}
@@ -113,7 +111,6 @@ export default function CP() {
             Consumo
           </Text>
         </TouchableOpacity>
-
 
         <TouchableOpacity
           onPress={() => setMode("Producción")}
@@ -158,8 +155,7 @@ export default function CP() {
   );
 }
 
-
-// estilos, deben ir en el otro archivo...
+// Estilos (deben ir en el otro archivo...)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -203,7 +199,6 @@ const styles = StyleSheet.create({
   toggleTextActive: {
     color: "white",
   },
-
   scrollContent: {
     paddingHorizontal: 20,
     paddingBottom: 80,
@@ -246,7 +241,6 @@ const styles = StyleSheet.create({
     padding: 15,  // Espaciado interno
     marginTop: 10,  // Espacio superior
     marginBottom: 20,  // Espacio inferior
-
   },
   deviceContainer: {
     marginTop: 5,
@@ -269,7 +263,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
-
   separator: {
     height: 1, // Grosor de la línea
     backgroundColor: '#ddd',

@@ -4,12 +4,13 @@ import { getToken } from '../utils/storage';
 // Obtener consumos del usuario
 export const getConsumptions = async () => {
     try {
-        const token = await getToken();
+        const token = await getToken(); // Obtener el token
+        console.log('Token obtenido:', token);
         const response = await fetch(API_URLS.consumptions, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`, // Enviar el token
             },
         });
 

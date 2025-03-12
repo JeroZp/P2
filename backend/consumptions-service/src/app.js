@@ -1,9 +1,12 @@
 const express = require('express');
 const consumptionRoutes = require('./routes/consumptionRoutes');
-const authMiddleware = require('./middlewares/authMiddleware');
-
+const cors = require('cors');
 const app = express();
+
+
+
 app.use(express.json());
+app.use(cors());
 
 // Rutas
 app.use('/cons', consumptionRoutes);

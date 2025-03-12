@@ -4,7 +4,7 @@ const { createProduction, getProductionsByUser, getPreviousMonthProductions } = 
 const addProduction = async (req, res) => {
     const { productionValue, productionDate } = req.body;
     const userId = req.user.userId; // Extraído del JWT
-
+    console.log("add production");
     try {
         const production = await createProduction(userId, productionValue, productionDate);
         res.status(201).json({ message: 'Producción registrada', production });
@@ -16,7 +16,7 @@ const addProduction = async (req, res) => {
 // Obtener todas las producciones de un usuario y calcular los valores necesarios
 const getProductions = async (req, res) => {
     const userId = req.user.userId; // Extraído del JWT
-
+    console.log("get production");
     try {
         const productions = await getProductionsByUser(userId);
 
