@@ -17,3 +17,5 @@ backend/productions-service/node_modules
 react-native-P2-project/Android
 .idea
 backend/auth-service/src/seed.js
+backend/marketplace-service/.env
+backend/marketplace-service/node_modules
