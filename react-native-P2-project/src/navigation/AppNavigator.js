@@ -12,7 +12,7 @@ export default function AppNavigator() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Registro" component={Registro} />
-        <Stack.Screen name="CP" component={CP} />
+        <Stack.Screen name="C&P" component={CP} />
 
       </Stack.Navigator>
     </NavigationContainer>
