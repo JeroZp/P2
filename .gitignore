@@ -1,0 +1,21 @@
+# Node.js
+node_modules
+npm-debug.log*
+yarn-error.log
+
+# Expo & React Native
+react-native-P2-project/.expo
+react-native-P2-project/android
+
+# Backend Services
+backend/auth-service/.env
+backend/auth-service/node_modules
+backend/consumptions-service/.env
+backend/consumptions-service/node_modules
+backend/productions-service/.env
+backend/productions-service/node_modules
+react-native-P2-project/Android
+.idea
+backend/auth-service/src/seed.js
+backend/marketplace-service/.env
+backend/marketplace-service/node_modules

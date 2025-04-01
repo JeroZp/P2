@@ -28,7 +28,7 @@ const registerStyles = StyleSheet.create({
   title: {
     fontFamily: 'MontserratAlternates-SemiBold',
     fontSize: 30,
-    marginBottom: 50,
+    marginBottom: 30,
     color: '#000',
   },
 
@@ -64,7 +64,7 @@ const registerStyles = StyleSheet.create({
   inputField: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 15,
     minHeight: 50,
     width: '100%',
     paddingLeft: 20,
@@ -127,7 +127,7 @@ const registerStyles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 4,
 
-    marginTop: -80,
+    marginTop: -120,
     marginBottom: 30,
     alignSelf: 'flex-start',
     width: '50%',
