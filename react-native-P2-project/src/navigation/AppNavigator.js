@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from '../screens/Login';
 import Registro from '../screens/Registro';
-import CP from '../screens/C&P.js'
+import CP from '../screens/C&P'
 
 const Stack = createStackNavigator();
 
