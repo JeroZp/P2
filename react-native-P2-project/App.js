@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Text, View, ActivityIndicator } from 'react-native';
 import * as Font from 'expo-font';
 import AppNavigator from './src/navigation/AppNavigator';
-import CP from './src/screens/C&P'; 
+// import Marketplace from './src/screens/Marketplace'; 
 
 
 const Stack = createStackNavigator();
@@ -77,11 +77,11 @@ export default function App() {
   }
 
  return (
-  <NavigationContainer>
-  <Stack.Navigator>
-    <Stack.Screen name="C&P" component={CP} options={{ headerShown: false }} />
-  </Stack.Navigator>
-</NavigationContainer>
-    //  <AppNavigator />
+//   <NavigationContainer>
+//   <Stack.Navigator>
+//     <Stack.Screen name="Marketplace" component={Marketplace} options={{ headerShown: false }} />
+//   </Stack.Navigator>
+// </NavigationContainer>
+     <AppNavigator />
    );;
 }
