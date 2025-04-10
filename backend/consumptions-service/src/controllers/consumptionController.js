@@ -24,9 +24,11 @@ const getConsumptions = async (req, res) => {
         // Calcular los valores necesarios
         const totalActual = consumptions.reduce((sum, cons) => sum + parseFloat(cons.consumptionvalue), 0).toFixed(2);
         const totalAnterior = await getPreviousMonthConsumptions(userId); // Obtener el total del mes anterior
-        const promedioDiario = (totalActual / 30).toFixed(2); // Suponiendo 30 días en el mes
+        const daysInMonth = new Date().getDate();
+        const horasEnMes = daysInMonth * 24;
+        const promedioDiario = (totalActual / daysInMonth).toFixed(2);
         const promedioMensual = totalActual;
-        const promedioHora = (totalActual / 720).toFixed(2); // Suponiendo 720 horas en el mes
+        const promedioHora = (totalActual / horasEnMes).toFixed(2);
 
         // Enviar los datos transformados al frontend
         res.status(200).json({

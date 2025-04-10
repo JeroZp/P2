@@ -1,52 +1,59 @@
 const db = require('../config/db');
 
-//definir el modelo de ofertas
-const createOffer = async (offerData) => {
-    const { userId, quantity, value } = offerData;
+// Crear nueva oferta
+const createOffer = async (userId, quantity, value, offerDate) => {
     const query = `
-        INSERT INTO offer (userId, quantity, value, offerDate)
-        VALUES ($1, $2, $3, $4)
-        RETURNING *;
-    `;
-    const values = [userId, quantity, value, new Date()]; // offerDate se establece como la fecha actual
-    return db.one(query, values);
+    INSERT INTO offer (userId, quantity, value, offerDate)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *;
+  `;
+    return db.one(query, [userId, quantity, value, offerDate]);
 };
 
-// Obtener una oferta por su ID
-const getOfferById = async (offerId) => {
-    const query = 'SELECT * FROM offer WHERE id = $1;';
-    return db.oneOrNone(query, [offerId]);
-};
-
-// Obtener todas las ofertas disponibles
-const getAllOffers = async () => {
-    const query = 'SELECT * FROM offer;'; // No hay un campo "status" en la tabla, así que se listan todas
-    return db.manyOrNone(query);
-};
-
-// Actualizar una oferta (por ejemplo, marcar como vendida)
-const updateOffer = async (offerId, updateData) => {
-    const { quantity, value } = updateData;
+// Obtener todas las ofertas (excepto las del usuario)
+const getOffers = async (excludeUserId) => {
     const query = `
-        UPDATE offer
-        SET quantity = $1, value = $2
-        WHERE id = $3
-        RETURNING *;
-    `;
-    const values = [quantity, value, offerId];
-    return db.one(query, values);
+    SELECT o.*, u.names, u.surnames, u.userType 
+    FROM offer o
+    JOIN users u ON o.userId = u.id
+    WHERE o.userId != $1
+    ORDER BY o.offerDate DESC;
+  `;
+    return db.manyOrNone(query, [excludeUserId]);
 };
 
-// Eliminar una oferta
-const deleteOffer = async (offerId) => {
-    const query = 'DELETE FROM offer WHERE id = $1 RETURNING *;';
-    return db.one(query, [offerId]);
+// Obtener ofertas de un usuario
+const getUserOffers = async (userId) => {
+    const query = 'SELECT * FROM offer WHERE userId = $1 ORDER BY offerDate DESC';
+    return db.manyOrNone(query, [userId]);
+};
+
+// Obtener oferta por ID
+const getOfferById = async (id) => {
+    return db.oneOrNone('SELECT * FROM offer WHERE id = $1', [id]);
+};
+
+// Actualizar oferta
+const updateOffer = async (id, quantity, value) => {
+    const query = `
+    UPDATE offer
+    SET quantity = $1, value = $2
+    WHERE id = $3
+    RETURNING *;
+  `;
+    return db.one(query, [quantity, value, id]);
+};
+
+// Eliminar oferta
+const deleteOffer = async (id) => {
+    return db.none('DELETE FROM offer WHERE id = $1', [id]);
 };
 
 module.exports = {
     createOffer,
+    getOffers,
+    getUserOffers,
     getOfferById,
-    getAllOffers,
     updateOffer,
-    deleteOffer,
+    deleteOffer
 };
