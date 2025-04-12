@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+
 const NavBar = () => {
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState("Dashboard"); // Inicialmente muestra "Dashboard"
@@ -22,15 +23,23 @@ const NavBar = () => {
         <FontAwesome5 name="bars" size={18} color="white" />
         {selectedTab === "Dashboard" && <Text style={styles.navText}>Dashboard</Text>}
       </TouchableOpacity>
+
+
       <TouchableOpacity>
         <FontAwesome5 name="chart-line" size={22} color="white" />
       </TouchableOpacity>
       <TouchableOpacity>
         <FontAwesome5 name="lightbulb" size={22} color="white" />
       </TouchableOpacity>
-      <TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.navItem}
+        onPress={() => handlePress("Marketplace", "Marketplace")} // Redirige a la pantalla Marketplace
+      >
         <FontAwesome5 name="shopping-cart" size={22} color="white" />
+        {selectedTab === "Marketplace" && <Text style={styles.navText}>Marketplace</Text>}
       </TouchableOpacity>
+
       <TouchableOpacity>
         <FontAwesome5 name="user" size={22} color="white" />
       </TouchableOpacity>
@@ -47,7 +56,8 @@ const styles = StyleSheet.create({
      justifyContent: "space-around",
      alignItems: "center",
      paddingVertical: 15,
-     backgroundColor: "#1E8449",
+    //  backgroundColor: "#1E8449",
+    backgroundColor: "#1F4E78",
      borderTopLeftRadius: 25,
      borderTopRightRadius: 25,
    },
