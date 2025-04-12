@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     width: "100%",
     top: 0,
     alignItems: "center",
-    zIndex: -1,
+    zIndex: 1,
   },
   toggleContainer: {
     flexDirection: "row",
