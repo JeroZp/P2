@@ -19,3 +19,4 @@ react-native-P2-project/Android
 backend/auth-service/src/seed.js
 backend/marketplace-service/.env
 backend/marketplace-service/node_modules
+repose.js

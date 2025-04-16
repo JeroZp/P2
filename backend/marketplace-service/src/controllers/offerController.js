@@ -1,72 +1,98 @@
-const { createOffer, getOfferById, getAllOffers, updateOffer, deleteOffer } = require('../models/offerModel');
+const {
+    createOffer,
+    getOffers,
+    getUserOffers,
+    updateOffer,
+    deleteOffer,
+    getOfferById
+} = require('../models/offerModel');
 
-// Crear una nueva oferta
-const createOfferHandler = async (req, res) => {
+// Crear nueva oferta
+const createNewOffer = async (req, res) => {
     const { quantity, value } = req.body;
-    const userId = req.user.userId; // Obtener el ID del usuario desde el token
-
+    const userId = req.user.userId;
+    console.log("Create New Offer");
     try {
-        const newOffer = await createOffer({ userId, quantity, value });
-        res.status(201).json(newOffer);
+        // Validaciones básicas
+        if (!quantity || !value) {
+            return res.status(400).json({ message: 'Cantidad y valor son requeridos' });
+        }
+
+        const newOffer = await createOffer(userId, quantity, value, new Date());
+        res.status(201).json({ message: 'Oferta creada', offer: newOffer });
     } catch (error) {
-        res.status(500).json({ message: 'Error al crear la oferta', error: error.message });
+        res.status(500).json({ message: 'Error al crear oferta', error: error.message });
     }
 };
 
-// Obtener todas las ofertas
-const getAllOffersHandler = async (req, res) => {
+// Obtener todas las ofertas (excepto las del usuario)
+const getAllOffers = async (req, res) => {
     try {
-        const offers = await getAllOffers();
+        const userId = req.user.userId;
+        const offers = await getOffers(userId); // Excluye las del usuario
+        console.log("Get All Offers");
         res.status(200).json(offers);
     } catch (error) {
-        res.status(500).json({ message: 'Error al obtener las ofertas', error: error.message });
+        res.status(500).json({ message: 'Error al obtener ofertas', error: error.message });
     }
 };
 
-// Obtener una oferta por su ID
-const getOfferByIdHandler = async (req, res) => {
-    const { id } = req.params;
-
+// Obtener ofertas del usuario actual
+const getMyOffers = async (req, res) => {
     try {
-        const offer = await getOfferById(id);
-        if (!offer) {
-            return res.status(404).json({ message: 'Oferta no encontrada' });
-        }
-        res.status(200).json(offer);
+        const userId = req.user.userId;
+        const offers = await getUserOffers(userId);
+        console.log("Get My Offers");
+        res.status(200).json(offers);
     } catch (error) {
-        res.status(500).json({ message: 'Error al obtener la oferta', error: error.message });
+        res.status(500).json({ message: 'Error al obtener tus ofertas', error: error.message });
     }
 };
 
-// Actualizar una oferta
-const updateOfferHandler = async (req, res) => {
+// Actualizar oferta
+const updateMyOffer = async (req, res) => {
     const { id } = req.params;
     const { quantity, value } = req.body;
-
+    const userId = req.user.userId;
+    console.log("Update My Offer");
     try {
-        const updatedOffer = await updateOffer(id, { quantity, value });
-        res.status(200).json(updatedOffer);
+        // Verificar que la oferta pertenece al usuario
+        const offer = await getOfferById(id);
+        if (!offer || offer.userid !== userId) {
+            return res.status(404).json({ message: 'Oferta no encontrada o no autorizada' });
+        }
+
+        const updatedOffer = await updateOffer(id, quantity, value);
+        res.status(200).json({ message: 'Oferta actualizada', offer: updatedOffer });
     } catch (error) {
-        res.status(500).json({ message: 'Error al actualizar la oferta', error: error.message });
+        res.status(500).json({ message: 'Error al actualizar oferta', error: error.message });
     }
 };
 
-// Eliminar una oferta
-const deleteOfferHandler = async (req, res) => {
+// Eliminar oferta
+const deleteMyOffer = async (req, res) => {
     const { id } = req.params;
-
+    const userId = req.user.userId;
+    console.log("Delete My Offer");
+    // Validaciones
     try {
-        const deletedOffer = await deleteOffer(id);
-        res.status(200).json(deletedOffer);
+        // Verificar que la oferta pertenece al usuario
+        const offer = await getOfferById(id);
+        if (!offer || offer.userid !== userId) {
+            return res.status(404).json({ message: 'Oferta no encontrada o no autorizada' });
+        }
+
+        await deleteOffer(id);
+        res.status(200).json({ message: 'Oferta eliminada' });
     } catch (error) {
-        res.status(500).json({ message: 'Error al eliminar la oferta', error: error.message });
+        res.status(500).json({ message: 'Error al eliminar oferta', error: error.message });
     }
 };
 
 module.exports = {
-    createOfferHandler,
-    getAllOffersHandler,
-    getOfferByIdHandler,
-    updateOfferHandler,
-    deleteOfferHandler,
+    createNewOffer,
+    getAllOffers,
+    getMyOffers,
+    updateMyOffer,
+    deleteMyOffer
 };
