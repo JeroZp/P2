@@ -18,7 +18,7 @@ const NavBar = () => {
       {/* Opción de Dashboard */}
       <TouchableOpacity
         style={styles.navItem}
-        onPress={() => handlePress("CP", "Dashboard")}
+        onPress={() => handlePress("C&P", "CP")}
       >
         <FontAwesome5 name="bars" size={18} color="white" />
         {selectedTab === "Dashboard" && <Text style={styles.navText}>Dashboard</Text>}
@@ -49,28 +49,28 @@ const NavBar = () => {
 
 const styles = StyleSheet.create({
   navBar: {
-     position: "absolute",
-     bottom: 0,
-     width: "100%",
-     flexDirection: "row",
-     justifyContent: "space-around",
-     alignItems: "center",
-     paddingVertical: 15,
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingVertical: 15,
     //  backgroundColor: "#1E8449",
     backgroundColor: "#1F4E78",
-     borderTopLeftRadius: 25,
-     borderTopRightRadius: 25,
-   },
-   navItem: {
-     alignItems: "center",
-   },
-   navText: {
-     fontSize: 10,
-     color: "white",
-     fontFamily: "MontserratAlternates-Bold",
-     marginTop: 4, // Espaciado entre icono y texto
-   },
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+  },
+  navItem: {
+    alignItems: "center",
+  },
+  navText: {
+    fontSize: 10,
+    color: "white",
+    fontFamily: "MontserratAlternates-Bold",
+    marginTop: 4, // Espaciado entre icono y texto
+  },
 
-   });
+});
 
 export default NavBar;

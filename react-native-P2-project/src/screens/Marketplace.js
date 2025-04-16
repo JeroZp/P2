@@ -1,22 +1,98 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Modal, TextInput, CheckBox } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import NavBar from "../components/NavBar"; 
-import Bubble from "../components/Bubble"; 
+import NavBar from "../components/NavBar";
+import Bubble from "../components/Bubble";
+import { getMarketOffers, getMyOffers, createOffer, deleteOffer } from "../services/marketplaceService";
 
 
 export default function Marketplace() {
   const [mode, setMode] = useState("Ordenes");
-  const [orders, setOrders] = useState([
-    { id: 1, name: "Jerónimo Perez Baquero", kWh: "20.00 kWh", price: "$5.0", status: "Aprobado" },
-    { id: 2, name: "Juan Jose Cañón", kWh: "350.70 kWh", price: "$20.0", status: "Multado" }
-  ]);
-  const [sales, setSales] = useState([
-    { id: 1, name: "Jerónimo", kWh: "20.00 kWh", price: "$5.0", status: "Procesando", date: "09/02/2025" }
-  ]);
+
+  const [orders, setOrders] = useState([]);
+  const [sales, setSales] = useState([]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Datos del formulario de oferta
+
+  const [offerForm, setOfferForm] = useState({
+    quantity: '',
+    price: '',
+    expirationDate: '',
+    transferDate: '',
+  });
+
+  // Cargar datos según el modo
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        if (mode === "Compra de Energía") {
+          const offers = await getMarketOffers();
+          setOrders(offers.map(offer => ({
+            id: offer.id,
+            name: `${offer.names} ${offer.surnames}`.trim(),
+            kWh: `${offer.quantity} kWh`,
+            price: `$${offer.value}`,
+            status: "Disponible"
+          })));
+        } else if (mode === "Ventas") {
+          const myOffers = await getMyOffers();
+          setSales(myOffers.map(offer => ({
+            id: offer.id,
+            name: "Comprador", // Esto se actualizará cuando haya compras
+            kWh: `${offer.quantity} kWh`,
+            price: `$${offer.value}`,
+            status: "Disponible",
+            date: new Date(offer.offerdate).toLocaleDateString()
+          })));
+        }
+      } catch (error) {
+        console.error("Error cargando datos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [mode]);
+
+  // Manejar creación de nueva oferta
+  const handleCreateOffer = async () => {
+    try {
+      await createOffer({
+        quantity: parseFloat(offerForm.quantity),
+        value: parseFloat(offerForm.price),
+        offerDate: new Date().toISOString()
+      });
+
+      setModalVisible(false);
+      setOfferForm({
+        quantity: '',
+        price: '',
+        expirationDate: '',
+        transferDate: ''
+      });
+
+      // Recargar ofertas
+      if (mode === "Ventas") {
+        const myOffers = await getMyOffers();
+        setSales(myOffers.map(offer => ({
+          id: offer.id,
+          name: "Comprador",
+          kWh: `${offer.quantity} kWh`,
+          price: `$${offer.value}`,
+          status: "Disponible",
+          date: new Date(offer.offerDate).toLocaleDateString()
+        })));
+      }
+    } catch (error) {
+      console.error("Error creando oferta:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -30,24 +106,24 @@ export default function Marketplace() {
         <Bubble size={330} color="#1F4E78" position={{ top: -275, left: 40 }} />
       </View>
 
-      
+
       <View style={styles.buttonContainer}>
 
-      <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => setMode("Compra de Energía")}
           style={[styles.toggleButton, mode === "Compra de Energía" && styles.toggleButtonActive]}
         >
           <Text style={[styles.toggleText, mode === "Compra de Energía" && styles.toggleTextActive]}>Compra de Energía</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => setMode("Ordenes")}
           style={[styles.toggleButton, mode === "Ordenes" && styles.toggleButtonActive]}
         >
           <Text style={[styles.toggleText, mode === "Ordenes" && styles.toggleTextActive]}>Órdenes</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => setMode("Ventas")}
           style={[styles.toggleButton, mode === "Ventas" && styles.toggleButtonActive]}
         >
@@ -57,7 +133,7 @@ export default function Marketplace() {
 
       <View style={styles.separator} />
 
-   
+
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {mode === "Ordenes" && orders.map((order) => (
           <View key={order.id} style={styles.card}>
@@ -71,9 +147,9 @@ export default function Marketplace() {
 
         {mode === "Ventas" && (
           <>
-           
-            
-           
+
+
+
             <View style={styles.createOfferContainer}>
               <TouchableOpacity style={styles.createOfferButton} onPress={() => setModalVisible(true)}>
                 <Text style={styles.createOfferText}>¡Crear nueva Oferta!</Text>
@@ -82,9 +158,9 @@ export default function Marketplace() {
 
             <View style={styles.separator} />
 
-             <Text style={styles.salesTitle}>Ventas Realizadas:</Text>
+            <Text style={styles.salesTitle}>Ventas Realizadas:</Text>
 
-        
+
             {sales.map((sale) => (
               <View key={sale.id} style={styles.card}>
                 <Text style={styles.cardTitle}>Vendido A: {sale.name}</Text>
@@ -97,10 +173,10 @@ export default function Marketplace() {
             ))}
           </>
         )}
-        
+
         {mode === "Compra de Energía" && (
           <>
-            
+
             {orders.map((order) => (
               <View key={order.id} style={styles.card}>
                 <Text style={styles.cardTitle}>{order.name}</Text>
@@ -115,7 +191,7 @@ export default function Marketplace() {
 
       </ScrollView>
 
-         {/* Modal para crear nueva oferta */}
+      {/* Modal para crear nueva oferta */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -124,42 +200,33 @@ export default function Marketplace() {
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-          <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)} // Cerrar el modal
-            >
-              <FontAwesome5 name="times" size={24} color="#D35400" />
-            </TouchableOpacity>
-
-            <Text style={styles.modalTitle}>Crear nueva Oferta</Text>
+            {/* ... otros elementos ... */}
             <TextInput
               style={styles.input}
               placeholder="Cantidad de Energía (kWh)"
+              value={offerForm.quantity}
+              onChangeText={(text) => setOfferForm({ ...offerForm, quantity: text })}
+              keyboardType="numeric"
             />
             <TextInput
               style={styles.input}
               placeholder="Precio por Unidad"
+              value={offerForm.price}
+              onChangeText={(text) => setOfferForm({ ...offerForm, price: text })}
+              keyboardType="numeric"
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Fecha de Expiración"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Fecha de Transferencia"
-            />
-            {/* <View style={styles.checkboxContainer}>
-              
-              <Text style={styles.checkboxText}>Acepto los términos</Text>
-            </View> */}
-            <TouchableOpacity style={styles.submitButton}>
+            {/* ... otros inputs ... */}
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleCreateOffer}
+            >
               <Text style={styles.submitButtonText}>¡Poner en venta!</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      
+
       <NavBar style={{ backgroundColor: "#1F4E78" }} />
     </View>
   );
@@ -179,9 +246,9 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   buttonContainer: {
-    flexDirection: "column",  
+    flexDirection: "column",
     justifyContent: "center",
-    marginTop: 80,  
+    marginTop: 80,
     marginBottom: 20,
     alignItems: "center",
   },
@@ -191,9 +258,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
 
     borderRadius: 30,
-    marginVertical: 5, 
+    marginVertical: 5,
     alignItems: "center",
-    
+
   },
   toggleButtonActive: {
     backgroundColor: "#3498DB",
@@ -231,7 +298,7 @@ const styles = StyleSheet.create({
   },
   cardValue: {
     fontSize: 25,
-   
+
     fontFamily: "MontserratAlternates-Bold",
     color: "#4F4F4F",
     marginVertical: 10,
