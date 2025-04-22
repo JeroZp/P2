@@ -169,6 +169,23 @@ export default function Marketplace() {
                   Estado: {sale.status}
                 </Text>
                 <Text style={styles.saleDate}>Fecha de venta: {sale.date}</Text>
+                {/* Botones para aceptar o rechazar la venta */}
+                  {sale.status === "Procesando" && (
+                    <View style={styles.actionButtons}>
+                      <TouchableOpacity
+                        style={[styles.actionButton, styles.acceptButton]}
+                        onPress={() => handleAcceptSale(sale.id)}
+                      >
+                        <Text style={styles.actionButtonText}>Aceptar</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.actionButton, styles.rejectButton]}
+                        onPress={() => handleRejectSale(sale.id)}
+                      >
+                        <Text style={styles.actionButtonText}>Rechazar</Text>
+                      </TouchableOpacity>
+                      </View>
+                  )}
               </View>
             ))}
           </>
@@ -181,15 +198,48 @@ export default function Marketplace() {
               <View key={order.id} style={styles.card}>
                 <Text style={styles.cardTitle}>{order.name}</Text>
                 <Text style={styles.cardValue}>{order.kWh} {order.price}</Text>
-                <TouchableOpacity style={styles.obtainButton}>
-                  <Text style={styles.obtainText}>Obtener</Text>
-                </TouchableOpacity>
+                <TouchableOpacity 
+              style={styles.obtainButton} 
+              onPress={() => handleObtainPress(order)}
+            >
+              <Text style={styles.obtainText}>Obtener</Text>
+            </TouchableOpacity>
               </View>
             ))}
           </>
         )}
 
       </ScrollView>
+
+        {/* Modal para comprar */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            {selectedOrder && (
+              <>
+                <Text style={styles.modalTitle}>Detalles de la Orden</Text>
+                <Text style={styles.modalText}>Nombre del Comprador: {selectedOrder.buyer}</Text>
+                <Text style={styles.modalText}>Nombre del Vendedor: {selectedOrder.seller}</Text>
+                <Text style={styles.modalText}>Energía: {selectedOrder.kWh} kWh</Text>
+                <Text style={styles.modalText}>Precio: ${selectedOrder.price}</Text>
+              </>
+            )}
+            <TouchableOpacity
+              style={styles.acceptButton}
+              onPress={handleAccept}
+            >
+              <Text style={styles.acceptButtonText}>Aceptar</Text>
+            </TouchableOpacity>
+
+            
+          </View>
+        </View>
+      </Modal>
 
       {/* Modal para crear nueva oferta */}
       <Modal
@@ -427,6 +477,41 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  acceptButton: {
+    marginTop: 10,
+    backgroundColor: "#28A745",
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+  },
+  acceptButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  actionButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  actionButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    width: "48%",
+  },
+  acceptButton: {
+    backgroundColor: "#28A745", // Verde para aceptar
+  },
+  rejectButton: {
+    backgroundColor: "#DC3545", // Rojo para rechazar
+  },
+  actionButtonText: {
+    color: "white",
+    fontFamily: "MontserratAlternates-SemiBold",
+    fontSize: 16,
+    textAlign: "center",
   },
 });
 
