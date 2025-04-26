@@ -17,7 +17,7 @@ const addConsumption = async (req, res) => {
 // Obtener todos los consumos de un usuario y calcular los valores necesarios
 const getConsumptions = async (req, res) => {
     const userId = req.user.userId; // Extraído del JWT
-    console.log("ger consumption");
+    console.log("get consumptions");
     try {
         const consumptions = await getConsumptionsByUser(userId);
 

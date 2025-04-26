@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const offerRoutes = require('./routes/offerRoutes');
+const purchaseRoutes = require('./routes/purchaseRoutes');
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/api/marketplace', offerRoutes);
+app.use('/api/marketplace', purchaseRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3003;
