@@ -6,11 +6,13 @@ const {
     updateContractStatus
 } = require('../models/purchaseModel');
 const { getOfferById } = require('../models/offerModel');
+const { generateAndSaveContract } = require('../services/contractService');
 
 // Comprar una oferta
 const purchaseOffer = async (req, res) => {
     const { id: offerId } = req.params;
     const buyerId = req.user.userId;
+    console.log("Purchase offer");
 
     try {
         // Obtener la oferta
@@ -19,17 +21,15 @@ const purchaseOffer = async (req, res) => {
             return res.status(404).json({ message: 'Oferta no encontrada' });
         }
 
-        // Verificar que no sea el propio usuario
         if (offer.userid === buyerId) {
             return res.status(400).json({ message: 'No puedes comprar tu propia oferta' });
         }
 
-        // Verificar que la oferta esté disponible
         if (offer.quantity <= 0) {
             return res.status(400).json({ message: 'La oferta no tiene cantidad disponible' });
         }
 
-        // Crear el contrato/compra con la cantidad total de la oferta
+        // Crear el contrato/compra
         const purchase = await createPurchase(
             buyerId,
             offerId,
@@ -37,10 +37,14 @@ const purchaseOffer = async (req, res) => {
             offer.value
         );
 
+        // Generar el contrato PDF (asíncrono, no bloqueante)
+        generateAndSaveContract(purchase.id)
+            .then(() => console.log(`Contract PDF generated for purchase ${purchase.id}`))
+            .catch(err => console.error('Error generating contract PDF:', err));
+
         res.status(201).json({
             message: 'Compra realizada con éxito',
-            purchase,
-            remainingOffer: offer // Opcional: devolver la oferta actualizada
+            purchase
         });
     } catch (error) {
         res.status(500).json({
@@ -52,6 +56,7 @@ const purchaseOffer = async (req, res) => {
 
 // Obtener mis compras
 const getMyPurchases = async (req, res) => {
+    console.log("Get my purchases");
     try {
         const userId = req.user.userId;
         const purchases = await getPurchasesByBuyer(userId);
@@ -63,6 +68,7 @@ const getMyPurchases = async (req, res) => {
 
 // Obtener mis ventas
 const getMySales = async (req, res) => {
+    console.log("Get my sales");
     try {
         const userId = req.user.userId;
         const sales = await getSalesBySeller(userId);
@@ -74,10 +80,10 @@ const getMySales = async (req, res) => {
 
 // Actualizar estado de contrato (para admin o partes involucradas)
 const updateContract = async (req, res) => {
+    console.log("Update contract status");
     const { id } = req.params;
     const { status } = req.body;
     const userId = req.user.userId;
-
     try {
         // Verificar que el usuario tenga permisos (comprador o vendedor)
         const contract = await getContractById(id);
