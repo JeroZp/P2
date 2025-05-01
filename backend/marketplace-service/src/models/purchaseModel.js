@@ -1,13 +1,13 @@
 const db = require('../config/db');
 
 // Crear nueva compra/contrato
-const createPurchase = async (buyerId, offerId, quantity, agreedPrice) => {
+const createPurchase = async (buyerId, offerId, quantity, agreedPrice, contractPath = null) => {
   const query = `
-        INSERT INTO energy_contracts (buyer_id, offer_id, quantity, agreed_price, status)
-        VALUES ($1, $2, $3, $4, 'Pending')
+        INSERT INTO energy_contracts (buyer_id, offer_id, quantity, agreed_price, status, contract_pdf_path)
+        VALUES ($1, $2, $3, $4, 'Pending', $5)
         RETURNING *;
     `;
-  return db.one(query, [buyerId, offerId, quantity, agreedPrice]);
+  return db.one(query, [buyerId, offerId, quantity, agreedPrice, contractPath]);
 };
 
 // Obtener compras del usuario (como comprador)
@@ -38,6 +38,7 @@ const getSalesBySeller = async (sellerId) => {
 
 // Obtener contrato por ID
 const getContractById = async (id) => {
+  console.log(id);
   return db.oneOrNone('SELECT * FROM energy_contracts WHERE id = $1', [id]);
 };
 
