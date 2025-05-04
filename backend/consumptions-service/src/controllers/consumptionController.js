@@ -43,4 +43,18 @@ const getConsumptions = async (req, res) => {
     }
 };
 
-module.exports = { addConsumption, getConsumptions };
+const getConsumptionsOrdered = async (req, res) => {
+    const userId = req.user.userId;
+
+    try {
+        const consumptions = await getConsumptionsByUserOrdered(userId);
+        res.status(200).json(consumptions);
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al obtener los consumos ordenados',
+            error: error.message
+        });
+    }
+};
+
+module.exports = { addConsumption, getConsumptions, getConsumptionsOrdered };
