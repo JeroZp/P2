@@ -42,4 +42,18 @@ const getProductions = async (req, res) => {
     }
 };
 
-module.exports = { addProduction, getProductions };
+const getProductionsOrdered = async (req, res) => {
+    const userId = req.user.userId;
+
+    try {
+        const productions = await getProductionsByUserOrdered(userId);
+        res.status(200).json(productions);
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al obtener las producciones ordenadas',
+            error: error.message
+        });
+    }
+};
+
+module.exports = { addProduction, getProductions, getProductionsOrdered };

@@ -1,7 +1,7 @@
 const pgp = require('pg-promise')();
 
 // Configuración de la conexión
-const connectionString = process.env.DATABASE_URL || 'postgresql://p2_user:60OjO7dSZTjPI5Ms1NRMQpOlXHOBIWbk@dpg-cvob00juibrs73bn7f00-a.oregon-postgres.render.com/p2_database';
+const connectionString = process.env.DATABASE_URL || 'postgresql://p2_user:WSOxsdEldKqCP94BlMMQ8Xclae0URupD@dpg-d0d4cjruibrs73dte8n0-a.oregon-postgres.render.com/p2_database_rptx';
 
 const db = pgp({
     connectionString,
