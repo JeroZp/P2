@@ -10,4 +10,7 @@ router.post('/', authMiddleware, productionController.addProduction);
 // Ruta protegida: Solo usuarios autenticados pueden obtener sus producciones
 router.get('/', authMiddleware, productionController.getProductions);
 
+// Ruta protegida: Solo usuarios autenticados pueden obtener sus producciones ordenadas
+router.get('/ordered', authMiddleware, productionController.getProductionsOrdered);
+
 module.exports = router;

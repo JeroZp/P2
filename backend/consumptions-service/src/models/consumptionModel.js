@@ -33,4 +33,14 @@ const getPreviousMonthConsumptions = async (userId) => {
   return result ? parseFloat(result.total) : 0;
 };
 
-module.exports = { createConsumption, getConsumptionsByUser, getPreviousMonthConsumptions };
+const getConsumptionsByUserOrdered = async (userId) => {
+  const query = `
+    SELECT * 
+    FROM consumptions 
+    WHERE userId = $1
+    ORDER BY consumptionDate ASC;
+  `;
+  return db.manyOrNone(query, [userId]);
+};
+
+module.exports = { createConsumption, getConsumptionsByUser, getPreviousMonthConsumptions, getConsumptionsByUserOrdered };

@@ -33,4 +33,14 @@ const getPreviousMonthProductions = async (userId) => {
   return result ? parseFloat(result.total) : 0;
 };
 
-module.exports = { createProduction, getProductionsByUser, getPreviousMonthProductions };
+const getProductionsByUserOrdered = async (userId) => {
+  const query = `
+    SELECT * 
+    FROM productions 
+    WHERE userId = $1
+    ORDER BY productionDate ASC;
+  `;
+  return db.manyOrNone(query, [userId]);
+};
+
+module.exports = { createProduction, getProductionsByUser, getPreviousMonthProductions, getProductionsByUserOrdered };
