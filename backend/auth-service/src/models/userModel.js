@@ -20,4 +20,19 @@ const createUser = async (names, surnames, email, passwordHash, userType, cedula
   return db.one(query, values);
 };
 
-module.exports = { findUserByEmail, createUser };
+const updateUserEmail = async (userId, newEmail) => {
+  const query = `
+    UPDATE users 
+    SET email = $1, updatedAt = CURRENT_TIMESTAMP
+    WHERE id = $2
+    RETURNING id, email, userType;
+  `;
+  try {
+    return await db.one(query, [newEmail, userId]);
+  } catch (error) {
+    console.error('Error en updateUserEmail:', error);
+    throw new Error('Error al actualizar el email en la base de datos');
+  }
+};
+
+module.exports = { findUserByEmail, createUser, updateUserEmail };
