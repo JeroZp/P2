@@ -170,22 +170,22 @@ export default function Marketplace() {
                 </Text>
                 <Text style={styles.saleDate}>Fecha de venta: {sale.date}</Text>
                 {/* Botones para aceptar o rechazar la venta */}
-                  {sale.status === "Procesando" && (
-                    <View style={styles.actionButtons}>
-                      <TouchableOpacity
-                        style={[styles.actionButton, styles.acceptButton]}
-                        onPress={() => handleAcceptSale(sale.id)}
-                      >
-                        <Text style={styles.actionButtonText}>Aceptar</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.actionButton, styles.rejectButton]}
-                        onPress={() => handleRejectSale(sale.id)}
-                      >
-                        <Text style={styles.actionButtonText}>Rechazar</Text>
-                      </TouchableOpacity>
-                      </View>
-                  )}
+                {sale.status === "Procesando" && (
+                  <View style={styles.actionButtons}>
+                    <TouchableOpacity
+                      style={[styles.actionButton, styles.acceptButton]}
+                      onPress={() => handleAcceptSale(sale.id)}
+                    >
+                      <Text style={styles.actionButtonText}>Aceptar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.actionButton, styles.rejectButton]}
+                      onPress={() => handleRejectSale(sale.id)}
+                    >
+                      <Text style={styles.actionButtonText}>Rechazar</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             ))}
           </>
@@ -198,12 +198,12 @@ export default function Marketplace() {
               <View key={order.id} style={styles.card}>
                 <Text style={styles.cardTitle}>{order.name}</Text>
                 <Text style={styles.cardValue}>{order.kWh} {order.price}</Text>
-                <TouchableOpacity 
-              style={styles.obtainButton} 
-              onPress={() => handleObtainPress(order)}
-            >
-              <Text style={styles.obtainText}>Obtener</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.obtainButton}
+                  onPress={() => handleObtainPress(order)}
+                >
+                  <Text style={styles.obtainText}>Obtener</Text>
+                </TouchableOpacity>
               </View>
             ))}
           </>
@@ -211,7 +211,7 @@ export default function Marketplace() {
 
       </ScrollView>
 
-        {/* Modal para comprar */}
+      {/* Modal para comprar */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -220,7 +220,7 @@ export default function Marketplace() {
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-            {selectedOrder && (
+            {/* {selectedOrder && (
               <>
                 <Text style={styles.modalTitle}>Detalles de la Orden</Text>
                 <Text style={styles.modalText}>Nombre del Comprador: {selectedOrder.buyer}</Text>
@@ -234,9 +234,9 @@ export default function Marketplace() {
               onPress={handleAccept}
             >
               <Text style={styles.acceptButtonText}>Aceptar</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            
+
           </View>
         </View>
       </Modal>
