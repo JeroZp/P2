@@ -212,7 +212,7 @@ export default function Marketplace() {
       </ScrollView>
 
         {/* Modal para comprar */}
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -239,7 +239,7 @@ export default function Marketplace() {
             
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       {/* Modal para crear nueva oferta */}
       <Modal

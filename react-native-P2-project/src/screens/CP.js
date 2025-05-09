@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StatusBar, StyleSheet } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
+import { PieChart } from "react-native-chart-kit";
+
 import Bubble from "../components/Bubble";
 import NavBar from "../components/NavBar";
+import { showMessage } from "react-native-flash-message";
 import { getConsumptions, getProductions } from "../services/consumptionProductionService";
 
+const { width: screenWidth } = Dimensions.get("window");
+
 export default function CP() {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [showChart, setShowChart] = useState(true);
   const [mode, setMode] = useState("Consumo");
   const [data, setData] = useState({
     Consumo: {
@@ -24,13 +38,36 @@ export default function CP() {
     },
   });
 
-  const titles = {
-    totalActual: `${mode} total del mes actual`,
-    totalAnterior: `${mode} total del mes anterior`,
-    promedioDiario: `${mode} promedio diario`,
-    promedioMensual: `${mode} promedio mensual`,
-    promedioHora: `${mode} promedio por hora`,
-  };
+  // Cuando cambie el modo, resetea selección y trae datos
+  useEffect(() => {
+    (async () => {
+      try {
+        if (mode === "Consumo") {
+          const consumptions = await getConsumptions();
+          setData(prev => ({ ...prev, Consumo: consumptions }));
+        } else {
+          const productions = await getProductions();
+          setData(prev => ({ ...prev, Producción: productions }));
+        }
+      } catch {
+        showMessage({
+          message: "ERROR",
+          description: "No obtuvo la información correctamente.",
+          type: "danger",
+          icon: "auto",
+          duration: 5500,
+        });
+      }
+    })();
+    setSelectedIndex(null);
+  }, [mode]);
+
+  // Cada vez que cambie selectedIndex, forzamos un remount del chart
+  useEffect(() => {
+    setShowChart(false);
+    const t = setTimeout(() => setShowChart(true), 100);
+    return () => clearTimeout(t);
+  }, [selectedIndex]);
 
   const dispositivos = {
     Consumo: [
@@ -51,57 +88,38 @@ export default function CP() {
     ],
   };
 
-  // Obtener datos del backend
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (mode === "Consumo") {
-          const consumptions = await getConsumptions();
-          setData(prevData => ({
-            ...prevData,
-            Consumo: {
-              totalActual: consumptions.totalActual,
-              totalAnterior: consumptions.totalAnterior,
-              promedioDiario: consumptions.promedioDiario,
-              promedioMensual: consumptions.promedioMensual,
-              promedioHora: consumptions.promedioHora,
-            },
-          }));
-        } else {
-          const productions = await getProductions();
-          setData(prevData => ({
-            ...prevData,
-            Producción: {
-              totalActual: productions.totalActual,
-              totalAnterior: productions.totalAnterior,
-              promedioDiario: productions.promedioDiario,
-              promedioMensual: productions.promedioMensual,
-              promedioHora: productions.promedioHora,
-            },
-          }));
-        }
-      } catch (error) {
-        console.error('Error al obtener los datos:', error);
-        alert('Error al cargar los datos. Por favor, inténtalo de nuevo.');
-      }
-    };
+  const COLORS = ['#1E8449','#6FCF97','#F2C94C','#EB5757','#2D9CDB','#9B51E0'];
 
-    fetchData();
-  }, [mode]);
+  // Prepara los datos con color/leyenda según selección
+  const chartData = dispositivos[mode].map((d, i) => ({
+    name: d.nombre,
+    population: parseFloat(d.porcentaje),
+    porcentaje: d.porcentaje,
+    color: selectedIndex === null
+      ? COLORS[i]
+      : (i === selectedIndex ? COLORS[i] : "#e0e0e0"),
+    legendFontColor: i === selectedIndex ? "#000" : "#333",
+    legendFontSize: 16,
+  }));
+
+  const titles = {
+    totalActual: `${mode} total del mes actual`,
+    totalAnterior: `${mode} total del mes anterior`,
+    promedioDiario: `${mode} promedio diario`,
+    promedioMensual: `${mode} promedio mensual`,
+    promedioHora: `${mode} promedio por hora`,
+  };
 
   return (
     <View style={styles.container}>
-      {/* Barra de estado transparente */}
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
-      {/* Contenedor de burbujas (fondo fijo) */}
       <View style={styles.bubblesContainer}>
         <Bubble size={330} color="#6FCF97" position={{ top: -260, left: -90 }} />
         <Bubble size={330} color="#6FCF97" position={{ top: -260, left: 150 }} />
         <Bubble size={330} color="#1E8449" position={{ top: -275, left: 40 }} />
       </View>
 
-      {/* Botones de Consumo y Producción */}
       <View style={styles.toggleContainer}>
         <TouchableOpacity
           onPress={() => setMode("Consumo")}
@@ -111,7 +129,6 @@ export default function CP() {
             Consumo
           </Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           onPress={() => setMode("Producción")}
           style={[styles.toggleButton, mode === "Producción" && styles.toggleButtonActive]}
@@ -124,37 +141,71 @@ export default function CP() {
 
       <View style={styles.separator} />
 
-      {/* Contenido desplazable */}
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {Object.keys(data[mode]).map((key, index) => (
-          <View key={index} style={styles.card}>
+        {Object.keys(data[mode]).map((key, i) => (
+          <View key={i} style={styles.card}>
             <Text style={styles.cardTitle}>{titles[key]}</Text>
             <Text style={styles.cardValue}>{data[mode][key]}</Text>
           </View>
         ))}
 
-        {/* Contenedor general de dispositivos con fondo */}
-        <View style={styles.devicesWrapper}>
-          {/* Título con modo en negrilla */}
+        <View style={[
+            styles.devicesWrapper,
+            { backgroundColor:
+                mode === "Consumo"
+                  ? "rgba(255,183,77,0.13)"
+                  : "rgba(211,84,0,0.1)"
+            }
+        ]}>
           <Text style={styles.footerText}>
             <Text style={styles.boldText}>{mode}</Text> total por dispositivo:
           </Text>
+          <View style={styles.legendContainer}>
+            {chartData.map((slice, i) => {
+              const isSel = i === selectedIndex;
+              return (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => setSelectedIndex(isSel ? null : i)}
+                  style={[styles.legendItem, isSel && styles.legendItemActive]}
+                >
+                  <View style={[styles.legendColor, { backgroundColor: slice.color }]} />
+                  <Text style={[styles.legendText, isSel && styles.legendTextActive]}>
+                    {slice.name}: <Text style={styles.boldText}>{slice.porcentaje}</Text>
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
 
-          {/* Lista de dispositivos con su porcentaje */}
-          {dispositivos[mode].map((item, index) => (
-            <View key={index} style={styles.deviceContainer}>
-              <Text style={styles.deviceText}>{item.nombre}: <Text style={styles.boldText}>{item.porcentaje}</Text></Text>
-            </View>
-          ))}
+          <View style={styles.chartContainer}>
+            {showChart && (
+              <PieChart
+                data={chartData}
+                width={screenWidth * 0.8}
+                height={screenWidth * 0.8}
+                chartConfig={{
+                  backgroundGradientFrom: "#fff",
+                  backgroundGradientTo: "#fff",
+                  decimalPlaces: 0,
+                  color: () => `rgba(255,255,255,1)`,
+                  labelColor: () => `rgba(255,255,255,1)`,
+                }}
+                accessor="population"
+                backgroundColor="transparent"
+                absolute
+                hasLegend={false}
+                paddingLeft={`${screenWidth * 0.2}`}
+              />
+            )}
+          </View>
         </View>
       </ScrollView>
 
-      {/* Barra de navegación fija */}
       <NavBar style={{ backgroundColor: "#1E8449" }} />
     </View>
   );
 }
-
 // Estilos (deben ir en el otro archivo...)
 const styles = StyleSheet.create({
   container: {
@@ -202,6 +253,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 20,
     paddingBottom: 80,
+    
   },
   card: {
     backgroundColor: "white",
@@ -210,11 +262,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
+    shadowColor: "#666",
+    shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 10,
-    elevation: 8,
+    elevation: 6, // Efecto de sombra en Android
   },
   cardTitle: {
     fontSize: 16,
@@ -236,9 +288,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   devicesWrapper: {
-    backgroundColor: "rgba(255, 183, 77, 0.13)",  // Color de fondo
     borderRadius: 15,  // Bordes redondeados
-    padding: 15,  // Espaciado interno
+    padding: 30,  // Espaciado interno
     marginTop: 10,  // Espacio superior
     marginBottom: 20,  // Espacio inferior
   },
@@ -268,5 +319,38 @@ const styles = StyleSheet.create({
     backgroundColor: '#ddd',
     width: '50%',
     alignSelf: 'center',
+  },
+  chartContainer:{marginTop:20,alignSelf:"center",width:screenWidth*0.8,height:screenWidth*0.8,justifyContent:"center",alignItems:"center",marginBottom:40},
+  legendContainer: {
+    marginTop: 10, 
+    width: "100%" 
+  },
+  legendContainer: {
+    marginTop: 10,
+    width: "100%",
+  },
+  legendItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 4,
+    padding: 4,
+  },
+  legendItemActive: {
+    backgroundColor: "rgba(0,0,0,0.1)",
+    borderRadius: 6,
+  },
+  legendColor: {
+    width: 16,
+    height: 16,
+    borderRadius: 4,
+    marginRight: 8,
+  },
+  legendText: {
+    fontSize: 14,
+    fontFamily: "MontserratAlternates-Medium",
+    color: "#333",
+  },
+  legendTextActive: {
+    color: "#000",
   },
 });

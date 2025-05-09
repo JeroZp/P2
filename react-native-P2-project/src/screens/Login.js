@@ -1,4 +1,4 @@
-import { Alert } from 'react-native'; // alertas -> backend
+import {  Alert, } from 'react-native'; // alertas -> backend
 import { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
+  ActivityIndicator,
   Keyboard,
   TouchableWithoutFeedback,
   Animated
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { showMessage } from 'react-native-flash-message';
 import loginStyles from '../../assets/styles/loginStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Bubble from '../components/Bubble';
@@ -26,6 +28,8 @@ export default function Login() {
   const [password, setPassword] = useState(''); // Cambiar de "contraseña" a "password" -> backend
   const [isKeyboardVisible, setKeyboardVisible] = useState(false); // Estado del teclado
   const insets = useSafeAreaInsets(); // Margen seguro dinámico
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Animación de opacidad
   const fadeAnim = useRef(new Animated.Value(1)).current; // Inicia visible
@@ -58,15 +62,35 @@ export default function Login() {
 
   // Manejar el inicio de sesión -> backend
   const handleLogin = async () => {
+    
+    if (!email.trim() || !password.trim()) {
+      showMessage({
+        message: '¡Ups!',
+        description: 'Por favor ingresa correo y contraseña.',
+        type: 'warning',
+        icon: 'auto',
+        duration: 5500,
+      });
+      return;
+    } 
+    setIsLoading(true);
     try {
-      const { token } = await loginUser(email, password); // Llamar al servicio de autenticación
-      await storeToken(token); // Guardar el token en AsyncStorage
-      console.log('Login exitoso. Token:', token); // Imprimir en consola
-      // Redirigir a la vista de consumos -> backend
-      navigation.navigate('C&P');
+      const { token } = await loginUser(email, password);
+      await storeToken(token);
+      navigation.navigate('CP');
+      
     } catch (error) {
-      console.error('Error en el login:', error); // Imprimir el error en consola
-      Alert.alert('Error', 'No se pudo iniciar sesión. Verifica tus credenciales.');
+      
+      showMessage({
+        message: '¡Ups! No pudimos iniciar sesión',
+        description: 'Revisa tu correo y contraseña e inténtalo de nuevo.',
+        type: 'danger',
+        icon: 'auto',
+        duration: 3000,
+      });
+    } finally {
+      setIsLoading(false);
+
     }
   };
 
@@ -125,19 +149,39 @@ export default function Login() {
                 <TextInput
                   style={loginStyles.input}
                   placeholder="Contraseña"
-                  secureTextEntry
+                  secureTextEntry={!showPassword}
                   value={password}
                   onChangeText={setPassword}
                   placeholderTextColor="#666"
                   returnKeyType="done"
-                  onSubmitEditing={() => Keyboard.dismiss()}
                 />
+                <TouchableOpacity onPress={() => setShowPassword(prev => !prev)} style={{ marginRight: 40 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                  <FontAwesome5 name={showPassword ? 'eye' : 'eye-slash'} size={18} color="#666" />
+                </TouchableOpacity>
               </View>
 
               {/* Botón de inicio */}
-              <TouchableOpacity style={loginStyles.loginButton} onPress={handleLogin}/* que hacer en caso de presionar -> backend */>
-                <FontAwesome5 name="arrow-right" size={20} color="white" />
-              </TouchableOpacity>
+              <TouchableOpacity
+              style={loginStyles.loginButton}
+              onPress={handleLogin}
+              disabled={isLoading}
+            >
+              {isLoading
+                ? (
+                  <ActivityIndicator
+                    size="large"
+                    color="#fff"
+                  />
+                )
+                : (
+                  <FontAwesome5
+                    name="arrow-right"
+                    size={20}
+                    color="white"
+                  />
+                )
+              }
+            </TouchableOpacity>
             </View>
           </View>
 

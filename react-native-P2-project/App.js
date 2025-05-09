@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import FlashMessage from 'react-native-flash-message';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -82,6 +83,9 @@ export default function App() {
 //     <Stack.Screen name="Marketplace" component={Marketplace} options={{ headerShown: false }} />
 //   </Stack.Navigator>
 // </NavigationContainer>
-     <AppNavigator />
+    <>
+      <AppNavigator />
+      <FlashMessage position="top" /> 
+    </> 
    );;
 }

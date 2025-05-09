@@ -1,59 +1,58 @@
-import { StyleSheet, StatusBar, Dimensions  } from 'react-native';
+import { StyleSheet, StatusBar, Dimensions, Platform } from 'react-native';
 
-const screenHeight = Dimensions.get('window').height;
+const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
+const vw = (v) => SCREEN_W * (v / 100);
+const vh = (v) => SCREEN_H * (v / 100);
 
 const registerStyles = StyleSheet.create({
   safeArea: {
-      flex: 1,
-      backgroundColor: '#F5F5F5',
-      paddingTop: StatusBar.currentHeight,
-    },
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
 
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
-    height: screenHeight,
-    },
+    paddingHorizontal: vw(0),
+  },
 
   logo: {
-    fontSize: 28,
+    fontSize: vw(8),
     fontFamily: 'Xirod',
     color: '#000066',
-    marginBottom: 15,
+    marginBottom: vh(2),
     textAlign: 'center',
   },
 
   title: {
     fontFamily: 'MontserratAlternates-SemiBold',
-    fontSize: 30,
-    marginBottom: 30,
+    fontSize: vw(7),
+    marginBottom: vh(3),
     color: '#000',
   },
 
   separator: {
-    height: 1.5, // Grosor de la línea
+    height: StyleSheet.hairlineWidth,
     backgroundColor: '#ddd',
-    width: '105%',
+    width: '100%',
     alignSelf: 'center',
+    marginVertical: vh(2),
   },
 
   inputWrapper: {
     width: '100%',
     alignItems: 'flex-start',
-    marginLeft: -50,
   },
 
   inputContainer: {
-    backgroundColor: 'white',
-    width: '90%',
-    paddingVertical: 2,
-    paddingHorizontal: 15,
-    borderTopRightRadius: 60,
-    borderBottomRightRadius: 60,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
+    backgroundColor: '#fff',
+    width: vw(80),
+    paddingVertical: vh(0),
+    paddingHorizontal: vw(4),
+    borderTopRightRadius: vw(15),
+    borderBottomRightRadius: vw(15),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
@@ -64,78 +63,70 @@ const registerStyles = StyleSheet.create({
   inputField: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
-    minHeight: 50,
+    paddingVertical: vh(2),
+    minHeight: vh(7),
     width: '100%',
-    paddingLeft: 20,
+    paddingLeft: vw(4),
   },
 
   inputIcon: {
-    marginRight: 15,
-    marginLeft: 15,
+    marginHorizontal: vw(2),
   },
 
   input: {
     flex: 1,
-    fontSize: 18,
+    fontSize: vw(4),
     fontFamily: 'MontserratAlternates-SemiBold',
     textAlignVertical: 'center',
     includeFontPadding: false,
-    height: '100%',
-    lineHeight: 60,
-    paddingTop: 0,
-    paddingBottom: 0,
+    lineHeight: vh(2.5),
   },
 
-  loginButton: {
+  loginButton: {           // botón de enviar registro (flecha)
     backgroundColor: '#3498DB',
-    borderRadius: 50,
-    width: 90,
-    height: 90,
+    borderRadius: vw(12),
+    width: vw(18),
+    height: vw(18),
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    right: -40,
-    top: '46%',
-    transform: [{ translateY: -27.5 }],
+    right: -vw(10),
+    top: vh(26),
+    transform: [{ translateY: -vw(9) }],
     shadowColor: '#000',
     shadowOpacity: 0.5,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: vh(0.4) },
     elevation: 5,
   },
 
   forgotPassword: {
     color: '#A9A9A9',
-    fontSize: 14,
-    marginTop: 15,
+    fontSize: vw(3.5),
+    marginTop: vh(2),
     fontFamily: 'MontserratAlternates-SemiBold',
     alignSelf: 'flex-start',
-    marginLeft: -50,
   },
 
-  registerButton: {
-    backgroundColor: '#ffffff',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderTopLeftRadius: 80,
-    borderBottomLeftRadius: 80,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
+  registerButton: {        // botón “Volver” o link complementario
+    backgroundColor: '#fff',
+    paddingVertical: vh(2),
+    paddingHorizontal: vw(4),
+    borderTopRightRadius: 80,
+    borderBottomRightRadius: 80,
+    borderTopLeftRadius: vw(8),
+    borderBottomLeftRadius: vw(8),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 4,
-
-    marginTop: -120,
-    marginBottom: 30,
-    alignSelf: 'flex-start',
-    width: '50%',
-    marginLeft: 240,
+    marginBottom: vh(4),
+    alignSelf: 'flex-end',
+    width: vw(50),
   },
 
   registerText: {
-    fontSize: 20,
+    fontSize: vw(5),
     fontFamily: 'MontserratAlternates-Bold',
     color: '#1E8449',
     textAlign: 'center',
