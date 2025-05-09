@@ -32,6 +32,7 @@ export default function Registro() {
   const [cedula, setCedula] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const [showPassword, setShowPassword] = useState(false);
 
   // Animación del teclado
   useEffect(() => {
@@ -181,12 +182,15 @@ export default function Registro() {
                 <TextInput
                   style={registerStyles.input}
                   placeholder="Contraseña"
-                  secureTextEntry
+                  secureTextEntry={!showPassword}
                   value={contraseña}
                   onChangeText={setContraseña}
                   placeholderTextColor="#666"
                   returnKeyType="done"
                 />
+                <TouchableOpacity onPress={() => setShowPassword(prev => !prev)} style={{ marginRight: 20 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                    <FontAwesome5 name={showPassword ? 'eye' : 'eye-slash'} size={18} color="#666" />
+                </TouchableOpacity>
               </View>
 
               <View style={registerStyles.separator} />

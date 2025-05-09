@@ -7,20 +7,28 @@ import {
   StatusBar,
   StyleSheet,
   Dimensions,
+  //ActivityIndicator, 
 } from "react-native";
-import { PieChart } from "react-native-chart-kit";
 
 import Bubble from "../components/Bubble";
 import NavBar from "../components/NavBar";
+import LoadingDots from '../components/LoadingDots';
+
+import { FontAwesome5 } from '@expo/vector-icons';
+import { PieChart } from "react-native-chart-kit";
 import { showMessage } from "react-native-flash-message";
 import { getConsumptions, getProductions } from "../services/consumptionProductionService";
+
 
 const { width: screenWidth } = Dimensions.get("window");
 
 export default function CP() {
+
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [showChart, setShowChart] = useState(true);
   const [mode, setMode] = useState("Consumo");
+
   const [data, setData] = useState({
     Consumo: {
       totalActual: "0.00 Wh",
@@ -40,6 +48,7 @@ export default function CP() {
 
   // Cuando cambie el modo, resetea selección y trae datos
   useEffect(() => {
+    setLoading(true);
     (async () => {
       try {
         if (mode === "Consumo") {
@@ -57,18 +66,13 @@ export default function CP() {
           icon: "auto",
           duration: 5500,
         });
+      } finally {
+          setLoading(false);
       }
     })();
     setSelectedIndex(null);
   }, [mode]);
-
-  // Cada vez que cambie selectedIndex, forzamos un remount del chart
-  useEffect(() => {
-    setShowChart(false);
-    const t = setTimeout(() => setShowChart(true), 100);
-    return () => clearTimeout(t);
-  }, [selectedIndex]);
-
+ 
   const dispositivos = {
     Consumo: [
       { nombre: "Horno microondas", porcentaje: "12%" },
@@ -141,66 +145,103 @@ export default function CP() {
 
       <View style={styles.separator} />
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {Object.keys(data[mode]).map((key, i) => (
-          <View key={i} style={styles.card}>
-            <Text style={styles.cardTitle}>{titles[key]}</Text>
-            <Text style={styles.cardValue}>{data[mode][key]}</Text>
-          </View>
-        ))}
+      {loading ? (
+        <LoadingDots />
+      ) : (
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          {Object.keys(data[mode]).map((key, i) => (
+            <View key={i} style={styles.card}>
+              <Text style={styles.cardTitle}>{titles[key]}</Text>
+              <Text style={styles.cardValue}>{data[mode][key]}</Text>
+            </View>
+          ))}
 
-        <View style={[
-            styles.devicesWrapper,
-            { backgroundColor:
-                mode === "Consumo"
-                  ? "rgba(255,183,77,0.13)"
-                  : "rgba(211,84,0,0.1)"
-            }
-        ]}>
-          <Text style={styles.footerText}>
-            <Text style={styles.boldText}>{mode}</Text> total por dispositivo:
-          </Text>
-          <View style={styles.legendContainer}>
-            {chartData.map((slice, i) => {
-              const isSel = i === selectedIndex;
-              return (
-                <TouchableOpacity
-                  key={i}
-                  onPress={() => setSelectedIndex(isSel ? null : i)}
-                  style={[styles.legendItem, isSel && styles.legendItemActive]}
-                >
-                  <View style={[styles.legendColor, { backgroundColor: slice.color }]} />
-                  <Text style={[styles.legendText, isSel && styles.legendTextActive]}>
-                    {slice.name}: <Text style={styles.boldText}>{slice.porcentaje}</Text>
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+          
+          <View style={[
+              styles.devicesWrapper,
+              { backgroundColor:
+                  mode === "Consumo"
+                    ? "rgba(255,183,77,0.13)"
+                    : "rgba(211,84,0,0.1)"
+              }
+          ]}>
+           
+            <Text style={styles.footerText}>
+              <Text style={styles.boldText}>{mode}</Text> total por dispositivo  <FontAwesome5
+            name="bolt"          // o "sun" para sol
+            size={20}
+            color="#FFA500"
+          />
+              
+            </Text>
+            <View style={styles.legendContainer}>
+              {chartData.map((slice, i) => {
+                const isSel = i === selectedIndex;
+                return (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => setSelectedIndex(isSel ? null : i)}
+                    style={[styles.legendItem, isSel && styles.legendItemActive]}
+                  >
+                    <View style={[styles.legendColor, { backgroundColor: slice.color }]} />
+                    <Text style={[styles.legendText, isSel && styles.legendTextActive]}>
+                      {slice.name}: <Text style={styles.boldText}>{slice.porcentaje}</Text>
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
 
-          <View style={styles.chartContainer}>
-            {showChart && (
-              <PieChart
-                data={chartData}
-                width={screenWidth * 0.8}
-                height={screenWidth * 0.8}
-                chartConfig={{
-                  backgroundGradientFrom: "#fff",
-                  backgroundGradientTo: "#fff",
-                  decimalPlaces: 0,
-                  color: () => `rgba(255,255,255,1)`,
-                  labelColor: () => `rgba(255,255,255,1)`,
+            <View style={styles.chartContainer}>
+              {showChart && (
+
+                <View
+                style={{
+                  width: screenWidth * 0.8,
+                  height: screenWidth * 0.8,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
-                accessor="population"
-                backgroundColor="transparent"
-                absolute
-                hasLegend={false}
-                paddingLeft={`${screenWidth * 0.2}`}
-              />
-            )}
+                >
+
+                <PieChart
+                  data={chartData}
+                  width={screenWidth * 0.8}
+                  height={screenWidth * 0.8}
+                  chartConfig={{
+                    backgroundGradientFrom: "#fff",
+                    backgroundGradientTo: "#fff",
+                    decimalPlaces: 0,
+                    color: () => `rgba(255,255,255,1)`,
+                    labelColor: () => `rgba(255,255,255,1)`,
+                  }}
+                  accessor="population"
+                  backgroundColor="transparent"
+                  absolute
+                  hasLegend={false}
+                  paddingLeft={`${screenWidth * 0.2}`}
+                />
+                <View
+                  style={{
+                    position: 'absolute',
+                    width: screenWidth * 0.4,
+                    height: screenWidth * 0.4,
+                    borderRadius: (screenWidth * 0.4) / 2,
+                    backgroundColor: '#fff',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                />
+                
+
+
+                </View>
+  )}
+</View>
+             
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+        )}
 
       <NavBar style={{ backgroundColor: "#1E8449" }} />
     </View>
@@ -288,10 +329,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   devicesWrapper: {
-    borderRadius: 15,  // Bordes redondeados
+    borderRadius: 30,  // Bordes redondeados
     padding: 30,  // Espaciado interno
-    marginTop: 10,  // Espacio superior
-    marginBottom: 20,  // Espacio inferior
+    marginTop: 25,  // Espacio superior
+    marginBottom: 45,  // Espacio inferior
   },
   deviceContainer: {
     marginTop: 5,
@@ -320,7 +361,11 @@ const styles = StyleSheet.create({
     width: '50%',
     alignSelf: 'center',
   },
-  chartContainer:{marginTop:20,alignSelf:"center",width:screenWidth*0.8,height:screenWidth*0.8,justifyContent:"center",alignItems:"center",marginBottom:40},
+  chartContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
   legendContainer: {
     marginTop: 10, 
     width: "100%" 
@@ -352,5 +397,11 @@ const styles = StyleSheet.create({
   },
   legendTextActive: {
     color: "#000",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 100,
   },
 });

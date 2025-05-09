@@ -1,4 +1,3 @@
-import {  Alert, } from 'react-native'; // alertas -> backend
 import { useState, useEffect, useRef } from 'react';
 import {
   View,
