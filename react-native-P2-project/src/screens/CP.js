@@ -143,7 +143,7 @@ export default function CP() {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.separator} />
+      {/* <View style={styles.separator} /> */}
 
       {loading ? (
         <LoadingDots />
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     alignItems: "center",
-    shadowColor: "#666",
+    shadowColor: "rgba(211, 84, 0, 0.1)",
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 10,
@@ -402,6 +402,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 100,
+    marginBottom: 150,
   },
 });

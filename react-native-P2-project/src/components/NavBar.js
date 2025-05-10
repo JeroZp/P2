@@ -12,6 +12,7 @@ const NavBar = ({ style }) => {
     Registro: null,
     CP: "CP",
     Marketplace: "Marketplace",
+    Battery: "Battery",
   };
 
   // Obtenemos el estado del router y la ruta activa
@@ -21,7 +22,7 @@ const NavBar = ({ style }) => {
 
   const tabs = [
     { screen: "CP", tab: "CP", icon: "bars", label: "Dashboard" },
-    { screen: null, tab: "Light", icon: "lightbulb", label: "Light" },
+    { screen: "Battery", tab: "Battery", icon: "lightbulb", label: "Almacen" },
     { screen: "Marketplace", tab: "Marketplace", icon: "shopping-cart", label: "Marketplace" },
     { screen: null, tab: "User", icon: "user", label: "User" }
   ];
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   },
   navItem: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   navText: {
     fontSize: 10,
