@@ -25,7 +25,7 @@ export default function Battery() {
   const [unit, setUnit] = useState("Wh"); 
   
   const [storage, setStorage] = useState({
-  capacityKW: 10,       
+  capacityKW: 13.5,       
   availableKW: 2,       
   historyKW: [2,5,3,6,4,7,10],   // datos para la gráfica en Wh
   labels: ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],
@@ -79,20 +79,7 @@ export default function Battery() {
 
       {/* Tarjetas de Nivel, Capacidad y Disponible */}
       <View style={batteryStyles.cardsContainer}>
-        <View style={batteryStyles.card}>
-          <FontAwesome5
-            name="tachometer-alt"          // o "sun" para sol
-            size={20}
-            marginBottom={5} 
-            color="#EB5757"
-          />
-          <Text style={batteryStyles.cardTitle}>Nivel de Batería </Text>
-          <Text style={batteryStyles.cardValue}>
-            {unit === "%" 
-              ? `${levelPercent.toFixed(1)} %` 
-              : `${storage.availableKW.toFixed(1)} Wh`}
-          </Text>
-        </View>
+        
         <View style={batteryStyles.card}>
           <FontAwesome5 
         name="battery-full" 
@@ -107,20 +94,27 @@ export default function Battery() {
               : `${storage.capacityKW.toFixed(1)} Wh`}
           </Text>
         </View>
-        <View style={batteryStyles.card}>
-          <FontAwesome5 
-        name="bolt" 
-        size={20} 
-        marginBottom={5} 
-        color="#FFA500" 
-      />
-          <Text style={batteryStyles.cardTitle}>Energía Disponible </Text>
-          <Text style={batteryStyles.cardValue}>
-            {unit === "%" 
-              ? `${((storage.availableKW/storage.capacityKW)*100).toFixed(1)} %` 
-              : `${storage.availableKW.toFixed(1)} Wh`}
-          </Text>
-        </View>
+
+        {unit === "%" && (
+          <View style={batteryStyles.card}>
+            <FontAwesome5 name="tachometer-alt" size={20} color="#EB5757" style={batteryStyles.iconAbove}/>
+            <Text style={batteryStyles.cardTitle}>Nivel de Batería</Text>
+            <Text style={batteryStyles.cardValue}>
+              {`${levelPercent.toFixed(1)} %`}
+            </Text>
+          </View>
+        )}
+
+        {/* → Si estoy en Wh: muestro Disponible */}
+        {unit === "Wh" && (
+          <View style={batteryStyles.card}>
+            <FontAwesome5 name="bolt" size={20} color="#FFA500" style={batteryStyles.iconAbove}/>
+            <Text style={batteryStyles.cardTitle}>Energía Disponible</Text>
+            <Text style={batteryStyles.cardValue}>
+              {`${storage.availableKW.toFixed(1)} Wh`}
+            </Text>
+          </View>
+        )}
       </View>
 
       {/* Botones de Alternar Unidad */}

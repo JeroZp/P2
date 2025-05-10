@@ -1,20 +1,63 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Modal, TextInput, CheckBox } from "react-native";
+import React, { useState, useEffect, useRef  } from "react";
+import { View, Text, TouchableOpacity, ScrollView, StatusBar, Animated, StyleSheet, Modal, TextInput, CheckBox,TouchableWithoutFeedback, } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import NavBar from "../components/NavBar";
 import Bubble from "../components/Bubble";
+import LoadingDots from '../components/LoadingDots';
+import { showMessage } from 'react-native-flash-message';
 import { getMarketOffers, getMyOffers, createOffer, deleteOffer } from "../services/marketplaceService";
 
 
 export default function Marketplace() {
-  const [mode, setMode] = useState("Ordenes");
+  const [mode, setMode] = useState("Compra de Energía");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [orders, setOrders] = useState([]);
   const [sales, setSales] = useState([]);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const handleObtainPress = (order) => {
+  setSelectedOrder(order);
+  setShowDetailsModal(true);
+};
+
+
+
+  // animado para el carrito
+  const cartAnim = useRef(new Animated.Value(0)).current;
+  const hasProcessingSale = sales.some(s => s.status === "Procesando");
+
+    useEffect(() => {
+    if (hasProcessingSale && mode === "Ventas") {
+      // bucle infinito de vaivén entre -8 y +8 px
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(cartAnim, {
+            toValue: 8,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+          Animated.timing(cartAnim, {
+            toValue: -8,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    } else {
+      // parar y resetear posición
+      cartAnim.stopAnimation();
+      cartAnim.setValue(0);
+    }
+  }, [hasProcessingSale, mode]);
+
 
   // Datos del formulario de oferta
 
@@ -24,6 +67,32 @@ export default function Marketplace() {
     expirationDate: '',
     transferDate: '',
   });
+
+
+  const handleDeleteOffer = async (offerId) => {
+   try {
+     await deleteOffer(offerId);
+     // recarga mis ofertas
+     const myOffers = await getMyOffers();
+     setSales(myOffers.map(o => ({
+       id: o.id,
+       name: o.buyerName || "Comprador",
+       kWh: `${o.quantity} kWh`,
+       price: `$${o.value}`,
+       status: o.status,           // espera que vengan: "Disponible", "Procesando", "Vendido"
+       date: new Date(o.offerDate).toLocaleDateString(),
+     })));
+   } catch (e) {
+    showMessage({
+        message: 'Error eliminando oferta',
+        description:  e,
+        type: 'danger',
+        icon: 'auto',
+        duration: 3000,
+      });
+     
+   }
+ };
 
   // Cargar datos según el modo
   useEffect(() => {
@@ -51,7 +120,14 @@ export default function Marketplace() {
           })));
         }
       } catch (error) {
-        console.error("Error cargando datos:", error);
+        showMessage({
+        message: 'Error eliminando oferta',
+        description:  error,
+        type: 'danger',
+        icon: 'auto',
+        duration: 3000,
+      });
+        
       } finally {
         setLoading(false);
       }
@@ -63,13 +139,17 @@ export default function Marketplace() {
   // Manejar creación de nueva oferta
   const handleCreateOffer = async () => {
     try {
+      const rawPrice = parseInt(
+      offerForm.price.replace(/\D/g, ""), // quita todo lo que no es dígito
+      10
+      );
       await createOffer({
         quantity: parseFloat(offerForm.quantity),
-        value: parseFloat(offerForm.price),
+        value: rawPrice,
         offerDate: new Date().toISOString()
       });
 
-      setModalVisible(false);
+      setShowCreateModal(false);
       setOfferForm({
         quantity: '',
         price: '',
@@ -90,9 +170,28 @@ export default function Marketplace() {
         })));
       }
     } catch (error) {
-      console.error("Error creando oferta:", error);
+      showMessage({
+        message: 'Error creando oferta',
+        description:  error,
+        type: 'danger',
+        icon: 'auto',
+        duration: 3000,
+      });
     }
   };
+
+  const formatToCOP = (input = "") => {
+  // quita todo menos dígitos
+  const digits = input.replace(/\D/g, "");
+  if (!digits) return "";
+  // convierte a entero
+  const num = parseInt(digits, 10);
+  // añade separadores de miles
+  const withThousands = num
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return ` ${withThousands}`;
+};
 
   return (
     <View style={styles.container}>
@@ -113,87 +212,60 @@ export default function Marketplace() {
           onPress={() => setMode("Compra de Energía")}
           style={[styles.toggleButton, mode === "Compra de Energía" && styles.toggleButtonActive]}
         >
-          <Text style={[styles.toggleText, mode === "Compra de Energía" && styles.toggleTextActive]}>Compra de Energía</Text>
+          <Text style={[styles.toggleText, mode === "Compra de Energía" && styles.toggleTextActive]}>Tienda de Energía</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => setMode("Ordenes")}
           style={[styles.toggleButton, mode === "Ordenes" && styles.toggleButtonActive]}
         >
-          <Text style={[styles.toggleText, mode === "Ordenes" && styles.toggleTextActive]}>Órdenes</Text>
+          <Text style={[styles.toggleText, mode === "Ordenes" && styles.toggleTextActive]}>Ordenes y Compras</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => setMode("Ventas")}
-          style={[styles.toggleButton, mode === "Ventas" && styles.toggleButtonActive]}
+      onPress={() => setMode("Ventas")}
+      style={[
+        styles.toggleButton,
+        mode === "Ventas" && styles.toggleButtonActive
+      ]}
+    >
+      {/* Texto del botón */}
+      <Text style={[
+        styles.toggleText,
+        mode === "Ventas" && styles.toggleTextActive
+      ]}>
+        Ventas y Pedidos  
+
+        
+
+      {hasProcessingSale && mode === "Ventas" && (
+        <Animated.View
+          style={{
+            marginLeft: 30,
+            transform: [{ translateX: cartAnim }]
+          }}
         >
-          <Text style={[styles.toggleText, mode === "Ventas" && styles.toggleTextActive]}>Venta</Text>
-        </TouchableOpacity>
+          <FontAwesome5 name="shopping-cart" size={14} color="#fff" />
+        </Animated.View>
+      )}
+      </Text>
+
+      
+      </TouchableOpacity>
       </View>
 
-      <View style={styles.separator} />
+      {/* <View style={styles.separator} /> */}
 
-
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {mode === "Ordenes" && orders.map((order) => (
-          <View key={order.id} style={styles.card}>
-            <Text style={styles.cardTitle}>{order.name}</Text>
-            <Text style={styles.cardValue}>{order.kWh} {order.price}</Text>
-            <Text style={[styles.cardStatus, order.status === "Aprobado" ? styles.approved : styles.rejected]}>
-              Estado: {order.status}
-            </Text>
-          </View>
-        ))}
-
-        {mode === "Ventas" && (
-          <>
-
-
-
-            <View style={styles.createOfferContainer}>
-              <TouchableOpacity style={styles.createOfferButton} onPress={() => setModalVisible(true)}>
-                <Text style={styles.createOfferText}>¡Crear nueva Oferta!</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.separator} />
-
-            <Text style={styles.salesTitle}>Ventas Realizadas:</Text>
-
-
-            {sales.map((sale) => (
-              <View key={sale.id} style={styles.card}>
-                <Text style={styles.cardTitle}>Vendido A: {sale.name}</Text>
-                <Text style={styles.cardValue}>{sale.kWh} {sale.price}</Text>
-                <Text style={[styles.cardStatus, sale.status === "Procesando" ? styles.processing : styles.completed]}>
-                  Estado: {sale.status}
-                </Text>
-                <Text style={styles.saleDate}>Fecha de venta: {sale.date}</Text>
-                {/* Botones para aceptar o rechazar la venta */}
-                  {sale.status === "Procesando" && (
-                    <View style={styles.actionButtons}>
-                      <TouchableOpacity
-                        style={[styles.actionButton, styles.acceptButton]}
-                        onPress={() => handleAcceptSale(sale.id)}
-                      >
-                        <Text style={styles.actionButtonText}>Aceptar</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.actionButton, styles.rejectButton]}
-                        onPress={() => handleRejectSale(sale.id)}
-                      >
-                        <Text style={styles.actionButtonText}>Rechazar</Text>
-                      </TouchableOpacity>
-                      </View>
-                  )}
-              </View>
-            ))}
-          </>
-        )}
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <LoadingDots />
+        </View>
+      ) : (
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
         {mode === "Compra de Energía" && (
           <>
-
+            
             {orders.map((order) => (
               <View key={order.id} style={styles.card}>
                 <Text style={styles.cardTitle}>{order.name}</Text>
@@ -209,72 +281,196 @@ export default function Marketplace() {
           </>
         )}
 
-      </ScrollView>
 
-        {/* Modal para comprar */}
-      {/* <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            {selectedOrder && (
-              <>
-                <Text style={styles.modalTitle}>Detalles de la Orden</Text>
-                <Text style={styles.modalText}>Nombre del Comprador: {selectedOrder.buyer}</Text>
-                <Text style={styles.modalText}>Nombre del Vendedor: {selectedOrder.seller}</Text>
-                <Text style={styles.modalText}>Energía: {selectedOrder.kWh} kWh</Text>
-                <Text style={styles.modalText}>Precio: ${selectedOrder.price}</Text>
-              </>
-            )}
-            <TouchableOpacity
-              style={styles.acceptButton}
-              onPress={handleAccept}
-            >
-              <Text style={styles.acceptButtonText}>Aceptar</Text>
-            </TouchableOpacity>
-
-            
+        {mode === "Ordenes" && orders.map((order) => (
+          <View key={order.id} style={styles.card}>
+            <Text style={styles.cardTitle}>{order.name}</Text>
+            <Text style={styles.cardValue}>{order.kWh} {order.price}</Text>
+            <Text style={[styles.cardStatus, order.status === "Aprobado" ? styles.approved : styles.rejected]}>
+              Estado: {order.status}
+            </Text>
           </View>
-        </View>
-      </Modal> */}
+        ))}
 
-      {/* Modal para crear nueva oferta */}
+        {mode === "Ventas" && (
+          <>
+
+
+           <View style={styles.createContainer}>
+            <View style={styles.createOfferContainer}>
+              <TouchableOpacity
+                style={styles.createOfferButton}
+                onPress={() => setShowCreateModal(true)}
+              >
+                <Text style={styles.createOfferText}>¡Crear nueva Oferta!</Text>
+              </TouchableOpacity>
+            </View>
+            </View> 
+
+        
+
+            <Text style={styles.salesTitle}>Lista de Ventas:</Text>
+
+
+            {sales.map((sale) => {
+         switch (sale.status) {
+           case "Vendido": // vendido
+             return (
+               <View key={sale.id} style={styles.card}>
+                 <Text style={styles.cardTitle}>Vendido a: {sale.name}</Text>
+                 <Text style={styles.cardValue}>{sale.kWh} {sale.price}</Text>
+                 <Text style={styles.saleDate}>Fecha: {sale.date}</Text>
+               </View>
+             );
+
+           case "Disponible":  // en venta
+             return (
+               <View key={sale.id} style={styles.card}>
+                <Text style={styles.cardTitle}>Oferta en venta</Text>
+                <Text style={styles.cardValue}>{sale.kWh} {sale.price}</Text>
+                 <Text style={styles.saleDate}>Creada: {sale.date}</Text>
+                 <TouchableOpacity
+                   style={styles.deleteButton}
+                   onPress={() => handleDeleteOffer(sale.id)}
+                 >
+                   <FontAwesome5 name="trash-alt" size={20} color="#DC3545" />
+                 </TouchableOpacity>
+               </View>
+             );
+
+           case "Procesando":
+           default:
+             return (
+               <View key={sale.id} style={styles.card}>
+                 <Text style={styles.cardTitle}>Vendido a: {sale.name}</Text>
+                 <Text style={styles.cardValue}>{sale.kWh} {sale.price}</Text>
+                 <Text style={[styles.cardStatus, styles.processing]}>
+                   Estado: {sale.status}
+                 </Text>
+                 <Text style={styles.saleDate}>Fecha: {sale.date}</Text>
+                 <View style={styles.actionButtons}>
+                   <TouchableOpacity
+                     style={[styles.actionButton, styles.acceptButton]}
+                     onPress={() => handleAcceptSale(sale.id)}
+                   >
+                     <Text style={styles.actionButtonText}>Aceptar</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity
+                     style={[styles.actionButton, styles.rejectButton]}
+                     onPress={() => handleRejectSale(sale.id)}
+                   >
+                     <Text style={styles.actionButtonText}>Rechazar</Text>
+                   </TouchableOpacity>
+                 </View>
+               </View>
+             );
+         }
+       })}
+          </>
+        )}
+
+        
+
+      </ScrollView>
+      )}
+
+       {/* — Modal de DETALLES de Orden — */}
       <Modal
         animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        transparent
+        visible={showDetailsModal}
+        onRequestClose={() => setShowDetailsModal(false)}
       >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            {/* ... otros elementos ... */}
-            <TextInput
-              style={styles.input}
-              placeholder="Cantidad de Energía (kWh)"
-              value={offerForm.quantity}
-              onChangeText={(text) => setOfferForm({ ...offerForm, quantity: text })}
-              keyboardType="numeric"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Precio por Unidad"
-              value={offerForm.price}
-              onChangeText={(text) => setOfferForm({ ...offerForm, price: text })}
-              keyboardType="numeric"
-            />
-            {/* ... otros inputs ... */}
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleCreateOffer}
-            >
-              <Text style={styles.submitButtonText}>¡Poner en venta!</Text>
-            </TouchableOpacity>
+        <TouchableWithoutFeedback onPress={() => setShowDetailsModal(false)}>
+          <View style={styles.modalBackground}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContainer}>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setShowDetailsModal(false)}
+                >
+                  <Text style={styles.closeButtonText}>×</Text>
+                </TouchableOpacity>
+
+                {selectedOrder && (
+                  <>
+                    <Text style={styles.modalTitle}>Detalles de la Orden</Text>
+                    <Text style={styles.modalText}>
+                      Nombre del Vendedor: {selectedOrder.name}
+                    </Text>
+                    <Text style={styles.modalText}>
+                      Energía: {selectedOrder.kWh}
+                    </Text>
+                    <Text style={styles.modalText}>
+                      Precio: {selectedOrder.price}
+                    </Text>
+                  </>
+                )}
+                <TouchableOpacity
+                  style={styles.submitButton}
+                >
+                  <Text style={styles.submitButtonText}>¡Comprar!</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
+
+      {/* — Modal de CREAR OFERTA — */}
+      <Modal
+        animationType="slide"
+        transparent
+        visible={showCreateModal}
+        onRequestClose={() => setShowCreateModal(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setShowCreateModal(false)}>
+          <View style={styles.modalBackground}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContainer}>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setShowCreateModal(false)}
+                >
+                  <Text style={styles.closeButtonText}>×</Text>
+                </TouchableOpacity>
+
+                {/* aquí tu formulario */}
+                <TextInput
+                  style={styles.input}
+                  placeholder="Cantidad de Energía (Wh)"
+                  placeholderTextColor="#888"
+                  value={offerForm.quantity}
+                  onChangeText={t => setOfferForm({ ...offerForm, quantity: t })}
+                  keyboardType="numeric"
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Precio por la energía ($)"
+                  placeholderTextColor="#888"
+                  value={offerForm.price}
+                  onChangeText={t => {
+                    const formatted = formatToCOP(t);
+                    setOfferForm({ ...offerForm, price: formatted });
+                  }}
+                  keyboardType="numeric"
+                />
+
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  onPress={async () => {
+                    await handleCreateOffer();
+                    setShowCreateModal(false);
+                  }}
+                >
+                  <Text style={styles.submitButtonText}>¡Poner en venta!</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
 
 
       <NavBar style={{ backgroundColor: "#1F4E78" }} />
@@ -306,10 +502,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#D7EFFF",
     paddingVertical: 5,
     paddingHorizontal: 25,
-
+    justifyContent: "center",
     borderRadius: 30,
     marginVertical: 5,
     alignItems: "center",
+    textAlignVertical: "center",
+    flexDirection: "row",
 
   },
   toggleButtonActive: {
@@ -319,9 +517,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "MontserratAlternates-SemiBold",
     color: "#1F4E78",
+    textAlignVertical: "center",
   },
   toggleTextActive: {
     color: "white",
+    textAlignVertical: "center",
   },
   scrollContent: {
     paddingHorizontal: 20,
@@ -334,11 +534,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: "#666",
     shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.4,
+    shadowOpacity: 0.1,
     shadowRadius: 10,
-    elevation: 8,
+    elevation: 6,
   },
   cardTitle: {
     fontSize: 16,
@@ -348,7 +548,7 @@ const styles = StyleSheet.create({
   },
   cardValue: {
     fontSize: 25,
-
+    textAlign: "center",
     fontFamily: "MontserratAlternates-Bold",
     color: "#4F4F4F",
     marginVertical: 10,
@@ -375,13 +575,18 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: "MontserratAlternates-Medium",
   },
+  createContainer: {
+    backgroundColor:"rgba(255,183,77,0.13)",
+    width: "100%",
+    marginTop: 20,
+    borderRadius: 20,
+  },
   createOfferContainer: {
-    marginBottom: 60,
-    marginTop: 60,
+    margin: 40,
     alignItems: "center",
   },
   createOfferButton: {
-    backgroundColor: "#3498DB",
+    backgroundColor: "#FFA500",
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 10,
@@ -407,7 +612,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   obtainButton: {
-    backgroundColor: "#3498DB",
+    backgroundColor: "#FFA500",
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -423,6 +628,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalText:{
+    fontSize: 16,
+    fontFamily: "MontserratAlternates-Medium",
+    color: "#666",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    marginBottom: 10,
   },
   modalContainer: {
     backgroundColor: "white",
@@ -477,6 +691,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "MontserratAlternates-SemiBold",
   },
   acceptButton: {
     marginTop: 10,
@@ -497,21 +712,35 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    width: "48%",
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    width: "38%",
   },
   acceptButton: {
-    backgroundColor: "#28A745", // Verde para aceptar
+    backgroundColor: "#68a765", // Verde para aceptar
+    marginRight: 5,
   },
   rejectButton: {
-    backgroundColor: "#DC3545", // Rojo para rechazar
+    backgroundColor: "#ef8989", // Rojo para rechazar
   },
   actionButtonText: {
     color: "white",
     fontFamily: "MontserratAlternates-SemiBold",
     fontSize: 16,
     textAlign: "center",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 80,  // para no solaparse con el NavBar
+  },
+  deleteButton: {
+    marginTop: 12,
+    backgroundColor: "#FDEDEC",
+    padding: 8,
+    borderRadius: 20,
+    alignSelf: "flex-end",
   },
 });
 
