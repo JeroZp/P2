@@ -5,6 +5,7 @@ import Registro from '../screens/Registro';
 import CP from '../screens/CP'
 import Marketplace from '../screens/Marketplace';
 import Battery from '../screens/Battery';
+import Profile from '../screens/Profile';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ export default function AppNavigator() {
         <Stack.Screen name="CP" component={CP} />
         <Stack.Screen name="Marketplace" component={Marketplace} />
         <Stack.Screen name="Battery" component={Battery} />
+        <Stack.Screen name="Profile" component={Profile} />
         
 
       </Stack.Navigator>
