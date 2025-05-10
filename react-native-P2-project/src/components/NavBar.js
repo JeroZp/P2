@@ -1,48 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-
-const NavBar = () => {
+const NavBar = ({ style }) => {
   const navigation = useNavigation();
-  const [selectedTab, setSelectedTab] = useState("Dashboard"); // Inicialmente muestra "Dashboard"
 
-  const handlePress = (screen, tab) => {
-    setSelectedTab(tab);
-    navigation.navigate(screen);
+  // Mapeo de nombres de ruta a claves de pestaña
+  const routeToTab = {
+    Login: null,
+    Registro: null,
+    CP: "CP",
+    Marketplace: "Marketplace",
+    Battery: "Battery",
+    Profile: "Profile",
   };
 
+  // Obtenemos el estado del router y la ruta activa
+  const navState = navigation.getState();
+  const activeRouteName = navState?.routes[navState.index]?.name;
+  const selectedTab = routeToTab[activeRouteName] || "CP";
+
+  const tabs = [
+    { screen: "CP", tab: "CP", icon: "bars", label: "Dashboard" },
+    { screen: "Battery", tab: "Battery", icon: "lightbulb", label: "Almacen" },
+    { screen: "Marketplace", tab: "Marketplace", icon: "shopping-cart", label: "Marketplace" },
+    { screen: "Profile", tab: "Profile", icon: "user", label: "Perfil" }
+  ];
+
   return (
-    <View style={styles.navBar}>
-      {/* Opción de Dashboard */}
-      <TouchableOpacity
-        style={styles.navItem}
-        onPress={() => handlePress("C&P", "CP")}
-      >
-        <FontAwesome5 name="bars" size={18} color="white" />
-        {selectedTab === "Dashboard" && <Text style={styles.navText}>Dashboard</Text>}
-      </TouchableOpacity>
-
-
-      <TouchableOpacity>
-        <FontAwesome5 name="chart-line" size={22} color="white" />
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <FontAwesome5 name="lightbulb" size={22} color="white" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.navItem}
-        onPress={() => handlePress("Marketplace", "Marketplace")} // Redirige a la pantalla Marketplace
-      >
-        <FontAwesome5 name="shopping-cart" size={22} color="white" />
-        {selectedTab === "Marketplace" && <Text style={styles.navText}>Marketplace</Text>}
-      </TouchableOpacity>
-
-      <TouchableOpacity>
-        <FontAwesome5 name="user" size={22} color="white" />
-      </TouchableOpacity>
+    <View style={[styles.navBar, style]}>
+      {tabs.map(({ screen, tab, icon, label }) => (
+        <TouchableOpacity
+          key={tab}
+          style={styles.navItem}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          onPress={() => screen && navigation.navigate(screen)}
+        >
+          <FontAwesome5
+            name={icon}
+            size={22}
+            color={selectedTab === tab ? "#FFFFFF" : "rgba(255,255,255,0.6)"}
+          />
+          {selectedTab === tab && <Text style={styles.navText}>{label}</Text>}
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
@@ -55,14 +57,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: 15,
-    //  backgroundColor: "#1E8449",
-    backgroundColor: "#1F4E78",
+    paddingVertical: 25,
+    //backgroundColor: "#1E8449",
+    //backgroundColor: "#1F4E78",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
   navItem: {
     alignItems: "center",
+    marginBottom: 10,
   },
   navText: {
     fontSize: 10,

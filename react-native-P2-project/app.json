@@ -23,7 +23,7 @@
       "package": "com.anonymous.reactnativeP2project"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon1.png"
     }
   }
 }

@@ -7,21 +7,22 @@ import {
   SafeAreaView,
   StatusBar,
   Keyboard,
+  ActivityIndicator,
   TouchableWithoutFeedback,
   Animated
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { showMessage } from 'react-native-flash-message';
 import registerStyles from '../../assets/styles/registerStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Bubble from '../components/Bubble';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Para guardar el token -> backend
-import { signupUser } from '../services/authService'; // Servicio para el registro -> backend
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { signupUser } from '../services/authService';
 
 export default function Registro() {
   const navigation = useNavigation();
-  const insets = useSafeAreaInsets(); // Margen seguro dinámico
+  const insets = useSafeAreaInsets();
 
   // Estados de los inputs
   const [name, setName] = useState('');
@@ -29,70 +30,70 @@ export default function Registro() {
   const [correo, setCorreo] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [cedula, setCedula] = useState('');
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Estado para controlar la carga -> backend
-  // Animación de opacidad
+  const [isLoading, setIsLoading] = useState(false);
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Escuchar eventos del teclado con animación
+  // Animación del teclado
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardVisible(true);
-      Animated.timing(fadeAnim, {
-        toValue: 0, // Se desvanece
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+    const showSub = Keyboard.addListener('keyboardDidShow', () => {
+      Animated.timing(fadeAnim, { toValue: 0, duration: 300, useNativeDriver: true }).start();
     });
-
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardVisible(false);
-      Animated.timing(fadeAnim, {
-        toValue: 1, // Reaparece
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+    const hideSub = Keyboard.addListener('keyboardDidHide', () => {
+      Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true }).start();
     });
+    return () => { showSub.remove(); hideSub.remove(); };
+  }, []);
 
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, [fadeAnim]);
-
-  // Función para manejar el registro -> backend
   const handleSignup = async () => {
-    if (!name || !lastname || !correo || !contraseña || !cedula) {
-      Alert.alert('Error', 'Todos los campos son obligatorios');
+    // Validaciones
+    if (!name.trim() || !lastname.trim() || !correo.trim() || !contraseña.trim() || !cedula.trim()) {
+      showMessage({
+        message: '¡Ups!',
+        description: 'Todos los campos son obligatorios.',
+        type: 'warning',
+        icon: 'auto',
+        duration: 2500,
+      });
       return;
     }
-
     if (contraseña.length < 6) {
-      Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
+      showMessage({
+        message: '¡Ups!',
+        description: 'La contraseña debe tener al menos 6 caracteres.',
+        type: 'warning',
+        icon: 'auto',
+        duration: 2500,
+      });
       return;
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(correo)) {
-      Alert.alert('Error', 'El formato del correo electrónico no es válido');
+      showMessage({
+        message: '¡Ups!',
+        description: 'El correo no tiene un formato válido.',
+        type: 'warning',
+        icon: 'auto',
+        duration: 2500,
+      });
       return;
     }
 
-    setIsLoading(true); // Activar el estado de carga
-
+    setIsLoading(true);
     try {
-      // Enviar los datos al backend
       const response = await signupUser(name, lastname, correo, contraseña, 'Residencial', cedula);
-
-      // Guardar el token en AsyncStorage
       await AsyncStorage.setItem('userToken', response.token);
-      // Redirigir a la vista de consumos -> backend
       navigation.navigate('C&P');
     } catch (error) {
-      console.error('Error en el registro:', error);
-      Alert.alert('Error', 'No se pudo registrar el usuario');
+      showMessage({
+        message: '¡Error!',
+        description: 'No se pudo registrar el usuario. Intenta de nuevo.',
+        type: 'danger',
+        icon: 'auto',
+        duration: 3000,
+      });
     } finally {
-      setIsLoading(false); // Desactivar el estado de carga
+      setIsLoading(false);
     }
   };
 
@@ -104,18 +105,15 @@ export default function Registro() {
         <View style={[registerStyles.container, { paddingBottom: insets.bottom }]}>
 
           {/* Bolitas decorativas */}
-          <Bubble size={330} color="#AED6F1" position={{ top: -240, left: -90 }} />
-          <Bubble size={330} color="#1F4E78" position={{ top: -265, left: 70 }} />
+          <Bubble size={330} color="#AED6F1" position={{ top: -262, left: -90 }} />
+          <Bubble size={330} color="#1F4E78" position={{ top: -280, left: 70 }} />
 
-          <Animated.View style={{ opacity: fadeAnim }}>
-            <Bubble size={270} color="#AED6F1" position={{ top: 440, left: 110 }} />
-            <Bubble size={330} color="#1F4E78" position={{ top: 550, left: -60 }} />
-          </Animated.View>
+          
 
           {/* Botón de "Inicia sesión" con animación */}
           <Animated.View style={{ opacity: fadeAnim }}>
             <TouchableOpacity onPress={() => navigation.navigate('Login')} style={registerStyles.registerButton}>
-              <Text style={registerStyles.registerText}>Inicia sesión</Text>
+              <Text style={registerStyles.registerText}>¡Inicia sesión!</Text>
             </TouchableOpacity>
           </Animated.View>
 
@@ -124,9 +122,7 @@ export default function Registro() {
             <Text style={registerStyles.logo}>ENERGÍA COMUNIDAD</Text>
           </Animated.View>
 
-          <Animated.View style={{ opacity: fadeAnim }}>
-            <Text style={registerStyles.title}>Registro</Text>
-          </Animated.View>
+          
 
           {/* Contenedor de los inputs */}
           <View style={registerStyles.inputWrapper}>
@@ -186,12 +182,15 @@ export default function Registro() {
                 <TextInput
                   style={registerStyles.input}
                   placeholder="Contraseña"
-                  secureTextEntry
+                  secureTextEntry={!showPassword}
                   value={contraseña}
                   onChangeText={setContraseña}
                   placeholderTextColor="#666"
                   returnKeyType="done"
                 />
+                <TouchableOpacity onPress={() => setShowPassword(prev => !prev)} style={{ marginRight: 20 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                    <FontAwesome5 name={showPassword ? 'eye' : 'eye-slash'} size={18} color="#666" />
+                </TouchableOpacity>
               </View>
 
               <View style={registerStyles.separator} />
@@ -210,21 +209,32 @@ export default function Registro() {
               </View>
 
               {/* Botón de Registro  */}
-              <TouchableOpacity style={[registerStyles.loginButton, isLoading && { opacity: 0.5 }]}
-                onPress={handleSignup}
-                disabled={isLoading}>
-                <FontAwesome5 name="arrow-right" size={20} color="white" />
-              </TouchableOpacity>
+              <TouchableOpacity
+              style={[
+                registerStyles.loginButton,
+                isLoading && { opacity: 0.5 }
+              ]}
+              onPress={handleSignup}
+              disabled={isLoading}
+            >
+              {isLoading
+                ? <ActivityIndicator size="large" color="#fff" />
+                : <FontAwesome5 name="arrow-right" size={20} color="white" />
+              }
+            </TouchableOpacity>
 
 
             </View>
           </View>
 
-
+          <Animated.View style={{ opacity: fadeAnim }}>
+            <Bubble size={270} color="#AED6F1" position={{ top: -70, left: 110 }} />
+            <Bubble size={330} color="#1F4E78" position={{ top: 25, left: -60 }} />
+          </Animated.View>
 
         </View>
 
-
+      
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );

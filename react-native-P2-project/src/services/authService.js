@@ -31,11 +31,14 @@ export const loginUser = async (email, password) => {
             body: JSON.stringify({ email, password }),
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error('Error en el login');
+            throw new Error(data.message);
         }
 
-        return await response.json(); // { message: 'Login exitoso', token: '...' }
+        // todo ok: devolvemos el JSON completo
+        return data; // { message: 'Login exitoso', token: '...' }
     } catch (error) {
         console.error('Error:', error);
         throw error;
