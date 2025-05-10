@@ -1,4 +1,4 @@
-const { createProduction, getProductionsByUser, getPreviousMonthProductions } = require('../models/productionModel');
+const { createProduction, getProductionsByUser, getPreviousMonthProductions, getProductionsByUserOrdered } = require('../models/productionModel');
 
 // Registrar una nueva producción
 const addProduction = async (req, res) => {
@@ -7,8 +7,10 @@ const addProduction = async (req, res) => {
     console.log("add production");
     try {
         const production = await createProduction(userId, productionValue, productionDate);
+        console.log("production created successfully");
         res.status(201).json({ message: 'Producción registrada', production });
     } catch (error) {
+        console.error('Error al registrar la producción:', error);
         res.status(500).json({ message: 'Error al registrar la producción', error: error.message });
     }
 };
@@ -29,6 +31,7 @@ const getProductions = async (req, res) => {
         const promedioMensual = totalActual;
         const promedioHora = (totalActual / horasEnMes).toFixed(2);
 
+        console.log("get productions successfully");
         // Enviar los datos transformados al frontend
         res.status(200).json({
             totalActual: `${totalActual} Wh`,
@@ -38,17 +41,21 @@ const getProductions = async (req, res) => {
             promedioHora: `${promedioHora} Wh`,
         });
     } catch (error) {
+        console.error('Error al obtener las producciones:', error);
         res.status(500).json({ message: 'Error al obtener las producciones', error: error.message });
     }
 };
 
 const getProductionsOrdered = async (req, res) => {
+    console.log("get productions ordered");
     const userId = req.user.userId;
 
     try {
         const productions = await getProductionsByUserOrdered(userId);
+        console.log("get productions ordered successfully");
         res.status(200).json(productions);
     } catch (error) {
+        console.error('Error al obtener las producciones ordenadas:', error);
         res.status(500).json({
             message: 'Error al obtener las producciones ordenadas',
             error: error.message

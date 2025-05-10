@@ -369,12 +369,12 @@ export default function Marketplace() {
           </>
         )}
 
-        
 
       </ScrollView>
       )}
-
+      
        {/* — Modal de DETALLES de Orden — */}
+
       <Modal
         animationType="slide"
         transparent

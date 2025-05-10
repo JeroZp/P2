@@ -1,4 +1,4 @@
-const { createConsumption, getConsumptionsByUser, getPreviousMonthConsumptions } = require('../models/consumptionModel');
+const { createConsumption, getConsumptionsByUser, getPreviousMonthConsumptions, getConsumptionsByUserOrdered } = require('../models/consumptionModel');
 
 // Registrar un nuevo consumo
 const addConsumption = async (req, res) => {
@@ -8,8 +8,10 @@ const addConsumption = async (req, res) => {
 
     try {
         const consumption = await createConsumption(userId, consumptionValue, consumptionDate);
+        console.log("consumption created successfully");
         res.status(201).json({ message: 'Consumo registrado', consumption });
     } catch (error) {
+        console.error('Error al registrar el consumo:', error);
         res.status(500).json({ message: 'Error al registrar el consumo', error: error.message });
     }
 };
@@ -30,6 +32,7 @@ const getConsumptions = async (req, res) => {
         const promedioMensual = totalActual;
         const promedioHora = (totalActual / horasEnMes).toFixed(2);
 
+        console.log("get consumptions successfully");
         // Enviar los datos transformados al frontend
         res.status(200).json({
             totalActual: `${totalActual} Wh`,
@@ -39,17 +42,20 @@ const getConsumptions = async (req, res) => {
             promedioHora: `${promedioHora} Wh`,
         });
     } catch (error) {
+        console.error('Error al obtener los consumos:', error);
         res.status(500).json({ message: 'Error al obtener los consumos', error: error.message });
     }
 };
 
 const getConsumptionsOrdered = async (req, res) => {
     const userId = req.user.userId;
-
+    console.log("get consumptions ordered");
     try {
         const consumptions = await getConsumptionsByUserOrdered(userId);
+        console.log("get consumptions ordered successfully");
         res.status(200).json(consumptions);
     } catch (error) {
+        console.error('Error al obtener los consumos ordenados:', error);
         res.status(500).json({
             message: 'Error al obtener los consumos ordenados',
             error: error.message
