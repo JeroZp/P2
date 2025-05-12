@@ -105,3 +105,88 @@ export const updateOffer = async (offerId, offerData) => {
         throw error;
     }
 };
+
+// Comprar una oferta
+export const purchaseOffer = async (offerId) => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.marketplace.purchaseOffer(offerId), {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al comprar oferta');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error en purchaseOffer:', error);
+        throw error;
+    }
+};
+
+// Obtener mis compras
+export const getMyPurchases = async () => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.marketplace.myPurchases, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) throw new Error('Error al obtener tus compras');
+        return await response.json();
+    } catch (error) {
+        console.error('Error en getMyPurchases:', error);
+        throw error;
+    }
+};
+
+// Obtener mis ventas (alternativa a myOffers)
+export const getMySales = async () => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.marketplace.mySales, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) throw new Error('Error al obtener tus ventas');
+        return await response.json();
+    } catch (error) {
+        console.error('Error en getMySales:', error);
+        throw error;
+    }
+};
+
+// Descargar contrato
+export const downloadContract = async (contractId) => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.marketplace.downloadContract(contractId), {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) throw new Error('Error al descargar contrato');
+
+        // Para React Native necesitarás un paquete como react-native-blob-util
+        // para manejar la descarga de archivos
+        return response;
+    } catch (error) {
+        console.error('Error en downloadContract:', error);
+        throw error;
+    }
+};
