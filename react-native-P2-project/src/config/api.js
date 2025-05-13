@@ -1,9 +1,9 @@
-const IP_APIS = '192.168.1.5'; // Cambia esto por la IP de tu servidor o localhost si estás en el mismo dispositivo
+const IP_APIS = '13.217.188.1'; // Cambia esto por la IP de tu servidor o localhost si estás en el mismo dispositivo
 
-const API_BASE_URL_AUTH = `http://${IP_APIS}:3000`; // URL del auth-service
-const API_BASE_URL_CONS = `http://${IP_APIS}:3001`; // URL del consumptions-service
-const API_BASE_URL_PROD = `http://${IP_APIS}:3002`; // URL del productions-service
-const API_BASE_URL_MARKEPLACE = `http://${IP_APIS}:3003`; // URL del marketplace-service
+const API_BASE_URL_AUTH = `http://${IP_APIS}/api/auth`; // URL del auth-service
+const API_BASE_URL_CONS = `http://${IP_APIS}/api/consumptions`; // URL del consumptions-service
+const API_BASE_URL_PROD = `http://${IP_APIS}/api/productions`; // URL del productions-service
+const API_BASE_URL_MARKEPLACE = `http://${IP_APIS}/api/marketplace`; // URL del marketplace-service
 
 
 export const API_URLS = {
