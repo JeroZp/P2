@@ -1,4 +1,4 @@
-const IP_APIS = '192.168.1.14';
+const IP_APIS = '172.20.10.2';
 const API_BASE_URL_AUTH = `http://${IP_APIS}:3000`; // URL del auth-service
 const API_BASE_URL_CONS = `http://${IP_APIS}:3001`; // URL del consumptions-service
 const API_BASE_URL_PROD = `http://${IP_APIS}:3002`; // URL del productions-service
