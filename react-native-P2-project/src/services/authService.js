@@ -1,22 +1,20 @@
 import { API_URLS } from '../config/api';
+import { getToken } from '../utils/storage';
 
-export const signupUser = async (names, surnames, email, password, userType, cedulaOrNit) => {
+export const signupUser = async (userData) => {
     try {
         const response = await fetch(API_URLS.signup, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ names, surnames, email, password, userType, cedulaOrNit }),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData),
         });
 
-        if (!response.ok) {
-            throw new Error('Error en el registro');
-        }
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error en el registro');
 
-        return await response.json(); // { message: 'Usuario creado exitosamente', user: {...}, token: '...' }
+        return data;
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Signup Error:', error);
         throw error;
     }
 };
@@ -25,22 +23,38 @@ export const loginUser = async (email, password) => {
     try {
         const response = await fetch(API_URLS.login, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
         });
 
         const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Credenciales incorrectas');
 
-        if (!response.ok) {
-            throw new Error(data.message);
-        }
-
-        // todo ok: devolvemos el JSON completo
-        return data; // { message: 'Login exitoso', token: '...' }
+        return data;
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Login Error:', error);
+        throw error;
+    }
+};
+
+export const updateUserEmail = async (newEmail) => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.updateEmail, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ newEmail }),
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al actualizar email');
+
+        return data;
+    } catch (error) {
+        console.error('Update Email Error:', error);
         throw error;
     }
 };

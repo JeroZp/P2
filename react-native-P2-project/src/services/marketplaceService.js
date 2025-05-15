@@ -1,7 +1,8 @@
 import { API_URLS } from '../config/api';
 import { getToken } from '../utils/storage';
+import { CONTRACT_STATES } from '../constants/contractStates';
 
-// Obtener todas las ofertas del mercado (excepto las del usuario)
+// Offers
 export const getMarketOffers = async () => {
     try {
         const token = await getToken();
@@ -13,15 +14,16 @@ export const getMarketOffers = async () => {
             }
         });
 
-        if (!response.ok) throw new Error('Error al obtener ofertas');
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al obtener ofertas');
+
+        return data;
     } catch (error) {
-        console.error('Error en getMarketOffers:', error);
+        console.error('Get Market Offers Error:', error);
         throw error;
     }
 };
 
-// Obtener las ofertas del usuario actual
 export const getMyOffers = async () => {
     try {
         const token = await getToken();
@@ -33,15 +35,16 @@ export const getMyOffers = async () => {
             }
         });
 
-        if (!response.ok) throw new Error('Error al obtener tus ofertas');
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al obtener tus ofertas');
+
+        return data;
     } catch (error) {
-        console.error('Error en getMyOffers:', error);
+        console.error('Get My Offers Error:', error);
         throw error;
     }
 };
 
-// Crear nueva oferta
 export const createOffer = async (offerData) => {
     try {
         const token = await getToken();
@@ -54,38 +57,16 @@ export const createOffer = async (offerData) => {
             body: JSON.stringify(offerData)
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Error al crear oferta');
-        }
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al crear oferta');
+
+        return data;
     } catch (error) {
-        console.error('Error en createOffer:', error);
+        console.error('Create Offer Error:', error);
         throw error;
     }
 };
 
-// Eliminar oferta
-export const deleteOffer = async (offerId) => {
-    try {
-        const token = await getToken();
-        const response = await fetch(API_URLS.marketplace.deleteOffer(offerId), {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) throw new Error('Error al eliminar oferta');
-        return await response.json();
-    } catch (error) {
-        console.error('Error en deleteOffer:', error);
-        throw error;
-    }
-};
-
-// Actualizar oferta
 export const updateOffer = async (offerId, offerData) => {
     try {
         const token = await getToken();
@@ -98,15 +79,40 @@ export const updateOffer = async (offerId, offerData) => {
             body: JSON.stringify(offerData)
         });
 
-        if (!response.ok) throw new Error('Error al actualizar oferta');
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al actualizar oferta');
+
+        return data;
     } catch (error) {
-        console.error('Error en updateOffer:', error);
+        console.error('Update Offer Error:', error);
         throw error;
     }
 };
 
-// Comprar una oferta
+export const deleteOffer = async (offerId) => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.marketplace.deleteOffer(offerId), {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.message || 'Error al eliminar oferta');
+        }
+
+        return true; // Success
+    } catch (error) {
+        console.error('Delete Offer Error:', error);
+        throw error;
+    }
+};
+
+// Purchases & Sales
 export const purchaseOffer = async (offerId) => {
     try {
         const token = await getToken();
@@ -118,18 +124,16 @@ export const purchaseOffer = async (offerId) => {
             }
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Error al comprar oferta');
-        }
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al procesar compra');
+
+        return data;
     } catch (error) {
-        console.error('Error en purchaseOffer:', error);
+        console.error('Purchase Offer Error:', error);
         throw error;
     }
 };
 
-// Obtener mis compras
 export const getMyPurchases = async () => {
     try {
         const token = await getToken();
@@ -141,15 +145,16 @@ export const getMyPurchases = async () => {
             }
         });
 
-        if (!response.ok) throw new Error('Error al obtener tus compras');
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al obtener compras');
+
+        return data;
     } catch (error) {
-        console.error('Error en getMyPurchases:', error);
+        console.error('Get Purchases Error:', error);
         throw error;
     }
 };
 
-// Obtener mis ventas (alternativa a myOffers)
 export const getMySales = async () => {
     try {
         const token = await getToken();
@@ -161,32 +166,77 @@ export const getMySales = async () => {
             }
         });
 
-        if (!response.ok) throw new Error('Error al obtener tus ventas');
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al obtener ventas');
+
+        return data;
     } catch (error) {
-        console.error('Error en getMySales:', error);
+        console.error('Get Sales Error:', error);
         throw error;
     }
 };
 
-// Descargar contrato
+// Contracts
 export const downloadContract = async (contractId) => {
     try {
         const token = await getToken();
         const response = await fetch(API_URLS.marketplace.downloadContract(contractId), {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (!response.ok) throw new Error('Error al descargar contrato');
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.message || 'Error al descargar contrato');
+        }
 
-        // Para React Native necesitarás un paquete como react-native-blob-util
-        // para manejar la descarga de archivos
-        return response;
+        return response.blob(); // For file download
     } catch (error) {
-        console.error('Error en downloadContract:', error);
+        console.error('Download Contract Error:', error);
+        throw error;
+    }
+};
+
+export const acceptContract = async (contractId) => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.marketplace.updateContract(contractId), {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: CONTRACT_STATES.COMPLETED })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al aceptar contrato');
+
+        return data;
+    } catch (error) {
+        console.error('Accept Contract Error:', error);
+        throw error;
+    }
+};
+
+export const rejectContract = async (contractId) => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.marketplace.updateContract(contractId), {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: CONTRACT_STATES.CANCELLED })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al rechazar contrato');
+
+        return data;
+    } catch (error) {
+        console.error('Reject Contract Error:', error);
         throw error;
     }
 };
