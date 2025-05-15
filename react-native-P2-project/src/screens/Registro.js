@@ -18,7 +18,7 @@ import registerStyles from '../../assets/styles/registerStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Bubble from '../components/Bubble';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { signupUser } from '../services/authService';
+import { signupUser, loginUser } from '../services/authService';
 
 export default function Registro() {
   const navigation = useNavigation();
@@ -46,7 +46,7 @@ export default function Registro() {
   }, []);
 
   const handleSignup = async () => {
-    // Validaciones
+    // Validaciones (mantenemos las existentes)
     if (!name.trim() || !lastname.trim() || !correo.trim() || !contraseña.trim() || !cedula.trim()) {
       showMessage({
         message: '¡Ups!',
@@ -81,13 +81,37 @@ export default function Registro() {
 
     setIsLoading(true);
     try {
-      const response = await signupUser(name, lastname, correo, contraseña, 'Residencial', cedula);
-      await AsyncStorage.setItem('userToken', response.token);
-      navigation.navigate('C&P');
+      // 1. Primero hacemos el registro
+      const userData = {
+        names: name,
+        surnames: lastname,
+        email: correo,
+        password: contraseña,
+        userType: 'Residencial',
+        cedulaOrNit: cedula
+      };
+
+      await signupUser(userData);
+
+      // 2. Luego hacemos login automático con las mismas credenciales
+      const loginResponse = await loginUser(correo, contraseña);
+
+      // 3. Navegamos a la pantalla principal
+      navigation.replace('CP'); // Usamos replace para que no pueda volver atrás
+
+      showMessage({
+        message: '¡Bienvenido!',
+        description: 'Tu cuenta ha sido creada exitosamente.',
+        type: 'success',
+        icon: 'auto',
+        duration: 3000,
+      });
+
     } catch (error) {
+      console.error('Registration Error:', error);
       showMessage({
         message: '¡Error!',
-        description: 'No se pudo registrar el usuario. Intenta de nuevo.',
+        description: error.message || 'No se pudo registrar el usuario. Intenta de nuevo.',
         type: 'danger',
         icon: 'auto',
         duration: 3000,
@@ -108,7 +132,7 @@ export default function Registro() {
           <Bubble size={330} color="#AED6F1" position={{ top: -262, left: -90 }} />
           <Bubble size={330} color="#1F4E78" position={{ top: -280, left: 70 }} />
 
-          
+
 
           {/* Botón de "Inicia sesión" con animación */}
           <Animated.View style={{ opacity: fadeAnim }}>
@@ -122,7 +146,7 @@ export default function Registro() {
             <Text style={registerStyles.logo}>ENERGÍA COMUNIDAD</Text>
           </Animated.View>
 
-          
+
 
           {/* Contenedor de los inputs */}
           <View style={registerStyles.inputWrapper}>
@@ -189,7 +213,7 @@ export default function Registro() {
                   returnKeyType="done"
                 />
                 <TouchableOpacity onPress={() => setShowPassword(prev => !prev)} style={{ marginRight: 20 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                    <FontAwesome5 name={showPassword ? 'eye' : 'eye-slash'} size={18} color="#666" />
+                  <FontAwesome5 name={showPassword ? 'eye' : 'eye-slash'} size={18} color="#666" />
                 </TouchableOpacity>
               </View>
 
@@ -210,18 +234,18 @@ export default function Registro() {
 
               {/* Botón de Registro  */}
               <TouchableOpacity
-              style={[
-                registerStyles.loginButton,
-                isLoading && { opacity: 0.5 }
-              ]}
-              onPress={handleSignup}
-              disabled={isLoading}
-            >
-              {isLoading
-                ? <ActivityIndicator size="large" color="#fff" />
-                : <FontAwesome5 name="arrow-right" size={20} color="white" />
-              }
-            </TouchableOpacity>
+                style={[
+                  registerStyles.loginButton,
+                  isLoading && { opacity: 0.5 }
+                ]}
+                onPress={handleSignup}
+                disabled={isLoading}
+              >
+                {isLoading
+                  ? <ActivityIndicator size="large" color="#fff" />
+                  : <FontAwesome5 name="arrow-right" size={20} color="white" />
+                }
+              </TouchableOpacity>
 
 
             </View>
@@ -234,7 +258,7 @@ export default function Registro() {
 
         </View>
 
-      
+
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );
