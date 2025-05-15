@@ -22,12 +22,7 @@ export default function Profile() {
   const [user, setUser] = useState({
     photoURL:
       'https://media.istockphoto.com/id/1389348844/es/foto/foto-de-estudio-de-una-hermosa-joven-sonriendo-mientras-est%C3%A1-de-pie-sobre-un-fondo-gris.jpg?s=612x612&w=0&k=20&c=kUufmNoTnDcRbyeHhU1wRiip-fNjTWP9owjHf75frFQ=',
-    username: 'Luisa Posada Hernandez',
-    fullName: 'Luisa Posada Hernandez',
-    email: 'LuipH@gmail.com',
-    clientId: 'CL-2025-005',
-    notifications: true,
-
+    email: 'userTest@test.com',
   });
 
   const [isEditingEmail, setIsEditingEmail] = useState(false);
@@ -138,10 +133,10 @@ export default function Profile() {
           </View>
 
 
-          <View style={styles.infoRow}>
+          {/* <View style={styles.infoRow}>
             <FontAwesome5 name="id-card" size={18} color="#4F4F4F" />
             <Text style={styles.infoText}>ID Cliente: {user.clientId}</Text>
-          </View>
+          </View> */}
 
           <View style={styles.infoRow}>
             <FontAwesome5 name="bell" size={18} color="#4F4F4F" />
@@ -153,14 +148,14 @@ export default function Profile() {
           </View>
 
 
-          <View style={styles.divider} />
+          {/* <View style={styles.divider} />
           <Text style={styles.sectionTitle}>Últimas Facturas</Text>
           {invoices.map((inv) => (
             <View key={inv.id} style={styles.invoiceRow}>
               <Text style={styles.invoiceText}>{inv.id} - {inv.date}</Text>
               <Text style={styles.invoiceAmount}>{inv.amount}</Text>
             </View>
-          ))}
+          ))} */}
 
 
         </View>

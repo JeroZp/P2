@@ -1,5 +1,5 @@
 import { API_URLS } from '../config/api';
-import { getToken } from '../utils/storage';
+import { getToken, storeUserData, storeToken } from '../utils/storage';
 
 export const signupUser = async (userData) => {
     try {
@@ -12,12 +12,19 @@ export const signupUser = async (userData) => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || 'Error en el registro');
 
+        // Almacenar token y datos del usuario
+        if (data.token && data.user) {
+            await storeToken(data.token);
+            await storeUserData(data.user);
+        }
+
         return data;
     } catch (error) {
         console.error('Signup Error:', error);
         throw error;
     }
 };
+
 
 export const loginUser = async (email, password) => {
     try {
@@ -29,6 +36,12 @@ export const loginUser = async (email, password) => {
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || 'Credenciales incorrectas');
+
+        // Almacenar token y datos del usuario
+        if (data.token && data.user) {
+            await storeToken(data.token);
+            await storeUserData(data.user);
+        }
 
         return data;
     } catch (error) {
