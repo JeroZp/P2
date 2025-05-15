@@ -5,7 +5,8 @@ import NavBar from "../components/NavBar";
 import Bubble from "../components/Bubble";
 import LoadingDots from '../components/LoadingDots';
 import { showMessage } from 'react-native-flash-message';
-import { getMarketOffers, getMyOffers, createOffer, deleteOffer, getMyPurchases, getMySales, purchaseOffer } from "../services/marketplaceService";
+import { getMarketOffers, getMyOffers, createOffer, deleteOffer, getMyPurchases, getMySales, purchaseOffer, acceptContract, rejectContract } from "../services/marketplaceService";
+import { CONTRACT_STATES, STATE_LABELS, OFFER_STATE } from '../constants/contractStates';
 
 
 export default function Marketplace() {
@@ -32,11 +33,10 @@ export default function Marketplace() {
 
   // animado para el carrito
   const cartAnim = useRef(new Animated.Value(0)).current;
-  const hasProcessingSale = sales.some(s => s.status === "Procesando");
+  const hasProcessingSale = sales.some(s => s.status === CONTRACT_STATES.PENDING);
 
   useEffect(() => {
     if (hasProcessingSale && mode === "Ventas") {
-      // bucle infinito de vaivén entre -8 y +8 px
       Animated.loop(
         Animated.sequence([
           Animated.timing(cartAnim, {
@@ -52,7 +52,6 @@ export default function Marketplace() {
         ])
       ).start();
     } else {
-      // parar y resetear posición
       cartAnim.stopAnimation();
       cartAnim.setValue(0);
     }
@@ -72,25 +71,21 @@ export default function Marketplace() {
   const handleDeleteOffer = async (offerId) => {
     try {
       await deleteOffer(offerId);
-      // recarga mis ofertas
-      const myOffers = await getMyOffers();
-      setSales(myOffers.map(o => ({
-        id: o.id,
-        name: o.buyerName || "Comprador",
-        kWh: `${o.quantity} kWh`,
-        price: `$${o.value}`,
-        status: o.status,           // espera que vengan: "Disponible", "Procesando", "Vendido"
-        date: new Date(o.offerDate).toLocaleDateString(),
-      })));
+      // Actualización optimista del estado
+      setSales(prevSales => prevSales.filter(offer => offer.id !== offerId));
+
+      showMessage({
+        message: 'Oferta eliminada',
+        type: 'success',
+        duration: 3000,
+      });
     } catch (e) {
       showMessage({
         message: 'Error eliminando oferta',
-        description: e,
+        description: e.message,
         type: 'danger',
-        icon: 'auto',
         duration: 3000,
       });
-
     }
   };
 
@@ -109,6 +104,7 @@ export default function Marketplace() {
             status: "Disponible"
           })));
         } else if (mode === "Ordenes") {
+          // Para compras:
           const purchases = await getMyPurchases();
           setOrders(purchases.map(purchase => ({
             id: purchase.id,
@@ -116,11 +112,12 @@ export default function Marketplace() {
             kWh: `${purchase.quantity} kWh`,
             price: `$${purchase.agreed_price}`,
             status: purchase.status,
+            statusLabel: STATE_LABELS[purchase.status] || purchase.status,
             date: new Date(purchase.created_at).toLocaleDateString(),
             isContractAvailable: !!purchase.contract_pdf_path
           })));
         } else if (mode === "Ventas") {
-          // Obtener ambas fuentes de datos
+          // Para ventas:
           const [myOffers, mySales] = await Promise.all([
             getMyOffers(),
             getMySales()
@@ -129,23 +126,25 @@ export default function Marketplace() {
           // Mapear ofertas propias (disponibles)
           const offersData = myOffers.map(offer => ({
             id: offer.id,
-            type: 'offer', // Para diferenciar
+            type: 'offer',
             name: "Oferta disponible",
             kWh: `${offer.quantity} kWh`,
             price: `$${offer.value}`,
-            status: "Disponible",
-            date: offer.offerdate ? new Date(offer.offerdate).toLocaleDateString() : 'Fecha no disponible',
+            status: OFFER_STATE.ACTIVE,
+            statusLabel: 'Disponible',
+            date: offer.offerDate ? new Date(offer.offerDate).toLocaleDateString() : 'Fecha no disponible',
             isMine: true
           }));
 
           // Mapear ventas concretadas
           const salesData = mySales.map(sale => ({
             id: sale.id,
-            type: 'sale', // Para diferenciar
+            type: 'sale',
             name: `${sale.buyer_names} ${sale.buyer_surnames}`.trim() || "Comprador",
             kWh: `${sale.quantity} kWh`,
             price: `$${sale.agreed_price}`,
-            status: sale.status || "Procesando",
+            status: sale.status || CONTRACT_STATES.PENDING,
+            statusLabel: STATE_LABELS[sale.status] || 'Pendiente',
             date: sale.created_at ? new Date(sale.created_at).toLocaleDateString() : 'Fecha no disponible',
             isContractAvailable: !!sale.contract_pdf_path
           }));
@@ -181,7 +180,7 @@ export default function Marketplace() {
       await createOffer({
         quantity: parseFloat(offerForm.quantity),
         value: rawPrice,
-        offerDate: new Date().toISOString()
+        offerdate: new Date().toISOString()
       });
 
       setShowCreateModal(false);
@@ -201,7 +200,7 @@ export default function Marketplace() {
           kWh: `${offer.quantity} kWh`,
           price: `$${offer.value}`,
           status: "Disponible",
-          date: new Date(offer.offerDate).toLocaleDateString()
+          date: new Date(offer.offerdate).toLocaleDateString()
         })));
       }
     } catch (error) {
@@ -247,6 +246,82 @@ export default function Marketplace() {
         icon: 'auto',
         duration: 3000,
       });
+    }
+  };
+
+  const handleAcceptSale = async (contractId) => {
+    try {
+      setLoading(true);
+      // Actualización optimista primero
+      setSales(prev => prev.map(item =>
+        item.id === contractId
+          ? { ...item, status: CONTRACT_STATES.COMPLETED, statusLabel: STATE_LABELS[CONTRACT_STATES.COMPLETED] }
+          : item
+      ));
+
+      // Llamada a la API
+      await acceptContract(contractId);
+
+      showMessage({
+        message: 'Venta aceptada',
+        description: 'Has confirmado la transacción exitosamente',
+        type: 'success',
+        duration: 3000,
+      });
+    } catch (error) {
+      // Revertir en caso de error
+      setSales(prev => prev.map(item =>
+        item.id === contractId
+          ? { ...item, status: CONTRACT_STATES.PENDING, statusLabel: STATE_LABELS[CONTRACT_STATES.PENDING] }
+          : item
+      ));
+
+      showMessage({
+        message: 'Error al aceptar venta',
+        description: error.message,
+        type: 'danger',
+        duration: 3000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRejectSale = async (contractId) => {
+    try {
+      setLoading(true);
+      // Actualización optimista primero
+      setSales(prev => prev.map(item =>
+        item.id === contractId
+          ? { ...item, status: CONTRACT_STATES.CANCELLED, statusLabel: STATE_LABELS[CONTRACT_STATES.CANCELLED] }
+          : item
+      ));
+
+      // Llamada a la API
+      await rejectContract(contractId);
+
+      showMessage({
+        message: 'Venta rechazada',
+        description: 'Has cancelado esta transacción',
+        type: 'warning',
+        duration: 3000,
+      });
+    } catch (error) {
+      // Revertir en caso de error
+      setSales(prev => prev.map(item =>
+        item.id === contractId
+          ? { ...item, status: CONTRACT_STATES.PENDING, statusLabel: STATE_LABELS[CONTRACT_STATES.PENDING] }
+          : item
+      ));
+
+      showMessage({
+        message: 'Error al rechazar venta',
+        description: error.message,
+        type: 'danger',
+        duration: 3000,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -384,21 +459,25 @@ export default function Marketplace() {
 
               {sales.map((sale) => {
                 switch (sale.status) {
-                  case "Vendido": // vendido
+                  case CONTRACT_STATES.COMPLETED:
                     return (
                       <View key={sale.id} style={styles.card}>
-                        <Text style={styles.cardTitle}>Vendido a: {sale.name}</Text>
+                        <Text style={styles.cardTitle}>Venta completada a: {sale.name}</Text>
                         <Text style={styles.cardValue}>{sale.kWh} {sale.price}</Text>
-                        <Text style={styles.saleDate}>Fecha: {sale.date}</Text>
+                        <Text style={[styles.cardStatus, styles.completed]}>
+                          Estado: {sale.statusLabel}
+                        </Text>
                       </View>
                     );
 
-                  case "Disponible":  // en venta
+                  case OFFER_STATE.ACTIVE:
                     return (
                       <View key={sale.id} style={styles.card}>
-                        <Text style={styles.cardTitle}>Oferta en venta</Text>
+                        <Text style={styles.cardTitle}>Oferta disponible</Text>
                         <Text style={styles.cardValue}>{sale.kWh} {sale.price}</Text>
-                        <Text style={styles.saleDate}>Creada: {sale.date}</Text>
+                        <Text style={[styles.cardStatus, styles.available]}>
+                          Estado: {sale.statusLabel}
+                        </Text>
                         <TouchableOpacity
                           style={styles.deleteButton}
                           onPress={() => handleDeleteOffer(sale.id)}
@@ -408,32 +487,46 @@ export default function Marketplace() {
                       </View>
                     );
 
-                  case "Procesando":
-                  default:
+                  case CONTRACT_STATES.PENDING:
                     return (
                       <View key={sale.id} style={styles.card}>
-                        <Text style={styles.cardTitle}>Vendido a: {sale.name}</Text>
+                        <Text style={styles.cardTitle}>Venta pendiente a: {sale.name}</Text>
                         <Text style={styles.cardValue}>{sale.kWh} {sale.price}</Text>
-                        <Text style={[styles.cardStatus, styles.processing]}>
-                          Estado: {sale.status}
+                        <Text style={[styles.cardStatus, styles.pending]}>
+                          Estado: {sale.statusLabel}
                         </Text>
-                        <Text style={styles.saleDate}>Fecha: {sale.date}</Text>
                         <View style={styles.actionButtons}>
                           <TouchableOpacity
                             style={[styles.actionButton, styles.acceptButton]}
                             onPress={() => handleAcceptSale(sale.id)}
+                            disabled={loading}
                           >
                             <Text style={styles.actionButtonText}>Aceptar</Text>
                           </TouchableOpacity>
                           <TouchableOpacity
                             style={[styles.actionButton, styles.rejectButton]}
                             onPress={() => handleRejectSale(sale.id)}
+                            disabled={loading}
                           >
                             <Text style={styles.actionButtonText}>Rechazar</Text>
                           </TouchableOpacity>
                         </View>
                       </View>
                     );
+
+                  case CONTRACT_STATES.CANCELLED:
+                    return (
+                      <View key={sale.id} style={styles.card}>
+                        <Text style={styles.cardTitle}>Venta cancelada</Text>
+                        <Text style={styles.cardValue}>{sale.kWh} {sale.price}</Text>
+                        <Text style={[styles.cardStatus, styles.cancelled]}>
+                          Estado: {sale.statusLabel}
+                        </Text>
+                      </View>
+                    );
+
+                  default:
+                    return null;
                 }
               })}
             </>

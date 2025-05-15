@@ -14,6 +14,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import Bubble from '../components/Bubble';
 import NavBar from '../components/NavBar';
 import { useNavigation } from '@react-navigation/native';
+import { updateUserEmail } from '../services/authService'; // Importa la función para actualizar el email
 
 export default function Profile() {
   const navigation = useNavigation();
@@ -26,11 +27,12 @@ export default function Profile() {
     email: 'LuipH@gmail.com',
     clientId: 'CL-2025-005',
     notifications: true,
-    
+
   });
 
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [emailInput, setEmailInput] = useState(user.email);
+  const [isLoading, setIsLoading] = useState(false);
 
   const invoices = [
     { id: 'F001', date: '2025-04-01', amount: '$120,000' },
@@ -49,10 +51,33 @@ export default function Profile() {
     setEmailInput(user.email);
     setIsEditingEmail(true);
   };
-  const saveEmail = () => {
-    setUser({ ...user, email: emailInput });
-    setIsEditingEmail(false);
+
+  const saveEmail = async () => {
+    // Validación básica del email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailInput)) {
+      Alert.alert('Error', 'Por favor ingresa un email válido');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Llamar al servicio real
+      const response = await updateUserEmail(emailInput);
+
+      // Actualizar el estado local si la llamada fue exitosa
+      setUser({ ...user, email: emailInput });
+      setIsEditingEmail(false);
+
+      Alert.alert('Éxito', 'Email actualizado correctamente');
+    } catch (error) {
+      Alert.alert('Error', error.message || 'No se pudo actualizar el email');
+      console.error('Error updating email:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   const cancelEditEmail = () => {
     setIsEditingEmail(false);
   };
@@ -97,7 +122,7 @@ export default function Profile() {
               <Text style={styles.infoText}>{user.email}</Text>
             )}
             {isEditingEmail ? (
-              <>  
+              <>
                 <TouchableOpacity onPress={saveEmail} style={styles.editConfirmButton}>
                   <FontAwesome5 name="check" size={16} color="#fff" />
                 </TouchableOpacity>
@@ -112,13 +137,13 @@ export default function Profile() {
             )}
           </View>
 
-         
+
           <View style={styles.infoRow}>
             <FontAwesome5 name="id-card" size={18} color="#4F4F4F" />
             <Text style={styles.infoText}>ID Cliente: {user.clientId}</Text>
           </View>
 
-          <View style={styles.infoRow}>  
+          <View style={styles.infoRow}>
             <FontAwesome5 name="bell" size={18} color="#4F4F4F" />
             <Text style={styles.infoText}>Notificaciones</Text>
             <Switch
@@ -137,7 +162,7 @@ export default function Profile() {
             </View>
           ))}
 
-         
+
         </View>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>

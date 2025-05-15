@@ -24,6 +24,27 @@ export const getConsumptions = async () => {
     }
 };
 
+export const getConsumptionsOrdered = async () => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.consumptionsOrdered, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al obtener consumos ordenados');
+
+        return data;
+    } catch (error) {
+        console.error('Get Ordered Consumptions Error:', error);
+        throw error;
+    }
+};
+
 // Registrar un nuevo consumo
 export const addConsumption = async (consumptionValue, consumptionDate) => {
     try {
@@ -91,6 +112,27 @@ export const addProduction = async (productionValue, productionDate) => {
         return await response.json();
     } catch (error) {
         console.error('Error:', error);
+        throw error;
+    }
+};
+
+export const getProductionsOrdered = async () => {
+    try {
+        const token = await getToken();
+        const response = await fetch(API_URLS.productionsOrdered, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error al obtener producciones ordenadas');
+
+        return data;
+    } catch (error) {
+        console.error('Get Ordered Productions Error:', error);
         throw error;
     }
 };
