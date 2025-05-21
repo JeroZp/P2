@@ -1,3 +1,70 @@
+these are the tables which we used in this project:
+- Users
+| Campo        | Tipo                     | Restricciones                                                |
+| ------------ | ------------------------ | ------------------------------------------------------------ |
+| id           | SERIAL                   | PRIMARY KEY                                                  |
+| names        | VARCHAR(100)             | NOT NULL                                                     |
+| surnames     | VARCHAR(100)             |                                                              |
+| email        | VARCHAR(100)             | UNIQUE, NOT NULL, formato válido de email                    |
+| passwordHash | VARCHAR(255)             | NOT NULL                                                     |
+| userType     | VARCHAR(20)              | NOT NULL, solo 'Residencial', 'Industrial' o 'Administrador' |
+| cedulaOrNit  | INTEGER                  | UNIQUE, NOT NULL, > 0                                        |
+| createdAt    | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT\_TIMESTAMP                                   |
+| updatedAt    | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT\_TIMESTAMP                                   |
+
+- Consumptions
+| Campo            | Tipo                     | Restricciones                                 |
+| ---------------- | ------------------------ | --------------------------------------------- |
+| id               | SERIAL                   | PRIMARY KEY                                   |
+| userId           | INTEGER                  | FOREIGN KEY → `users(id)` (ON DELETE CASCADE) |
+| consumptionValue | NUMERIC(10,2)            | NOT NULL, ≥ 0                                 |
+| consumptionDate  | TIMESTAMP                | NOT NULL                                      |
+| createdAt        | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT\_TIMESTAMP                    |
+
+Índice: - idx_consumptions_userId en userId
+
+- Productions
+| Campo           | Tipo                     | Restricciones                                 |
+| --------------- | ------------------------ | --------------------------------------------- |
+| id              | SERIAL                   | PRIMARY KEY                                   |
+| userId          | INTEGER                  | FOREIGN KEY → `users(id)` (ON DELETE CASCADE) |
+| productionValue | NUMERIC(10,2)            | NOT NULL, ≥ 0                                 |
+| productionDate  | TIMESTAMP                | NOT NULL                                      |
+| createdAt       | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT\_TIMESTAMP                    |
+
+Índice: - idx_productions_userId en userId
+
+- offer
+| Campo     | Tipo                     | Restricciones                                 |
+| --------- | ------------------------ | --------------------------------------------- |
+| id        | SERIAL                   | PRIMARY KEY                                   |
+| userId    | INTEGER                  | FOREIGN KEY → `users(id)` (ON DELETE CASCADE) |
+| quantity  | NUMERIC(10,2)            | NOT NULL, > 0                                 |
+| value     | INTEGER                  | NOT NULL, > 0                                 |
+| offerDate | TIMESTAMP                | NOT NULL                                      |
+| createdAt | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT\_TIMESTAMP                    |
+
+Índice: - idx_offer_userId en userId
+
+- Energy Contracts
+| Campo               | Tipo                     | Restricciones                                       |
+| ------------------- | ------------------------ | --------------------------------------------------- |
+| id                  | SERIAL                   | PRIMARY KEY                                         |
+| buyer\_id           | INTEGER                  | FOREIGN KEY → `users(id)` (ON DELETE CASCADE)       |
+| offer\_id           | INTEGER                  | FOREIGN KEY → `offer(id)` (ON DELETE CASCADE)       |
+| quantity            | NUMERIC(10,2)            | NOT NULL, > 0                                       |
+| agreed\_price       | NUMERIC(10,2)            | NOT NULL, > 0                                       |
+| status              | VARCHAR(20)              | NOT NULL, solo 'Pending', 'Completed' o 'Cancelled' |
+| created\_at         | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT\_TIMESTAMP                          |
+| updated\_at         | TIMESTAMP WITH TIME ZONE | DEFAULT CURRENT\_TIMESTAMP                          |
+| contract\_pdf\_path | VARCHAR(255)             | Ruta al archivo PDF del contrato (opcional)         |
+
+Índices:
+- idx_energy_contracts_buyer en buyer_id
+
+- idx_energy_contracts_offer en offer_id
+
+
 this is the SQL code that we use to create the tables and indexes (in our case, we used postgreSQL in render):
 
 ```bash
