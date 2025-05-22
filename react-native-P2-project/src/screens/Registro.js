@@ -83,7 +83,7 @@ export default function Registro() {
     try {
       const response = await signupUser(name, lastname, correo, contraseña, 'Residencial', cedula);
       await AsyncStorage.setItem('userToken', response.token);
-      navigation.navigate('C&P');
+      navigation.navigate('CP');
     } catch (error) {
       showMessage({
         message: '¡Error!',

@@ -6,6 +6,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  Modal,
   Dimensions,
   //ActivityIndicator, 
 } from "react-native";
@@ -92,6 +93,8 @@ export default function CP() {
     ],
   };
 
+  const [infoVisible, setInfoVisible] = useState(false);
+
   const COLORS = ['#1E8449','#6FCF97','#F2C94C','#EB5757','#2D9CDB','#9B51E0'];
 
   // Prepara los datos con color/leyenda según selección
@@ -166,14 +169,26 @@ export default function CP() {
               }
           ]}>
            
+           <TouchableOpacity
+            onPress={() => setInfoVisible(true)}
+            style={{ alignSelf: 'center' }}
+          >
+            <FontAwesome5 name="info-circle" size={20} color="#666" />
+          </TouchableOpacity>
+
             <Text style={styles.footerText}>
+
               <Text style={styles.boldText}>{mode}</Text> total por dispositivo  <FontAwesome5
             name="bolt"          // o "sun" para sol
             size={20}
             color="#FFA500"
+            
           />
+            
               
             </Text>
+            
+
             <View style={styles.legendContainer}>
               {chartData.map((slice, i) => {
                 const isSel = i === selectedIndex;
@@ -242,6 +257,26 @@ export default function CP() {
           </View>
         </ScrollView>
         )}
+
+        <Modal
+        visible={infoVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setInfoVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.infoModal}>
+            <Text style={styles.modalTitle}>¿Para qué sirve esta gráfica?</Text>
+            <Text style={styles.modalText}>
+              Muestra el porcentaje de consumo o producción de energía por cada dispositivo. Úsalo para identificar qué aparatos consumen más y optimizar tu uso.
+            </Text>
+            <TouchableOpacity onPress={() => setInfoVisible(false)} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
 
       <NavBar style={{ backgroundColor: "#1E8449" }} />
     </View>
@@ -404,4 +439,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 150,
   },
+  modalOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+infoModal: {
+  width: '80%',
+  backgroundColor: '#fff',
+  borderRadius: 12,
+  padding: 20,
+  alignItems: 'center',
+},
+modalTitle: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  marginBottom: 12,
+},
+modalText: {
+  fontSize: 14,
+  textAlign: 'center',
+  marginBottom: 20,
+},
+closeButton: {
+  paddingVertical: 8,
+  paddingHorizontal: 20,
+  backgroundColor: '#FFA500',
+  borderRadius: 20,
+},
+closeButtonText: {
+  color: 'white',
+  fontWeight: '600',
+},
+
 });

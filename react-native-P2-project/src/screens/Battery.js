@@ -6,6 +6,7 @@ import {
   ScrollView,
   StatusBar,
   Dimensions,
+  Modal,
   StyleSheet,
   
 } from "react-native";
@@ -21,6 +22,8 @@ const { width: screenWidth } = Dimensions.get("window");
 export default function Battery() {
 
   const [loading, setLoading] = useState(true); // estado de carga
+
+  const [infoVisible, setInfoVisible] = useState(false);
 
   const [unit, setUnit] = useState("Wh"); 
   
@@ -152,55 +155,88 @@ export default function Battery() {
       {/* Gráfica de Línea */}
       <ScrollView contentContainerStyle={batteryStyles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={batteryStyles.chartContainer}>
+          <TouchableOpacity
+            onPress={() => setInfoVisible(true)}
+            style={{ alignSelf: 'center', marginBottom: 8 }}
+          >
+            <FontAwesome5 name="info-circle" size={20} color="#666" />
+          </TouchableOpacity>
           <LineChart
-   data={chartData}
-   width={screenWidth * 0.9}
-   height={250}
-   // activa líneas internas y desactiva bordes exteriores
-   withInnerLines={true}
-   withOuterLines={false}
-   withVerticalLines={true}
-   withHorizontalLines={true}
-   // dibuja sombra y puntos
-   withShadow={true}
-   withDots={true}
-   bezier
-   chartConfig={{
-     backgroundGradientFrom: "#fff",
-     backgroundGradientTo: "#fff",
-     // sombreado degradado
-     fillShadowGradientFrom: "#D35400",
-     fillShadowGradientFromOpacity: 0.2,
-     fillShadowGradientTo: "#D35400",
-     fillShadowGradientToOpacity: 0.0,
-     decimalPlaces: 0,
-     // color de línea y etiquetas
-     color: (opacity = 1) => `rgba(211,84,0, ${opacity})`,
-     labelColor: () => `rgba(0,0,0,0.7)`,
-     // puntos
-     propsForDots: {
-       r: "6",
-       strokeWidth: "2",
-       stroke: "#fff",
-       fill: "#D35400",
-     },
-     // grid punteado
-     propsForBackgroundLines: {
-       stroke: "#CCCCCC",
-       strokeDasharray: "4,4",
-     },
-   }}
-   style={{
-     marginVertical: 8,
-     marginBottom: 50,
-     borderRadius: 16,
-   }}
- />
-        </View>
-      </ScrollView>
-    </ScrollView>
+        data={chartData}
+        width={screenWidth * 0.9}
+        height={250}
+        // activa líneas internas y desactiva bordes exteriores
+        withInnerLines={true}
+        withOuterLines={false}
+        withVerticalLines={true}
+        withHorizontalLines={true}
+        // dibuja sombra y puntos
+        withShadow={true}
+        withDots={true}
+        bezier
+        chartConfig={{
+          backgroundGradientFrom: "#fff",
+          backgroundGradientTo: "#fff",
+          // sombreado degradado
+          fillShadowGradientFrom: "#D35400",
+          fillShadowGradientFromOpacity: 0.2,
+          fillShadowGradientTo: "#D35400",
+          fillShadowGradientToOpacity: 0.0,
+          decimalPlaces: 0,
+          // color de línea y etiquetas
+          color: (opacity = 1) => `rgba(211,84,0, ${opacity})`,
+          labelColor: () => `rgba(0,0,0,0.7)`,
+          // puntos
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#fff",
+            fill: "#D35400",
+          },
+          // grid punteado
+          propsForBackgroundLines: {
+            stroke: "#CCCCCC",
+            strokeDasharray: "4,4",
+          },
+        }}
+        style={{
+          marginVertical: 8,
+          marginBottom: 50,
+          borderRadius: 16,
+        }}
+      />
 
-      )}
+
+              </View>
+                    {/* Modal de Información */}
+      <Modal
+        visible={infoVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setInfoVisible(false)}
+      >
+        <View style={batteryStyles.modalOverlay}>
+          <View style={batteryStyles.infoModal}>
+            <Text style={batteryStyles.modalTitle}>¿Para qué sirve esta gráfica?</Text>
+            <Text style={batteryStyles.modalText}>
+              Muestra la evolución del nivel de carga de la batería durante la última semana.
+              Cambia la unidad para ver datos en Wh o en porcentaje.
+            </Text>
+            <TouchableOpacity
+              onPress={() => setInfoVisible(false)}
+              style={batteryStyles.closeButton}
+            >
+              <Text style={batteryStyles.closeButtonText}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+            </ScrollView>
+          </ScrollView>
+
+            )}
+
 
       <NavBar style={{ backgroundColor: "#1E8449" }} />
     </View>
@@ -291,5 +327,38 @@ const batteryStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 75,
+  },
+   modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoModal: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  modalText: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  closeButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    backgroundColor: '#2D9CDB',
+    borderRadius: 20,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: '600',
   },
 });

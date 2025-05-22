@@ -72,13 +72,13 @@ export default function Profile() {
 
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.profileCard}>
-          <View style={styles.avatarContainer}>
+          {/* <View style={styles.avatarContainer}>
             <Image source={{ uri: user.photoURL }} style={styles.avatar} />
             <TouchableOpacity style={styles.editAvatarButton} onPress={handleEditPhoto}>
               <FontAwesome5 name="camera" size={16} color="#fff" />
             </TouchableOpacity>
-          </View>
-          <Text style={styles.username}>{user.username}</Text>
+          </View> */}
+          {/* <Text style={styles.username}>{user.username}</Text> */}
           <Text style={styles.fullName}>Grid Community</Text>
 
           <View style={styles.divider} />
@@ -113,10 +113,10 @@ export default function Profile() {
           </View>
 
          
-          <View style={styles.infoRow}>
+          {/* <View style={styles.infoRow}>
             <FontAwesome5 name="id-card" size={18} color="#4F4F4F" />
             <Text style={styles.infoText}>ID Cliente: {user.clientId}</Text>
-          </View>
+          </View> */}
 
           <View style={styles.infoRow}>  
             <FontAwesome5 name="bell" size={18} color="#4F4F4F" />
@@ -128,14 +128,15 @@ export default function Profile() {
           </View>
 
 
-          <View style={styles.divider} />
+          {/* <View style={styles.divider} />
           <Text style={styles.sectionTitle}>Últimas Facturas</Text>
           {invoices.map((inv) => (
             <View key={inv.id} style={styles.invoiceRow}>
               <Text style={styles.invoiceText}>{inv.id} - {inv.date}</Text>
               <Text style={styles.invoiceAmount}>{inv.amount}</Text>
+              <FontAwesome5 name="download" size={18} color="#28A745" style={{ marginRight: 8 }} />
             </View>
-          ))}
+          ))} */}
 
          
         </View>
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   username: { fontSize: 16, fontFamily: 'MontserratAlternates-SemiBold', color: '#4F4F4F' },
-  fullName: { fontSize: 14, fontFamily: 'MontserratAlternates-Medium', color: '#4F4F4F', marginBottom: 8 },
+  fullName: { fontSize: 14, fontFamily: 'MontserratAlternates-SemiBold', color: '#4F4F4F', marginBottom: 8 },
   divider: { width: '80%', height: 1, backgroundColor: '#ddd', marginVertical: 12 },
   infoRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6 },
   infoText: { flex: 1, marginLeft: 8, fontSize: 14, fontFamily: 'MontserratAlternates-Medium', color: '#4F4F4F' },
