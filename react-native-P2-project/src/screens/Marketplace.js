@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, StatusBar, Animated, StyleShe
 import { FontAwesome5 } from "@expo/vector-icons";
 import NavBar from "../components/NavBar";
 import Bubble from "../components/Bubble";
+import Checkbox from 'expo-checkbox';
 import LoadingDots from '../components/LoadingDots';
 import { showMessage } from 'react-native-flash-message';
 import { getMarketOffers, getMyOffers, createOffer, deleteOffer, getMyPurchases, getMySales, purchaseOffer, acceptContract, rejectContract } from "../services/marketplaceService";
@@ -910,3 +911,4 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
 });
+

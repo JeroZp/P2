@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   ScrollView,
   StatusBar,
@@ -19,23 +18,21 @@ export default function Profile() {
   const navigation = useNavigation();
 
   const [user, setUser] = useState({
-    photoURL:
-      'https://media.istockphoto.com/id/1389348844/es/foto/foto-de-estudio-de-una-hermosa-joven-sonriendo-mientras-est%C3%A1-de-pie-sobre-un-fondo-gris.jpg?s=612x612&w=0&k=20&c=kUufmNoTnDcRbyeHhU1wRiip-fNjTWP9owjHf75frFQ=',
+    photoURL: 'https://…jpg',
     username: 'Luisa Posada Hernandez',
     fullName: 'Luisa Posada Hernandez',
     email: 'LuipH@gmail.com',
     clientId: 'CL-2025-005',
     notifications: true,
-    
   });
 
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [emailInput, setEmailInput] = useState(user.email);
 
-  const invoices = [
-    { id: 'F001', date: '2025-04-01', amount: '$120,000' },
-    { id: 'F002', date: '2025-03-01', amount: '$115,500' },
-    { id: 'F003', date: '2025-02-01', amount: '$130,200' },
+  const tips = [
+    'Revisa tu consumo diario para detectar picos inesperados.',
+    'Activa notificaciones para recibir alertas de tarifa.',
+    'Participa en el Mercado Energético y maximiza tus ingresos.',
   ];
 
   const toggleNotifications = (value) =>
@@ -57,32 +54,19 @@ export default function Profile() {
     setIsEditingEmail(false);
   };
 
-  const handleEditPhoto = () => {
-    // Placeholder for image picker
-    alert('Funcionalidad de editar foto no implementada.');
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
-
       <Bubble size={330} color="#6FCF97" position={{ top: -260, left: -90 }} />
       <Bubble size={330} color="#6FCF97" position={{ top: -260, left: 150 }} />
       <Bubble size={330} color="#1E8449" position={{ top: -275, left: 40 }} />
 
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.profileCard}>
-          {/* <View style={styles.avatarContainer}>
-            <Image source={{ uri: user.photoURL }} style={styles.avatar} />
-            <TouchableOpacity style={styles.editAvatarButton} onPress={handleEditPhoto}>
-              <FontAwesome5 name="camera" size={16} color="#fff" />
-            </TouchableOpacity>
-          </View> */}
-          {/* <Text style={styles.username}>{user.username}</Text> */}
           <Text style={styles.fullName}>Grid Community</Text>
-
           <View style={styles.divider} />
 
+          {/* Email */}
           <View style={styles.infoRow}>
             <FontAwesome5 name="envelope" size={18} color="#4F4F4F" />
             {isEditingEmail ? (
@@ -97,7 +81,7 @@ export default function Profile() {
               <Text style={styles.infoText}>{user.email}</Text>
             )}
             {isEditingEmail ? (
-              <>  
+              <>
                 <TouchableOpacity onPress={saveEmail} style={styles.editConfirmButton}>
                   <FontAwesome5 name="check" size={16} color="#fff" />
                 </TouchableOpacity>
@@ -112,13 +96,14 @@ export default function Profile() {
             )}
           </View>
 
-         
+          {/* Client ID */}
           {/* <View style={styles.infoRow}>
             <FontAwesome5 name="id-card" size={18} color="#4F4F4F" />
             <Text style={styles.infoText}>ID Cliente: {user.clientId}</Text>
           </View> */}
 
-          <View style={styles.infoRow}>  
+          {/* Notificaciones */}
+          <View style={styles.infoRow}>
             <FontAwesome5 name="bell" size={18} color="#4F4F4F" />
             <Text style={styles.infoText}>Notificaciones</Text>
             <Switch
@@ -126,19 +111,20 @@ export default function Profile() {
               onValueChange={toggleNotifications}
             />
           </View>
+        </View>
 
+        {/* Accesos rápidos */}
+        
 
-          {/* <View style={styles.divider} />
-          <Text style={styles.sectionTitle}>Últimas Facturas</Text>
-          {invoices.map((inv) => (
-            <View key={inv.id} style={styles.invoiceRow}>
-              <Text style={styles.invoiceText}>{inv.id} - {inv.date}</Text>
-              <Text style={styles.invoiceAmount}>{inv.amount}</Text>
-              <FontAwesome5 name="download" size={18} color="#28A745" style={{ marginRight: 8 }} />
+        {/* Consejos útiles */}
+        <View style={styles.tipsContainer}>
+          <Text style={styles.sectionTitle}>Consejos útiles</Text>
+          {tips.map((t, i) => (
+            <View key={i} style={styles.tipRow}>
+              <FontAwesome5 name="lightbulb" size={16} color="#F2C94C" />
+              <Text style={styles.tipText}>{t}</Text>
             </View>
-          ))} */}
-
-         
+          ))}
         </View>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -158,7 +144,7 @@ const styles = StyleSheet.create({
   profileCard: {
     width: '90%',
     backgroundColor: 'white',
-    borderRadius: 40,
+    borderRadius: 20,
     padding: 20,
     alignItems: 'center',
     shadowColor: 'rgba(0,0,0,0.1)',
@@ -169,36 +155,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 40,
   },
-  avatarContainer: {
-    position: 'relative',
-    marginBottom: 12,
-  },
-  avatar: { width: 100, height: 100, borderRadius: 50 },
-  editAvatarButton: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: '#1E8449',
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  username: { fontSize: 16, fontFamily: 'MontserratAlternates-SemiBold', color: '#4F4F4F' },
-  fullName: { fontSize: 14, fontFamily: 'MontserratAlternates-SemiBold', color: '#4F4F4F', marginBottom: 8 },
+  fullName: { fontSize: 18, fontFamily: 'MontserratAlternates-SemiBold', color: '#4F4F4F', marginBottom: 8 },
   divider: { width: '80%', height: 1, backgroundColor: '#ddd', marginVertical: 12 },
   infoRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6 },
   infoText: { flex: 1, marginLeft: 8, fontSize: 14, fontFamily: 'MontserratAlternates-Medium', color: '#4F4F4F' },
   inputField: { flex: 1, marginLeft: 8, borderBottomWidth: 1, borderBottomColor: '#1E8449', fontSize: 14, fontFamily: 'MontserratAlternates-Medium', color: '#4F4F4F', paddingVertical: 2 },
-  sectionTitle: { fontSize: 14, fontFamily: 'MontserratAlternates-SemiBold', color: '#4F4F4F', marginTop: 12, marginBottom: 6 },
-  invoiceRow: { flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginVertical: 4, paddingHorizontal: 10 },
-  invoiceText: { fontSize: 14, fontFamily: 'MontserratAlternates-Medium', color: '#4F4F4F' },
-  invoiceAmount: { fontSize: 14, fontFamily: 'MontserratAlternates-SemiBold', color: '#2D9CDB' },
-  communityAvatar: { width: 36, height: 36, borderRadius: 18, marginRight: 8 },
   editButton: { backgroundColor: '#1E8449', width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
   editConfirmButton: { backgroundColor: '#28A745', width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
   editCancelButton: { backgroundColor: '#EB5757', width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
+  quickLinks: { width: '90%', marginVertical: 10 },
+  sectionTitle: { fontSize: 16, fontFamily: 'MontserratAlternates-SemiBold', color: '#333', marginBottom: 8 },
+  linksRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  linkButton: { flex: 1, backgroundColor: '#D0ECD8', padding: 12, marginHorizontal: 4, borderRadius: 20, alignItems: 'center' },
+  linkText: { marginTop: 4, fontSize: 12, fontFamily: 'MontserratAlternates-Medium', color: '#1E8449' },
+  tipsContainer: { width: '90%', backgroundColor: 'white', borderRadius: 20, padding: 16, marginBottom: 20, shadowColor: '#000', shadowOpacity: 0.1, shadowOffset: { width: 0, height: 2 }, shadowRadius: 6, elevation: 3 },
+  tipRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 4 },
+  tipText: { marginLeft: 8, fontSize: 14, fontFamily: 'MontserratAlternates-Medium', color: '#4F4F4F' },
   logoutButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#EB5757', paddingVertical: 12, paddingHorizontal: 20, borderRadius: 30, alignSelf: 'center', marginTop: 20 },
   logoutText: { color: 'white', fontSize: 16, fontFamily: 'MontserratAlternates-SemiBold' },
 });
