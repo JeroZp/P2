@@ -7,6 +7,7 @@ import {
   StatusBar,
   StyleSheet,
   Dimensions,
+  Modal,
   //ActivityIndicator, 
 } from "react-native";
 
@@ -24,10 +25,12 @@ const { width: screenWidth } = Dimensions.get("window");
 
 export default function CP() {
 
+  const [infoVisible, setInfoVisible] = useState(false);  // <-- Nuevo estado para controlar el modal
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showChart, setShowChart] = useState(true);
   const [mode, setMode] = useState("Consumo");
+
 
   const [data, setData] = useState({
     Consumo: {
@@ -67,12 +70,12 @@ export default function CP() {
           duration: 5500,
         });
       } finally {
-          setLoading(false);
+        setLoading(false);
       }
     })();
     setSelectedIndex(null);
   }, [mode]);
- 
+
   const dispositivos = {
     Consumo: [
       { nombre: "Horno microondas", porcentaje: "12%" },
@@ -92,7 +95,7 @@ export default function CP() {
     ],
   };
 
-  const COLORS = ['#1E8449','#6FCF97','#F2C94C','#EB5757','#2D9CDB','#9B51E0'];
+  const COLORS = ['#1E8449', '#6FCF97', '#F2C94C', '#EB5757', '#2D9CDB', '#9B51E0'];
 
   // Prepara los datos con color/leyenda según selección
   const chartData = dispositivos[mode].map((d, i) => ({
@@ -156,23 +159,31 @@ export default function CP() {
             </View>
           ))}
 
-          
+
           <View style={[
-              styles.devicesWrapper,
-              { backgroundColor:
-                  mode === "Consumo"
-                    ? "rgba(255,183,77,0.13)"
-                    : "rgba(211,84,0,0.1)"
-              }
+            styles.devicesWrapper,
+            {
+              backgroundColor:
+                mode === "Consumo"
+                  ? "rgba(255,183,77,0.13)"
+                  : "rgba(211,84,0,0.1)"
+            }
           ]}>
-           
+
+            <TouchableOpacity
+              onPress={() => setInfoVisible(true)}
+              style={{ alignSelf: 'center' }}
+            >
+              <FontAwesome5 name="info-circle" size={20} color="#666" />
+            </TouchableOpacity>
+
             <Text style={styles.footerText}>
               <Text style={styles.boldText}>{mode}</Text> total por dispositivo  <FontAwesome5
-            name="bolt"          // o "sun" para sol
-            size={20}
-            color="#FFA500"
-          />
-              
+                name="bolt"          // o "sun" para sol
+                size={20}
+                color="#FFA500"
+              />
+
             </Text>
             <View style={styles.legendContainer}>
               {chartData.map((slice, i) => {
@@ -196,53 +207,73 @@ export default function CP() {
               {showChart && (
 
                 <View
-                style={{
-                  width: screenWidth * 0.8,
-                  height: screenWidth * 0.8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-                >
-
-                <PieChart
-                  data={chartData}
-                  width={screenWidth * 0.8}
-                  height={screenWidth * 0.8}
-                  chartConfig={{
-                    backgroundGradientFrom: "#fff",
-                    backgroundGradientTo: "#fff",
-                    decimalPlaces: 0,
-                    color: () => `rgba(255,255,255,1)`,
-                    labelColor: () => `rgba(255,255,255,1)`,
-                  }}
-                  accessor="population"
-                  backgroundColor="transparent"
-                  absolute
-                  hasLegend={false}
-                  paddingLeft={`${screenWidth * 0.2}`}
-                />
-                <View
                   style={{
-                    position: 'absolute',
-                    width: screenWidth * 0.4,
-                    height: screenWidth * 0.4,
-                    borderRadius: (screenWidth * 0.4) / 2,
-                    backgroundColor: '#fff',
+                    width: screenWidth * 0.8,
+                    height: screenWidth * 0.8,
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
-                />
-                
+                >
+
+                  <PieChart
+                    data={chartData}
+                    width={screenWidth * 0.8}
+                    height={screenWidth * 0.8}
+                    chartConfig={{
+                      backgroundGradientFrom: "#fff",
+                      backgroundGradientTo: "#fff",
+                      decimalPlaces: 0,
+                      color: () => `rgba(255,255,255,1)`,
+                      labelColor: () => `rgba(255,255,255,1)`,
+                    }}
+                    accessor="population"
+                    backgroundColor="transparent"
+                    absolute
+                    hasLegend={false}
+                    paddingLeft={`${screenWidth * 0.2}`}
+                  />
+                  <View
+                    style={{
+                      position: 'absolute',
+                      width: screenWidth * 0.4,
+                      height: screenWidth * 0.4,
+                      borderRadius: (screenWidth * 0.4) / 2,
+                      backgroundColor: '#fff',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  />
+
 
 
                 </View>
-  )}
-</View>
-             
+              )}
+            </View>
+
           </View>
         </ScrollView>
-        )}
-
+      )}
+      <Modal
+        visible={infoVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setInfoVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.infoModal}>
+            <Text style={styles.modalTitle}>¿Para qué sirve esta gráfica?</Text>
+            <Text style={styles.modalText}>
+              Muestra el porcentaje de consumo o producción de energía por cada dispositivo...
+            </Text>
+            <TouchableOpacity
+              onPress={() => setInfoVisible(false)}
+              style={styles.closeButton}
+            >
+              <Text style={styles.closeButtonText}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <NavBar style={{ backgroundColor: "#1E8449" }} />
     </View>
   );
@@ -294,7 +325,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 20,
     paddingBottom: 80,
-    
+
   },
   card: {
     backgroundColor: "white",
@@ -367,8 +398,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   legendContainer: {
-    marginTop: 10, 
-    width: "100%" 
+    marginTop: 10,
+    width: "100%"
   },
   legendContainer: {
     marginTop: 10,
@@ -403,5 +434,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 150,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoModal: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  modalText: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  closeButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFA500',
+    borderRadius: 20,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: '600',
   },
 });
